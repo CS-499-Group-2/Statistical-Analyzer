@@ -1,36 +1,59 @@
-/* eslint-disable linebreak-style */
+
 import React from "react";
 
-interface Result { // Result component with "name" and "values" attributes
-  name: string; // name represents type of stats
-  values: number[]; // number array represents number(s) returned from calculating those stats
+/**
+ * Component with name and values attributes
+ */
+interface Result { 
+    /** Represesnts type of stats */
+    name: string; 
+    /** Represents number(s) returned from calculating those stats */
+    values: number[]; 
 }
 
-export interface ResultExporterProps { // component with "Result[]" type to allow for multiple stats
-  results: Result[]; // represents an array of results
+/**
+ * Component with Result[] attribute to allow for multiple stats
+ */
+export interface ResultExporterProps {
+    /** Represents an array of all results */
+    results: Result[]; 
 }
 
+/**
+ * Function that handles all actions regarding downloading results of the stats calculations
+ * @param props represents the results array from ResultExporterProps
+ * @returns an export button that will download the results.txt file when clicked
+ */
 export const ResultExporter = (props: ResultExporterProps) => {
-  const exportText = (result: string) => { // function to export results to a text file
-    const blob = new Blob([result], { type: "text/plain" }); // creates a "blob" that can hold the file data
-    const url = URL.createObjectURL(blob); // converts the blob into a url
-    const anchor = document.createElement("a"); // creates hyperlink element
-    anchor.download = "results.txt"; // names download
-    anchor.href = url; // specifies the anchor's url
-    anchor.click(); // simulates a mouse click
-
+  
+  /**
+   * Function inside ResultExporter that specifically handles downloading the results.txt file
+   * @param result represents the resultsString from handleOnClick that contains the reformatted results array
+   */
+  const exportText = (result: string) => {
+    const blob = new Blob([result], { type: "text/plain" }); // Creates a "blob" that can hold the file data
+    const url = URL.createObjectURL(blob); // Converts the blob into a url
+    const anchor = document.createElement("a"); // Creates hyperlink element
+    anchor.download = "results.txt"; // Names the resulting file download
+    anchor.href = url; // Specifies the anchor's url
+    anchor.click(); // Simulates a mouse click
   };
-  const handleOnClick = () => { // function to convert results to string
-    // the following maps every name and values and in result to be formatted
+
+  /**
+   * Function that reformats results array into a string, prints the resultsString to the console, and calls exportText
+   */
+  const handleOnClick = () => { 
+    // The following maps every name and values and in result to be formatted
     // in the form "name: values_1, values_2, etc.", with a newline in between each
     const resultsString = props.results
       .map(result => result.name + ": " + result.values.join(", "))
       .join("\n");
     
-    console.log("Results:\n" + resultsString); // log resultsString to console
-    exportText(resultsString); // call exportText function with resultsString argument
+    console.log("Results:\n" + resultsString); // Logs resultsString to console
+    exportText(resultsString); // Calls exportText function with resultsString argument
   };
-  // returns a button with text "Export" that calls handleOnClick
+  
+  // Returns a button with text "Export" that calls handleOnClick
   return (
     <div>
       <button onClick={handleOnClick}>Export</button>
