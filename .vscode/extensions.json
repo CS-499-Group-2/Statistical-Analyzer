@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "zixuanchen.vitest-explorer",
+    "github.vscode-pull-request-github",
+    "christian-kohler.npm-intellisense",
+    "dbaeumer.vscode-eslint"
+  ]
+}

@@ -19,6 +19,15 @@ export interface ResultExporterProps {
     results: Result[]; 
 }
 
+export const formatResults = (results: Result[]) => {
+  // The following maps every name and values and in result to be formatted
+  // in the form "name: values_1, values_2, etc.", with a newline in between each
+  const resultsString = results
+    .map(result => result.name + ": " + result.values.join(", "))
+    .join("\n");
+  return resultsString;
+};
+
 /**
  * Function that handles all actions regarding downloading results of the stats calculations
  * @param props represents the results array from ResultExporterProps
@@ -43,11 +52,7 @@ export const ResultExporter = (props: ResultExporterProps) => {
    * Function that reformats results array into a string, prints the resultsString to the console, and calls exportText
    */
   const handleOnClick = () => { 
-    // The following maps every name and values and in result to be formatted
-    // in the form "name: values_1, values_2, etc.", with a newline in between each
-    const resultsString = props.results
-      .map(result => result.name + ": " + result.values.join(", "))
-      .join("\n");
+    const resultsString = formatResults(props.results); // Calls formatResults function with results array
     
     console.log("Results:\n" + resultsString); // Logs resultsString to console
     exportText(resultsString); // Calls exportText function with resultsString argument
