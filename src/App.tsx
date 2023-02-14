@@ -2,12 +2,14 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import React from "react";
+import { NavBar } from "./components/nav-bar/nav-bar";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <div className="App">
+      <NavBar />
       <div>
         <a href="https://vitejs.dev">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
