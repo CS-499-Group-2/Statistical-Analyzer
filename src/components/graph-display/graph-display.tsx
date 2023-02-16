@@ -78,6 +78,8 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
           data: graph.data,
           // If the graph is a normal distribution, then we want to show the line.
           showLine: graph.chartType === "Normal Distribution",
+          backgroundColor: graph.color,
+          label: graph.lineLabel
         }
       ]
     };

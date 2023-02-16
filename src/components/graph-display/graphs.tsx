@@ -36,4 +36,6 @@ export type Graph = {
     x: number,
     y: number
   }[],
+  color?: string,
+  lineLabel?: string
 });
