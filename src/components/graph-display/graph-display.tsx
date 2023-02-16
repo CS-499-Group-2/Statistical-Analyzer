@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React from "react";
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from "chart.js";
 import { Bar, Pie, Scatter } from "react-chartjs-2";
@@ -9,6 +8,7 @@ import Draggable from "react-draggable";
 import { Card } from "react-bootstrap";
 import { Resizable } from "re-resizable";
 
+// This is required to register the chart types with chart js. See https://react-chartjs-2.js.org/faq/registered-element
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,7 +21,13 @@ ChartJS.register(
   BarElement
 );
 
+/**
+ * This function will take our internal graph type and convert it into a chart that can be rendered.
+ * @param graph The graph to be converted to a chart.
+ * @returns Returns a JSX element that will render the graph.
+ */
 export const mapGraphToChart = (graph: Graph): JSX.Element => {
+  // Setup the default options for the chart.
   const options: ChartProps["options"] =  {
     plugins: {
       title: {
@@ -30,13 +36,16 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
       }
     },
     responsive: true,
+    // setting this to false will allow the chart to be resized.
     maintainAspectRatio: false,
   };
 
+  // If the graph is a horizontal bar graph, we need to set the index axis to y (so it's sideways).
   if (graph.chartType === "Horizontal Bar") {
     options.indexAxis = "y";
   }
 
+  // If the grapg is a bar chart, then let's setup the data and return a bar component from chart js
   if (graph.chartType === "Vertical Bar" || graph.chartType === "Horizontal Bar") {
     const data: ChartProps<"bar">["data"] = {
       labels: graph.data.map((d) => d.label),
@@ -49,6 +58,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
     return <Bar data={data} options={options} />;
   }
 
+  // If the graph is a pie chart, then let's setup the data and return a pie component from chart js
   if (graph.chartType === "Pie") {
     const data: ChartProps<"pie">["data"] = {
       labels: graph.data.map((d) => d.label),
@@ -59,11 +69,14 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
     };
     return <Pie data={data} options={options} />;
   }
+
+  // If the graph is a scatter plot, then let's setup the data and return a scatter component from chart js
   if (graph.chartType === "XY Scatter" || graph.chartType === "Normal Distribution")  {
     const data: ChartProps<"scatter">["data"] = {
       datasets: [
         {
           data: graph.data,
+          // If the graph is a normal distribution, then we want to show the line.
           showLine: graph.chartType === "Normal Distribution",
         }
       ]
@@ -72,7 +85,9 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
   }
 };
 
+/** The properties for graph display */
 export interface GraphDisplayProps {
+  /** An array of the graphs that should be displayed  */
   selectedGraphs: Graph[];
 }
 
@@ -100,7 +115,7 @@ export const GraphDisplay = (props: GraphDisplayProps) => {
                 topLeft: false,
                 topRight: false
               }} key={index} as={Card}>
-                  {mapGraphToChart(graph)}
+                {mapGraphToChart(graph)}
               </Resizable>
             </div>
           </Draggable>
