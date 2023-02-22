@@ -1,12 +1,35 @@
 import React from "react";
 import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
+import { csvToArray } from "./csv-to-array";
 
 
 export const NavBar = () => {
 
+
+  // Function to open a file
   const openFile = () => {
-    console.log("openFile");
+    // Create a file input element, with the accept attribute set to .csv
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv";
+    input.onchange = (event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.item(0);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const target = event.target as FileReader;
+          const csv = target.result;
+          if (csv) {
+            const array = csvToArray(csv.toString());
+            console.log(array);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
   };
 
   const exportAsCsv = () => {
