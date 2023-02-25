@@ -1,23 +1,26 @@
-export function csvToArray(data, delimiter = ",") {
-     
- 
-  const titles = data.slice(0, data
-    .indexOf("\n")).split(delimiter);
-     
-  const titleValues = data.slice(data
-    .indexOf("\n") + 1).split("\n");
-     
-  const ansArray = titleValues.map(function (v) {
-     
-    const values = v.split(delimiter);
-    const storeKeyValue = titles.reduce(
-      function (obj, title, index) {
-        obj[title] = values[index];
-        return obj;
-      }, {});
-     
-    return storeKeyValue;
-  });
-     
-  return ansArray;
+interface CsvData {
+  headers?: string[],
+  data: number[][]
 }
+
+/**
+ * This function takes a string and converts it to an object with headers and data
+ * @param data A string that represents whatever
+ * @param delimiter The delimiter
+ * @returns An object with the headers and the data
+ * 
+ * 
+ */
+export function csvToArray(data:String, delimiter = ","): CsvData {
+  const header = data.slice(0, data.indexOf(" ")).split(delimiter);
+  const rows = data.slice(data.indexOf(" ") + 1).split(" ");
+
+  const csvData: CsvData = {
+    headers: header,
+    data: rows.map(row => row.split(delimiter).map(Number))
+  };
+
+  return csvData;
+
+}
+
