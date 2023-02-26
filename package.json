@@ -14,6 +14,7 @@
     "@fortune-sheet/react": "^0.13.0-beta.8",
     "@silevis/reactgrid": "^4.0.4",
     "bootstrap": "^5.2.3",
+    "handsontable": "^12.3.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.1",
     "react-dom": "^18.2.0",

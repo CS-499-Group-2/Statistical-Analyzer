@@ -4,7 +4,7 @@ import { Workbook } from "@fortune-sheet/react";
 import "@fortune-sheet/react/dist/index.css";
 import { ReactGrid, Column, Row } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
-
+import Handsontable from "handsontable";
 
 export const Spreadsheet = () => {
   
