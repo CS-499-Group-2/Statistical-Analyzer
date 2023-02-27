@@ -14,8 +14,9 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Spreadsheet />
+      
       <div>
+        <Spreadsheet />
         <button>Add Cells</button>  
         <a href="https://vitejs.dev">
           <img src="/vite.svg" className="logo" alt="Vite logo" />

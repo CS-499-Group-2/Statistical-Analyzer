@@ -1,22 +1,28 @@
 import { useState } from "react";
 import * as React from "react";
-import { Workbook } from "@fortune-sheet/react";
-import "@fortune-sheet/react/dist/index.css";
-import { ReactGrid, Column, Row } from "@silevis/reactgrid";
-import "@silevis/reactgrid/styles.css";
 import Handsontable from "handsontable";
-
+import { registerAllModules } from "handsontable/registry";
+import "handsontable/dist/handsontable.full.css";
+import { HotTable } from "@handsontable/react";
+import "handsontable/dist/handsontable.full.min.css";
+registerAllModules();
 export const Spreadsheet = () => {
   
 
   return (
     
-    <div><style>
-    html, body, #root 
-    &lbrace;
-      width: 100%;
-      height: 100%;
-    &rbrace; 
-    </style>
-    <div id="root"></div> </div>);
+    <div>
+      <HotTable
+        data={[
+          ["", "Tesla", "Volvo", "Toyota", "Ford"],
+          ["2019", 10, 11, 12, 13],
+          ["2020", 20, 11, 14, 13],
+          ["2021", 30, 15, 12, 13]
+        ]}
+        rowHeaders={true}
+        colHeaders={true}
+        height="auto"
+        licenseKey="non-commercial-and-evaluation" // for non-commercial use only
+      />
+    </div>);
 };
