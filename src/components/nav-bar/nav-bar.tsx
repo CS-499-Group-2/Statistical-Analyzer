@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
-import { csvToArray } from "./csv-to-array";
+import { csvToArray } from "../../file-handling/import";
 
 
 export const NavBar = () => {
