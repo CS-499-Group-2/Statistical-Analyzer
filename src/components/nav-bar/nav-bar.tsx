@@ -14,7 +14,7 @@ export const NavBar = () => {
   };
 
   return (
-    <Navbar bg="light" expand="sm" fixed="top" className="root">
+    <Navbar bg="light" expand="sm" sticky="top" className="root">
       <Container>
         <Navbar.Brand>Statistical Analyzer</Navbar.Brand>
         <Navbar.Toggle />
