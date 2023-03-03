@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
+import { exportData } from "./../../file-handling/data-export";
 
 
 export const NavBar = () => {
@@ -34,6 +35,8 @@ export const NavBar = () => {
 
   const exportAsCsv = () => {
     console.log("exportAsCsv");
+    const data = [[1,2],[3,4],[5,6]]; // dummy data so the program runs
+    exportData(data); // Calls exportData
   };
 
   return (
@@ -45,7 +48,7 @@ export const NavBar = () => {
           <Nav className="me-auto">
             <NavDropdown title="File" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
-              <NavDropdown.Item onClick={() => exportAsCsv}>Export as csv</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => exportAsCsv()}>Export as CSV</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
