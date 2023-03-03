@@ -1,0 +1,9 @@
+.graph-display-card{
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+.graph-display-container{
+  position: absolute;
+  padding: 2%;
+}
