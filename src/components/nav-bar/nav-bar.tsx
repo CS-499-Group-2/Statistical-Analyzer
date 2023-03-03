@@ -3,10 +3,16 @@ import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { exportData } from "./../../file-handling/data-export";
+import { Operation } from "../../stats/operations";
 
+export interface NavBarProps {
+  /** List of available operations */
+  availableOperations: Operation[];
+  /** Callback function to be called when an operation is selected */
+  onOperationSelected?: (operation: Operation) => void;
+}
 
-export const NavBar = () => {
-
+export const NavBar = (props: NavBarProps) => {
 
   // Function to open a file
   const openFile = () => {
@@ -40,15 +46,23 @@ export const NavBar = () => {
   };
 
   return (
-    <Navbar bg="light" expand="sm" sticky="top" className="root">
-      <Container>
-        <Navbar.Brand>Statistical Analyzer</Navbar.Brand>
+    <Navbar bg="light" expand="sm" sticky="top" >
+      <Container id="bar-container">
+        <Navbar.Brand>
+          <img className="nav-logo" src="logo.png"/>
+          Statistical Analyzer
+        </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="File" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
               <NavDropdown.Item onClick={() => exportAsCsv()}>Export as CSV</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Statistics" id="basic-nav-dropdown">
+              {props.availableOperations.map((operation) => ( // Loop over all the available operations
+                <NavDropdown.Item key={operation} onClick={() => props.onOperationSelected?.(operation) /* Call the onOperationSelected function if it's not null */}>{operation}</NavDropdown.Item>
+              ))}
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
