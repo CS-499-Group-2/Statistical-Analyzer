@@ -14,6 +14,7 @@ jobs:
       deployments: write
     
     steps:
+      - uses: actions/checkout@v2
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
         id: deployment
@@ -21,7 +22,6 @@ jobs:
           token: '${{ github.token }}'
           environment-url: https://excel4free.com
           environment: production
-      - uses: actions/checkout@v2
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
