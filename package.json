@@ -11,14 +11,17 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@handsontable/react": "^12.3.1",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.2.1",
-    "re-resizable": "^6.9.9",
+    "handsontable": "^12.3.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.1",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
-    "react-draggable": "^4.4.5"
+    "re-resizable": "^6.9.9",
+    "react-chartjs-2": "^5.2.0",
+    "react-draggable": "^4.4.5",
+    "scheduler": "^0.23.0"
   },
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
