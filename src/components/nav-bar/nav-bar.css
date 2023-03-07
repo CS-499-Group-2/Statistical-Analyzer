@@ -1,3 +1,10 @@
 .brand{
   width: 100vh;
 }
+.nav-logo {
+  height: 30px;
+  margin-right: 3%;
+}
+#bar-container{
+  margin-left: 2.5%;
+}
