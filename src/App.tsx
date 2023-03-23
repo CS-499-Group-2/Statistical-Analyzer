@@ -43,11 +43,25 @@ function App() {
     });
   };
 
+  /**
+   * Updates the header for the specified column
+   * @param column The column of the header that changed
+   * @param value The new value of the header
+   */
+  const onHeaderChange = (column: number, value: string) => {
+    setData(previousData => {
+      const newData = {...previousData}; // We need to clone the data, because we can't mutate the state directly
+      newData.headers[column] = value; // Update the value
+      console.log("New data: ", newData);
+      return newData;
+    });
+  };
+
   return (
     <div className="App">
       <NavBar availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/} 
         onOperationSelected={onOperationSelected} />
-      <Spreadsheet data={data} onCellChange={onCellChange} />
+      <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} />
     </div>
   );
 }
