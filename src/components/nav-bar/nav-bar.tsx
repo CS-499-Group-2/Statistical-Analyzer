@@ -1,15 +1,20 @@
 import React from "react";
+import {useState } from "react";
 import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { exportData } from "./../../file-handling/data-export";
 import { Operation } from "../../stats/operations";
+import { BinomialDistributionDialogBox } from "../dialog-box/binomial-distribution-dialog-box";
+
 
 export interface NavBarProps {
   /** List of available operations */
   availableOperations: Operation[];
   /** Callback function to be called when an operation is selected */
   onOperationSelected?: (operation: Operation) => void;
+  openDialogBox?: (open: boolean) => void;
+
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -31,6 +36,7 @@ export const NavBar = (props: NavBarProps) => {
           if (csv) {
             const array = csvToArray(csv.toString());
             console.log(array);
+            
           }
         };
         reader.readAsText(file);
@@ -38,6 +44,8 @@ export const NavBar = (props: NavBarProps) => {
     };
     input.click();
   };
+
+
 
   const exportAsCsv = () => {
     console.log("exportAsCsv");
@@ -63,6 +71,8 @@ export const NavBar = (props: NavBarProps) => {
               {props.availableOperations.map((operation) => ( // Loop over all the available operations
                 <NavDropdown.Item key={operation} onClick={() => props.onOperationSelected?.(operation) /* Call the onOperationSelected function if it's not null */}>{operation}</NavDropdown.Item>
               ))}
+            
+
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
