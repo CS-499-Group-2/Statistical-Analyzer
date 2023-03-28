@@ -11,17 +11,21 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@handsontable/react": "^12.3.1",
+    "@mui/material": "^5.11.12",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.2.1",
     "handsontable": "^12.3.1",
+    "re-resizable": "^6.9.9",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.1",
-    "react-dom": "^18.2.0",
-    "re-resizable": "^6.9.9",
     "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
-    "scheduler": "^0.23.0"
+    "scheduler": "^0.23.0",
+    "simple-statistics": "^7.8.3"
   },
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
