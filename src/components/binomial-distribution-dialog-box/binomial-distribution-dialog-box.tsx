@@ -4,6 +4,7 @@ import {DialogTitle } from "@mui/material";
 import { DialogContent } from "@mui/material";
 import { DialogActions } from "@mui/material";
 import {height} from "@mui/system";
+import { calculateBinomialDistribution } from "../../stats/calculations";
 
 
 export interface BinomialDistributionProps {
@@ -18,7 +19,10 @@ export const BinomialDistributionDialogBox = (props: BinomialDistributionProps) 
  
 
   const handleSubmit = () => {
-    // Calculate the binomial distribution
+    const trials = Number(document.getElementById("Number of Trials") as HTMLInputElement);
+    const successes = Number(document.getElementById("Number of Sucesses") as HTMLInputElement);
+    const results = calculateBinomialDistribution(trials, successes);
+    console.log(results);
 
     props.onSubmit([ ]);
   };
@@ -36,11 +40,11 @@ export const BinomialDistributionDialogBox = (props: BinomialDistributionProps) 
       <DialogContent>
         <div>
           <label>Number of Trials</label>
-          <input type="number" />
+          <input type="number" id = " Number of Trials" />
         </div>
         <div>
           <label>Probability of Success</label>
-          <input type="number" />
+          <input type="number" id = "Number of Sucesses" />
         </div>
       </DialogContent>
 
