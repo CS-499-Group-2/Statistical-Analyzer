@@ -4,6 +4,7 @@ import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
 import { Operation, operations } from "./stats/operations";
 import { CsvData } from "./file-handling/import";
+import { exportData } from "./file-handling/data-export";
 
 
 function App() {
@@ -45,8 +46,11 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/} 
-        onOperationSelected={onOperationSelected} />
+      <NavBar
+        availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/}
+        onOperationSelected={onOperationSelected}
+        onExport={() => exportData(data.data)}
+      />
       <Spreadsheet data={data} onCellChange={onCellChange} />
     </div>
   );
