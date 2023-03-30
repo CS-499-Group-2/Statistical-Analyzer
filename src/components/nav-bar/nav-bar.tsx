@@ -45,6 +45,12 @@ export const NavBar = (props: NavBarProps) => {
     exportData(data); // Calls exportData
   };
 
+  const showResults = () => {
+    console.log("showResults");
+    const popup = document.getElementById("popup");
+    popup.classList.add("open-popup");
+  };
+
   return (
     <Navbar bg="light" expand="sm" sticky="top" >
       <Container id="bar-container">
@@ -58,6 +64,7 @@ export const NavBar = (props: NavBarProps) => {
             <NavDropdown title="File" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
               <NavDropdown.Item onClick={() => exportAsCsv()}>Export as CSV</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => showResults()}>View Statistics</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Statistics" id="basic-nav-dropdown">
               {props.availableOperations.map((operation) => ( // Loop over all the available operations
