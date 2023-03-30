@@ -5,7 +5,7 @@ import "./result-exporter.css";
 /**
  * Component with name and values attributes
  */
-interface Result { 
+export interface Result { 
     /** Represesnts type of stats */
     name: string; 
     /** Represents number(s) returned from calculating those stats */

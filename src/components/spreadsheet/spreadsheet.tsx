@@ -16,6 +16,7 @@ export interface SpreadsheetProps {
   /** The data to be shown  */
   data: CsvData,
   onCellChange?: (row: number, column: number, value: number) => void
+  onHeaderChange?: (column: number, value: string) => void
 }
 
 export const Spreadsheet = (props: SpreadsheetProps) => {  
@@ -35,7 +36,37 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         rowHeights={23}
         type="numeric"
         colWidths={100}
-        contextMenu={["row_above", "row_below", "remove_row" , "col_left", "col_right", "remove_col"]}
+        // @ts-expect-error The types for handson table seem to not match up here, even though this is legal; see: https://handsontable.com/docs/react-data-grid/context-menu/#context-menu-with-a-fully-custom-configuration
+        contextMenu={{
+          items: [
+            "row_above",
+            "row_below",
+            "remove_row",
+            "col_left",
+            "col_right",
+            "remove_col",
+            {
+              name: "Edit Header",
+              key: "edit_header",
+              hidden() {
+                const selected = this.getSelectedRange();
+                if (selected.length !== 1) return true; // Hide if more than one range is selected
+                const selectedRange = selected[0]; // Get the first range that is selected
+                if (selectedRange.from.col !== selectedRange.to.col) return true; // Hide if the range is more than one column
+                return false;
+              },
+              callback: (_key, selection) => {
+                const cell = selection[0]; // Get the first cell that is selected
+                const headerIndex = cell.start.col; // Get the column index of the header
+                const headerValue = props.data.headers[headerIndex]; // Get the header value
+                const newHeaderValue = prompt("Enter the new header value", headerValue); // Prompt the user for the new header value
+                if (newHeaderValue) { // If the user entered a value
+                  props.onHeaderChange?.(headerIndex, newHeaderValue); // Call the onHeaderChange callback
+                }
+              }
+            }
+          ]
+        }}
         licenseKey="non-commercial-and-evaluation" // for non-commercial use only
         validator={"numeric"}
         beforeChange={(changes) => {
