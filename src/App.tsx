@@ -4,6 +4,7 @@ import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
 import { Operation, operations } from "./stats/operations";
 import { CsvData } from "./file-handling/import";
+import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
 
 
@@ -11,6 +12,8 @@ function App() {
   const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
   const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
+
+  
   
   // This is the useEffect hook. It is called whenever the things in the array change. In this case, we want to log the selected operations whenever they change. This will be called after re-rendering, so the state will have changed
   React.useEffect(() => {
@@ -58,6 +61,8 @@ function App() {
     });
   };
 
+  const results = [];
+
   return (
     <div className="App">
       <NavBar
@@ -66,6 +71,9 @@ function App() {
         onExport={() => exportData(data.data)}
       />
       <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} />
+      <div className = "popup" id = "popup">
+        <ResultExporter results={results}></ResultExporter>
+      </div>
     </div>
   );
 }

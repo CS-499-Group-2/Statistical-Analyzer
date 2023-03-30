@@ -1,0 +1,52 @@
+.resultRet {
+  overflow: scroll;
+  height: 100%;
+  width: 100%;
+}
+
+.popup {
+  visibility: hidden;
+}
+
+.open-popup {
+  width: 80%;
+  height: 90%;
+  background: white;
+  position: fixed;
+  text-align: unset;
+  border: 3px solid black;
+  border-radius: 10px;
+  font-size: larger;
+  white-space: pre;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  z-index: 1000000;
+  overflow: hidden;
+  visibility: visible;
+}
+
+.closeBut {
+  position: fixed;
+  top: 0;
+  right: 3%;
+  margin-left: calc(100vw - 48px);
+}
+
+.expBut {
+  margin-top: 10px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #7f7f7f;
+  border-color: black;
+  border-width: 2px;
+  color: white;
+}
+
+.results {
+  text-align: left;
+  margin: 15px;
+}
