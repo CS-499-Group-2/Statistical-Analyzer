@@ -5,6 +5,9 @@ import { DialogContent } from "@mui/material";
 import { DialogActions } from "@mui/material";
 import {height} from "@mui/system";
 import { calculateBinomialDistribution } from "../../stats/calculations";
+import { useState } from "react";
+import  Modal from "react-bootstrap/Modal";
+
 
 
 export interface BinomialDistributionProps {
@@ -16,12 +19,21 @@ export interface BinomialDistributionProps {
 
 
 export const BinomialDistributionDialogBox = (props: BinomialDistributionProps) => {
- 
+  const [trials, setTrials] = useState(0);
+  const [probability, setProbability] = useState(0);
+
+
+  const handleTrialsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTrials(Number(event.target.value));
+  };
+
+  const handleProbabilityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProbability(Number(event.target.value));
+  };
 
   const handleSubmit = () => {
-    const trials = Number(document.getElementById("Number of Trials") as HTMLInputElement);
-    const successes = Number(document.getElementById("Number of Sucesses") as HTMLInputElement);
-    const results = calculateBinomialDistribution(trials, successes);
+    console.log(trials, probability);
+    const results = calculateBinomialDistribution(trials, probability);
     console.log(results);
 
     props.onSubmit([ ]);
@@ -32,27 +44,26 @@ export const BinomialDistributionDialogBox = (props: BinomialDistributionProps) 
   };
  
   return (
-    <Dialog open={props.open}>
-      <DialogTitle>
-            Please enter the number of trials as well as the probability of success for each trial.
-      </DialogTitle>
-
-      <DialogContent>
-        <div>
-          <label>Number of Trials</label>
-          <input type="number" id = " Number of Trials" />
+    <Modal show={props.open} onHide={handleClose}>
+      <Modal.Header>
+        <Modal.Title>Binomial Distribution</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="form-group">
+          <label htmlFor="trials">Trials</label>
+          <input type = "number" className="form-control" id="trials" onChange={handleTrialsChange} />
         </div>
-        <div>
-          <label>Probability of Success</label>
-          <input type="number" id = "Number of Sucesses" />
+        <div className="form-group">
+          <label htmlFor="probability">Probability</label>
+          <input type = "number" className="form-control" id="probability" onChange={handleProbabilityChange} />
         </div>
-      </DialogContent>
+      </Modal.Body>
+      <Modal.Footer>
+        <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>
+        <button type="button" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+      </Modal.Footer>
 
-      <DialogActions>
-        <button onClick={handleClose}>Cancel</button>
-        <button onClick={handleSubmit}>Submit</button>
-      </DialogActions>
-    </Dialog>
+    </Modal>
   );
 };
     
