@@ -1,11 +1,18 @@
 import React from "react";
+import { CsvData } from "./import";
 
 /**
  * Creates a downloadable CSV file from the inputted data
  * @param data a 2d array of numbers representing the data being analyzed
  */
-export const exportData = (data: number[][]) => {
-  const dataString = data.join("\n"); // convert data to CSV formatted string
+export const exportData = (csvData: CsvData) => {
+  let dataString: string;
+  if (csvData.headers) {
+    dataString = csvData.headers + "\n" + csvData.data.join("\n"); // convert data to CSV formatted string
+  }
+  else {
+    dataString = csvData.data.join("\n");
+  }
   console.log("CSV string:\n" + dataString); // log dataString to console
   // Below is the same process as for exporting results, but with csv instead of txt file
   const blob = new Blob([dataString], { type: "text/csv" }); // Creates a "blob" that can hold the file data

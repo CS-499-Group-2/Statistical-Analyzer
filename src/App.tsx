@@ -68,7 +68,7 @@ function App() {
       <NavBar
         availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/}
         onOperationSelected={onOperationSelected}
-        onExport={() => exportData(data.data)}
+        onExport={() => exportData(data)}
       />
       <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} />
       <div className = "popup" id = "popup">
