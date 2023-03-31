@@ -1,9 +1,4 @@
 import React from "react";
-import { Dialog } from "@mui/material";
-import {DialogTitle } from "@mui/material";
-import { DialogContent } from "@mui/material";
-import { DialogActions } from "@mui/material";
-import {height} from "@mui/system";
 import { calculateBinomialDistribution } from "../../stats/calculations";
 import { useState } from "react";
 import  Modal from "react-bootstrap/Modal";
