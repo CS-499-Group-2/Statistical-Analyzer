@@ -10,7 +10,7 @@ function App() {
   const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
   const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
-  
+  // This is a reference to the spreadsheet. We need this to be able to call methods on the spreadsheet
   // This is the useEffect hook. It is called whenever the things in the array change. In this case, we want to log the selected operations whenever they change. This will be called after re-rendering, so the state will have changed
   React.useEffect(() => {
     console.log("Selected operations: ", selectedOperations.join(", "));
@@ -43,13 +43,18 @@ function App() {
     });
   };
 
+  const onFileOpen = (data: CsvData) => {
+    setData(data);
+  };
   return (
     <div className="App">
       <NavBar availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/} 
-        onOperationSelected={onOperationSelected} />
+        onOperationSelected={onOperationSelected} onFileImport={onFileOpen}/>
       <Spreadsheet data={data} onCellChange={onCellChange} />
     </div>
   );
 }
+
+
 
 export default App;

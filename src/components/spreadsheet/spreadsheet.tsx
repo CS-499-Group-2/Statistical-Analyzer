@@ -1,12 +1,14 @@
 import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 import { registerAllModules } from "handsontable/registry";
 import "handsontable/dist/handsontable.full.css";
 import { HotTable } from "@handsontable/react";
 import "handsontable/dist/handsontable.full.min.css";
 import "./spreadsheet.css";
-import { CsvData } from "../../file-handling/import";
+import { CsvData, csvToArray } from "../../file-handling/import";
 import { HyperFormula } from "hyperformula";
-
+import papa from "papaparse";
+import { getData } from "../../file-handling/import";
 registerAllModules();
 
 /**
@@ -15,8 +17,10 @@ registerAllModules();
 export interface SpreadsheetProps {
   /** The data to be shown  */
   data: CsvData,
-  onCellChange?: (row: number, column: number, value: number) => void
+  onCellChange?: (row: number, column: number, value: number) => void,
 }
+
+
 
 export const Spreadsheet = (props: SpreadsheetProps) => {  
 

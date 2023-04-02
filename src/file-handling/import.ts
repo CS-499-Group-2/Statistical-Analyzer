@@ -54,7 +54,7 @@ function getHeaders(data:string): string[] {
  * @param data A string that represents the data in a csv file
  * @returns The data of the csv file, without the headers. 
  */
-function getData(data:string): number[][] {
+export function getData(data:string): number[][] {
   const dataArray: number[][] = [];
   let stringBuilder = "";
   let i = "";

@@ -4,12 +4,14 @@ import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { exportData } from "./../../file-handling/data-export";
 import { Operation } from "../../stats/operations";
+import { CsvData } from "../../file-handling/import";
 
 export interface NavBarProps {
   /** List of available operations */
   availableOperations: Operation[];
   /** Callback function to be called when an operation is selected */
   onOperationSelected?: (operation: Operation) => void;
+  onFileImport?: (data: CsvData) => void;
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -31,6 +33,7 @@ export const NavBar = (props: NavBarProps) => {
           if (csv) {
             const array = csvToArray(csv.toString());
             console.log(array);
+            props.onFileImport?.(array);
           }
         };
         reader.readAsText(file);
