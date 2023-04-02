@@ -22,9 +22,10 @@ export interface Operation<T> {
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
    * represents a column.
    * @param spreadsheet The spreadsheet that the operation is being performed on.
+   * @param inputs The inputs that the user has provided for this operation.
    * @returns Any results from this operation.
    */
-  onSelected: (selectedCellsByColumn: number[][], spreadsheet: CsvData, inputNames: {[Property in keyof T]: number}) => Result[];
+  onSelected: (selectedCellsByColumn: number[][], spreadsheet: CsvData, inputs: {[Property in keyof T]: number}) => Result[];
   /**
    * The function that is called to determine if the operation is valid.
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
@@ -32,6 +33,7 @@ export interface Operation<T> {
    */
   isValid: (selectedCellsByColumn: number[][]) => boolean;
 
+  /** The names of the inputs that this operation takes. */
   keys: Array<keyof T & string>;
 }
 

@@ -1,8 +1,9 @@
 import React, { forwardRef, Ref, useImperativeHandle, useState } from "react";
 import { Button, Modal, NumberInput } from "@mantine/core";
+import { Operation } from "../../stats/operation";
 
 export interface InputModalRef {
-  open: (formValues: string[], onSubmit: (values: Record<string, number>) => void) => void;
+  open: (operation: Operation<Record<string, number>>, onSubmit: (values: Record<string, number>) => void) => void;
 }
 
 const InputModal = forwardRef((props, ref: Ref<InputModalRef>) => {
@@ -11,9 +12,8 @@ const InputModal = forwardRef((props, ref: Ref<InputModalRef>) => {
   const [formValues, setFormValues] = useState<Record<string, number>>({});
   const onSubmitRef = React.useRef<(values: Record<string, number>) => void>();
   useImperativeHandle(ref, () => ({
-    open: (formValues: string[], onSubmit) => {
-      console.log("Opening modal with values: ", formValues, onSubmit);
-      setFormLabels(formValues);
+    open: (operation, onSubmit) => {
+      setFormLabels(operation.keys);
       setOpened(true);
       onSubmitRef.current = onSubmit;
     }
@@ -22,7 +22,7 @@ const InputModal = forwardRef((props, ref: Ref<InputModalRef>) => {
   return (
     <Modal opened={opened} onClose={() => setOpened(false)} title="Additional Inputs" size={"md"} centered>
       {formLabels.map((formLabel, index) => (
-        <NumberInput key={index} label={formLabel} onChange={(value) => {
+        <NumberInput key={index} label={formLabel} precision={4} onChange={(value) => {
           const newValues = { ...formValues };
           newValues[formLabel] = value as number || 0;
           setFormValues(newValues);

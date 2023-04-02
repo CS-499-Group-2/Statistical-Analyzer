@@ -8,6 +8,7 @@ import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
 import {Percentile} from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
+import { GraphDisplay } from "./components/graph-display/graph-display";
 
 /** List of all available operations */
 const operations: Operation<never>[] = [
@@ -34,7 +35,11 @@ function App() {
    * @param operation The operation to add to the list of selected operations
    */
   const onOperationSelected = (operation: Operation<Record<string, number>>) => {
-    modalRef.current.open(operation.keys, (values) => operation.onSelected(selectedCells, data, values));
+    modalRef.current.open(operation, (values) => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+  };
+
+  const handleOperationComplete = (results: Result[]) => {
+    setResults((previousResults) => [...previousResults, ...results]);
   };
 
   /**
@@ -71,7 +76,6 @@ function App() {
 
   return (
     <div className="App">
-
       <NavBar
         availableOperations={availableOperations}
         onOperationSelected={onOperationSelected}
@@ -86,6 +90,7 @@ function App() {
       <div className = "popup" id = "popup">
         <ResultExporter results={results}></ResultExporter>
       </div>
+      <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
     </div>
   );
