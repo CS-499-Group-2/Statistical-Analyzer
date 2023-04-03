@@ -10,6 +10,7 @@ test("Make sure adding works", () => {
 test("Formatting results works correctly", () => {
   expect(formatResults([{
     name: "test",
-    values: [1, 2, 3]
+    values: [1, 2, 3],
+    graphs: []
   }])).toBe("test: 1, 2, 3");
 });
