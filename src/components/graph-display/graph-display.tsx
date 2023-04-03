@@ -106,7 +106,7 @@ export const GraphDisplay = (props: GraphDisplayProps) => {
       {props.selectedGraphs.map((graph, index) => {
         return (
           <Draggable key={index} nodeRef={containerRef[index]} handle="canvas">
-            <div ref={containerRef[index]}>
+            <div ref={containerRef[index]} style={{position: "absolute", top: "10%", left: "25%"}}>
               <Resizable style={{position: "absolute"}} className=".graph-display-container" enable={{
                 bottom: false,
                 bottomRight: true,

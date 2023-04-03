@@ -1,10 +1,11 @@
 
 import React from "react";
-
+import { CloseButton } from "react-bootstrap";
+import "./result-exporter.css";
 /**
  * Component with name and values attributes
  */
-interface Result { 
+export interface Result { 
     /** Represesnts type of stats */
     name: string; 
     /** Represents number(s) returned from calculating those stats */
@@ -16,7 +17,7 @@ interface Result {
  */
 export interface ResultExporterProps {
     /** Represents an array of all results */
-    results: Result[]; 
+    results?: Result[]; 
 }
 
 export const formatResults = (results: Result[]) => {
@@ -58,10 +59,29 @@ export const ResultExporter = (props: ResultExporterProps) => {
     exportText(resultsString); // Calls exportText function with resultsString argument
   };
   
+  const closeResults = () => {
+    console.log(closeResults);
+    const popup = document.getElementById("popup");
+    popup.classList.remove("open-popup");
+  };
+
   // Returns a button with text "Export" that calls handleOnClick
+  if (!props.results || props.results.length === 0)
+  {
+    return (
+      <div className = "resultRet">
+        <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
+        <br/>
+        <p>No Results to Return</p>
+      </div>
+    );
+  }
   return (
-    <div>
-      <button onClick={handleOnClick}>Export</button>
+    <div className = "resultRet">
+      <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
+      <br/>
+      <button className = "expBut" onClick={handleOnClick}>Export</button>
+      <p className = "results">{formatResults(props.results)}</p>
     </div>
   );
 };

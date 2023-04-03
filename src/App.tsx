@@ -4,14 +4,17 @@ import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
 import { Operation, operations } from "./stats/operations";
 import {BinomialDistributionDialogBox } from "./components/binomial-distribution-dialog-box/binomial-distribution-dialog-box";
-
-
+import { CsvData } from "./file-handling/import";
+import { ResultExporter } from "./components/result-exporter/result-exporter";
+import { exportData } from "./file-handling/data-export";
 
 
 function App() {
   const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
   const [open, setOpen] = React.useState(false);
-  
+  // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
+  const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
+
   // This is the useEffect hook. It is called whenever the things in the array change. In this case, we want to log the selected operations whenever they change. This will be called after re-rendering, so the state will have changed
   React.useEffect(() => {
     console.log("Selected operations: ", selectedOperations.join(", "));
@@ -28,16 +31,59 @@ function App() {
     }
   };
 
+  /**
+   * Called whenever a cell in the spreadsheet changes. When this happens, we need to update the data in our state, since it doesn't automatically update.
+   * @param row The row of the cell that changed
+   * @param column The column of the cell that changed
+   * @param value The new value of the cell
+   */
+  const onCellChange = (row: number, column: number, value: number) => {
+    setData(previousData => {
+      const newData = {...previousData}; // We need to clone the data, because we can't mutate the state directly
+      if (newData.data[row] === undefined) { // If row doesn't exist, create a new row
+        newData.data[row] = [];
+      }
+      newData.data[row][column] = value; // Update the value
+      console.log("New data: ", newData);
+      return newData;
+    });
+  };
+
+  /**
+   * Updates the header for the specified column
+   * @param column The column of the header that changed
+   * @param value The new value of the header
+   */
+  const onHeaderChange = (column: number, value: string) => {
+    setData(previousData => {
+      const newData = {...previousData}; // We need to clone the data, because we can't mutate the state directly
+      newData.headers[column] = value; // Update the value
+      console.log("New data: ", newData);
+      return newData;
+    });
+  };
+
+  const results = [];
+
+  const onFileOpen = (data: CsvData) => {
+    setData(data);
+  };
   return (
     <div className="App">
-      <NavBar availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/} 
-        onOperationSelected={onOperationSelected} />
-      <Spreadsheet />
+      <NavBar
+        availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/}
+        onOperationSelected={onOperationSelected}
+        onExport={() => exportData(data)}
+        onFileImport={onFileOpen}
+      />
+      <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} />
+      <div className = "popup" id = "popup">
+        <ResultExporter results={results}></ResultExporter>
+      </div>
       <BinomialDistributionDialogBox open={open} onClose={()=> setOpen(false)} onSubmit={(results) => {
         setOpen(false);
         console.log(results);
-        
-      } } />
+      }}/>
     </div>
   );
 }
