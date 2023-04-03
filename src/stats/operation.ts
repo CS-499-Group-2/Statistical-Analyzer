@@ -36,21 +36,3 @@ export interface Operation<T> {
   /** The names of the inputs that this operation takes. */
   keys: Array<keyof T & string>;
 }
-
-/**
- * Transposes a 2D array of numbers.
- * @param cells The 2D array of numbers to transpose.
- */
-export const transpose = (cells: number[][]): number[][] => {
-  if (cells.length === 0) {
-    return [];
-  }
-  if (cells[0] === undefined) {
-    return [];
-  }
-  if (cells[0].length === 0) {
-    return cells;
-  }
-  return cells[0].map((_, colIndex) => cells.map(row => row[colIndex]));
-};
-

@@ -2,13 +2,14 @@ import "./App.css";
 import React, { useMemo } from "react";
 import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
-import { Operation, Result, transpose } from "./stats/operation";
+import { Operation, Result } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
 import {Percentile} from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
+import { transpose } from "matrix-transpose";
 
 /** List of all available operations */
 const operations: Operation<never>[] = [
