@@ -21,7 +21,7 @@ export interface Column {
 }
 
 /** Represents an operation that can be performed on a stat. */
-export interface Operation<T extends Record<string, any>> {
+export interface Operation<T> {
   /** The name of the operation */
   name: string;
   /**
@@ -40,8 +40,6 @@ export interface Operation<T extends Record<string, any>> {
    */
   isValid: (selectedCellsByColumn: Column[]) => boolean;
 
-  /** The names of the inputs that this operation takes. */
-  keys: Array<keyof T & string>;
-
-  types: () => keyof T;
+  /** The names of the inputs that this operation takes along with what the input should be */
+  keys: {[Property in keyof T]: "Number" | "Text" | "Checkbox" | "Color"};
 }

@@ -7,9 +7,9 @@ import { CsvData } from "../../file-handling/import";
 
 export interface NavBarProps {
   /** List of available operations */
-  availableOperations: Operation<never>[];
+  availableOperations: Operation<unknown>[];
   /** Callback function to be called when an operation is selected */
-  onOperationSelected?: (operation: Operation<never>) => void;
+  onOperationSelected?: (operation: Operation<unknown>) => void;
   onFileImport?: (data: CsvData) => void;
   /** Called when the export button is pressed by the user */
   onExport?: () => unknown;

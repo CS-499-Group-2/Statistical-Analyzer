@@ -12,7 +12,7 @@ import { GraphDisplay } from "./components/graph-display/graph-display";
 import { transpose } from "matrix-transpose";
 
 /** List of all available operations */
-const operations: Operation<never>[] = [
+const operations: Operation<unknown>[] = [
   Percentile,
   ProbabilityDistribution
 ];
