@@ -18,21 +18,21 @@ export const Percentile: Operation<Inputs> = {
     }
     // Validation
     for (const column of selectedCellsByColumn) {
-      if (column.length < 2) {
+      if (column.values.length < 2) {
         alert("Please select at least two cells in each column.");
         return [];
       }
     }
     // For each column, calculate the percentile and return a result
-    return selectedCellsByColumn.map((column, columnIndex) => {
-      const quantileValue = quantile(column, percentileAmount);
-      const title = `${spreadsheet.headers[columnIndex]} | Percentile | ${percentileAmount * 100}%`;
+    return selectedCellsByColumn.map((column) => {
+      const quantileValue = quantile(column.values, percentileAmount);
+      const title = `${column.name} | Percentile | ${percentileAmount * 100}%`;
       return {
         name: title,
         values: [quantileValue],
         graphs: [{
           chartType: "Normal Distribution",
-          data: column.map((value, index) => ({x: index + 1, y: value})),
+          data: column.values.map((value, index) => ({x: index + 1, y: value})),
           title: title,
           color: "blue",
           lineLabel: "Data",

@@ -13,8 +13,15 @@ export interface Result {
   graphs: Graph[];
 }
 
+export interface Column {
+  /** Represents the column name */
+  name: string;
+  /** Represents the column values */
+  values: number[];
+}
+
 /** Represents an operation that can be performed on a stat. */
-export interface Operation<T> {
+export interface Operation<T extends Record<string, any>> {
   /** The name of the operation */
   name: string;
   /**
@@ -25,14 +32,16 @@ export interface Operation<T> {
    * @param inputs The inputs that the user has provided for this operation.
    * @returns Any results from this operation.
    */
-  onSelected: (selectedCellsByColumn: number[][], spreadsheet: CsvData, inputs: {[Property in keyof T]: number}) => Result[];
+  onSelected: (selectedCellsByColumn: Column[], spreadsheet: CsvData, inputs: {[Property in keyof T]: number}) => Result[];
   /**
    * The function that is called to determine if the operation is valid.
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
    * represents a column.
    */
-  isValid: (selectedCellsByColumn: number[][]) => boolean;
+  isValid: (selectedCellsByColumn: Column[]) => boolean;
 
   /** The names of the inputs that this operation takes. */
   keys: Array<keyof T & string>;
+
+  types: () => keyof T;
 }
