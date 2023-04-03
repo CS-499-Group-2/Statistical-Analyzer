@@ -1,9 +1,10 @@
 import { Operation, Result } from "../operation";
 import NormalDistribution from "normal-distribution";
+import { mean, standardDeviation } from "simple-statistics";
 
 interface Inputs {
-  Mean: undefined;
-  "Standard Deviation": undefined;
+  "Line Color",
+  "Fill Color"
 }
 
 /**
@@ -14,18 +15,15 @@ export const ProbabilityDistribution: Operation<Inputs> = {
   name: "Probability Distribution",
   isValid: (selectedCellsByColumn) => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-    const meanValue = inputs.Mean;
-    const standardDeviationValue = inputs["Standard Deviation"];
-    // Validation
-    if (standardDeviationValue < 0) {
-      alert("Standard deviation must be a positive number.");
-      return [];
-    }
+    const lineColor = inputs["Line Color"] as string;
+    const pointColor = inputs["Point Color"] as string;
     return selectedCellsByColumn.map((column) => {
-      const title = `${column.name} | Probability Distribution (Mean: ${meanValue}, Standard Deviation: ${standardDeviationValue})`;
+      const title = `${column.name} | Probability Distribution`;
+      const meanValue = mean(column.values);
+      const standardDeviationValue = standardDeviation(column.values);
       const normalDist = new NormalDistribution(meanValue, standardDeviationValue);
       const values = column.values.map((value) => normalDist.cdf(value));
-      const graphXValues = [2, 3, 4, 5, 6, 7, 8];
+      const graphXValues = column.values.sort((a, b) => a - b); // Sort the values in ascending order
       return {
         name: title,
         values: values,
@@ -35,10 +33,15 @@ export const ProbabilityDistribution: Operation<Inputs> = {
           data: graphXValues.map((value) => ({x: value, y: normalDist.pdf(value)})),
           lineLabel: "Normal Distribution Curve",
           curved: true,
-          color: "blue",
+          color: pointColor,
+          lineColor: lineColor,
+          filled: true
         }]
       };
     });
   },
-  keys: ["Mean", "Standard Deviation"]
+  keys: {
+    "Line Color": "Color",
+    "Fill Color": "Color"
+  }
 };

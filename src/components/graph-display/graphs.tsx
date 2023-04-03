@@ -40,6 +40,8 @@ export type Graph = {
   }[],
   color?: string,
   lineLabel?: string,
+  lineColor?: string,
+  filled?: boolean,
   curved?: boolean,
   annotations?: AnnotationOptions[] | Record<string, AnnotationOptions>
 });
