@@ -64,4 +64,7 @@ function calculateMode(data: number[][]): number[] {
   return modeArray;
 }
 
-
+export function calculateBinomialDistribution( numberofTrials: number, probability: number): number [] {
+  const binomialDistribution = ss.binomialDistribution(numberofTrials, probability);
+  return binomialDistribution;
+}

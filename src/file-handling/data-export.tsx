@@ -1,9 +1,8 @@
-import React from "react";
 import { CsvData } from "./import";
 
 /**
  * Creates a downloadable CSV file from the inputted data
- * @param data a 2d array of numbers representing the data being analyzed
+ * @param csvData a 2d array of numbers representing the data being analyzed
  */
 export const exportData = (csvData: CsvData) => {
   let dataString: string;

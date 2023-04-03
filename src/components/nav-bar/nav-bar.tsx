@@ -13,6 +13,7 @@ export interface NavBarProps {
   onFileImport?: (data: CsvData) => void;
   /** Called when the export button is pressed by the user */
   onExport?: () => unknown;
+  openDialogBox?: (open: boolean) => void;
 }
 
 export const NavBar = (props: NavBarProps) => {
