@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
-import { exportData } from "./../../file-handling/data-export";
 import { Operation } from "../../stats/operations";
 import { CsvData } from "../../file-handling/import";
 
@@ -12,6 +11,8 @@ export interface NavBarProps {
   /** Callback function to be called when an operation is selected */
   onOperationSelected?: (operation: Operation) => void;
   onFileImport?: (data: CsvData) => void;
+  /** Called when the export button is pressed by the user */
+  onExport?: () => unknown;
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -42,10 +43,10 @@ export const NavBar = (props: NavBarProps) => {
     input.click();
   };
 
-  const exportAsCsv = () => {
-    console.log("exportAsCsv");
-    const data = [[1,2],[3,4],[5,6]]; // dummy data so the program runs
-    exportData(data); // Calls exportData
+  const showResults = () => {
+    console.log("showResults");
+    const popup = document.getElementById("popup");
+    popup.classList.add("open-popup");
   };
 
   return (
@@ -60,7 +61,8 @@ export const NavBar = (props: NavBarProps) => {
           <Nav className="me-auto">
             <NavDropdown title="File" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
-              <NavDropdown.Item onClick={() => exportAsCsv()}>Export as CSV</NavDropdown.Item>
+              <NavDropdown.Item onClick={props.onExport}>Export as CSV</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => showResults()}>View Statistics</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Statistics" id="basic-nav-dropdown">
               {props.availableOperations.map((operation) => ( // Loop over all the available operations
