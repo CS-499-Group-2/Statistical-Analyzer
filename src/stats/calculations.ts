@@ -2,7 +2,7 @@ import * as ss from "simple-statistics";
 
 /**
  *  This function calculates the mean of each column that the user selects. 
- * @param data : This is the data will come from the spreadsheet
+ * @param data This is the data will come from the spreadsheet
  * @returns an array of the mean of each column
  */
 export function calculateMean(data: number[][]): number [] { 
@@ -23,7 +23,7 @@ export function calculateMean(data: number[][]): number [] {
 }
 /**
  *  This function calculates the mean of each column that the user selects. 
- * @param data : This is the data will come from the spreadsheet
+ * @param data This is the data will come from the spreadsheet
  * @returns an array of the mean of each column
  */
 function calculateMedian(data: number[][]): number[] {
@@ -44,7 +44,7 @@ function calculateMedian(data: number[][]): number[] {
 }
 /**
  *  This function calculates the mean of each column that the user selects. 
- * @param data : This is the data will come from the spreadsheet
+ * @param data This is the data will come from the spreadsheet
  * @returns an array of the mean of each column
  */
 function calculateMode(data: number[][]): number[] {
@@ -64,4 +64,7 @@ function calculateMode(data: number[][]): number[] {
   return modeArray;
 }
 
-
+export function calculateBinomialDistribution( numberofTrials: number, probability: number): number [] {
+  const binomialDistribution = ss.binomialDistribution(numberofTrials, probability);
+  return binomialDistribution;
+}

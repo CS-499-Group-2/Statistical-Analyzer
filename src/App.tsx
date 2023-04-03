@@ -1,8 +1,8 @@
 import "./App.css";
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
-import {Operation, Result, transpose} from "./stats/operation";
+import { Operation, Result, transpose } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
@@ -74,12 +74,17 @@ function App() {
     });
   };
 
+  const onFileOpen = (data: CsvData) => {
+    setData(data);
+  };
+
   return (
     <div className="App">
       <NavBar
         availableOperations={availableOperations}
         onOperationSelected={onOperationSelected}
         onExport={() => exportData(data)}
+        onFileImport={onFileOpen}
       />
       <Spreadsheet
         data={data}

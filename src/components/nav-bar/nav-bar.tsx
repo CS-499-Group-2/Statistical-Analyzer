@@ -3,12 +3,14 @@ import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
+import { CsvData } from "../../file-handling/import";
 
 export interface NavBarProps {
   /** List of available operations */
   availableOperations: Operation<never>[];
   /** Callback function to be called when an operation is selected */
   onOperationSelected?: (operation: Operation<never>) => void;
+  onFileImport?: (data: CsvData) => void;
   /** Called when the export button is pressed by the user */
   onExport?: () => unknown;
 }
@@ -32,6 +34,7 @@ export const NavBar = (props: NavBarProps) => {
           if (csv) {
             const array = csvToArray(csv.toString());
             console.log(array);
+            props.onFileImport?.(array);
           }
         };
         reader.readAsText(file);
@@ -63,8 +66,11 @@ export const NavBar = (props: NavBarProps) => {
             </NavDropdown>
             <NavDropdown title="Statistics" id="basic-nav-dropdown">
               {props.availableOperations.map((operation) => ( // Loop over all the available operations
-                <NavDropdown.Item key={operation.name} onClick={() => props.onOperationSelected?.(operation) /* Call the onOperationSelected
-                 function if it's not null */}>{operation.name}</NavDropdown.Item>
+                <NavDropdown.Item
+                  key={operation.name} // This is necessary whenever you use a loop in React
+                  onClick={() => props.onOperationSelected?.(operation) /* Call the onOperationSelected function if it's not null */}>
+                  {operation.name}
+                </NavDropdown.Item>
               ))}
             </NavDropdown>
           </Nav>
