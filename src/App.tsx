@@ -9,7 +9,6 @@ import { exportData } from "./file-handling/data-export";
 import { Percentile, ProbabilityDistribution } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
-import { transpose } from "matrix-transpose";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [

@@ -1,4 +1,4 @@
-import { Operation, Result } from "./operation";
+import { Operation, Result } from "../operation";
 import { quantile } from "simple-statistics";
 
 /** Here I define the inputs that the operation will take */

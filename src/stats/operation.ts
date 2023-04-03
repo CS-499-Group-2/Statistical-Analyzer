@@ -32,7 +32,8 @@ export interface Operation<T> {
    * @param inputs The inputs that the user has provided for this operation.
    * @returns Any results from this operation.
    */
-  onSelected: (selectedCellsByColumn: Column[], spreadsheet: CsvData, inputs: {[Property in keyof T]: number}) => Result[];
+  onSelected: (selectedCellsByColumn: Column[], spreadsheet: CsvData, inputs: {[Property in keyof T]: number | string | boolean})
+    => Result[];
   /**
    * The function that is called to determine if the operation is valid.
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
