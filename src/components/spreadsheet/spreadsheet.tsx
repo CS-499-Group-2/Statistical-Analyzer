@@ -17,12 +17,12 @@ export interface SpreadsheetProps {
   data: CsvData,
   onCellChange?: (row: number, column: number, value: number) => void
   onHeaderChange?: (column: number, value: string) => void
+  onCellsSelected?: (cells: number[][]) => void
 }
 
-export const Spreadsheet = (props: SpreadsheetProps) => {  
+export const Spreadsheet = (props: SpreadsheetProps) => {
 
   return (
-    
     <div className="sheet">
       <HotTable
         data={props.data.data}
@@ -88,6 +88,15 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             props.onCellChange?.(row, columnNumber, newValueAsNumber);
           });
         }}
+        afterSelectionEnd={(rowStart, columnStart, rowEnd, columnEnd) => {
+          const data = props.data.data; // Get the data
+          const cells: number[][] = []; // Create an array to store the cells
+          for (let row = rowStart; row <= rowEnd; row++) { // Loop through the rows
+            cells[row] = data[row].slice(columnStart, columnEnd + 1); // Add the cells to the array
+          }
+          props.onCellsSelected?.(cells); // Call the onCellsSelected callback
+        }}
+        outsideClickDeselects={false}
       />
     </div>);
 };

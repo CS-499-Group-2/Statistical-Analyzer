@@ -2,15 +2,7 @@
 import React from "react";
 import { CloseButton } from "react-bootstrap";
 import "./result-exporter.css";
-/**
- * Component with name and values attributes
- */
-export interface Result { 
-    /** Represesnts type of stats */
-    name: string; 
-    /** Represents number(s) returned from calculating those stats */
-    values: number[]; 
-}
+import {Result} from "../../stats/operation";
 
 /**
  * Component with Result[] attribute to allow for multiple stats

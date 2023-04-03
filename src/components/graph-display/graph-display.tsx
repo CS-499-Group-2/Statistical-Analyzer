@@ -7,6 +7,7 @@ import "./graph-display.css";
 import Draggable from "react-draggable";
 import { Card } from "react-bootstrap";
 import { Resizable } from "re-resizable";
+import annotationPlugin from "chartjs-plugin-annotation";
 
 // This is required to register the chart types with chart js. See https://react-chartjs-2.js.org/faq/registered-element
 ChartJS.register(
@@ -18,7 +19,8 @@ ChartJS.register(
   Tooltip,
   Legend,
   ArcElement,
-  BarElement
+  BarElement,
+  annotationPlugin
 );
 
 /**
@@ -31,8 +33,11 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
   const options: ChartProps["options"] =  {
     plugins: {
       title: {
-        display: !graph.title ? false : true,
+        display: !!graph.title,
         text: graph.title
+      },
+      annotation: {
+        annotations: []
       }
     },
     responsive: true,
@@ -45,7 +50,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
     options.indexAxis = "y";
   }
 
-  // If the grapg is a bar chart, then let's setup the data and return a bar component from chart js
+  // If the graph is a bar chart, then let's setup the data and return a bar component from chart js
   if (graph.chartType === "Vertical Bar" || graph.chartType === "Horizontal Bar") {
     const data: ChartProps<"bar">["data"] = {
       labels: graph.data.map((d) => d.label),
@@ -72,6 +77,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
 
   // If the graph is a scatter plot, then let's setup the data and return a scatter component from chart js
   if (graph.chartType === "XY Scatter" || graph.chartType === "Normal Distribution")  {
+    options.plugins.annotation.annotations = graph.annotations;
     const data: ChartProps<"scatter">["data"] = {
       datasets: [
         {
@@ -79,9 +85,9 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
           // If the graph is a normal distribution, then we want to show the line.
           showLine: graph.chartType === "Normal Distribution",
           backgroundColor: graph.color,
-          label: graph.lineLabel
+          label: graph.lineLabel,
         }
-      ]
+      ],
     };
     return <Scatter data={data}  options={options} />;
   }

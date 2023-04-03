@@ -1,34 +1,45 @@
 import "./App.css";
-import React from "react";
+import React, { useMemo } from "react";
 import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
-import { Operation, operations } from "./stats/operations";
-import {BinomialDistributionDialogBox } from "./components/binomial-distribution-dialog-box/binomial-distribution-dialog-box";
+import { Operation, Result, transpose } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
+import {Percentile} from "./stats";
+import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
+import { GraphDisplay } from "./components/graph-display/graph-display";
 
+/** List of all available operations */
+const operations: Operation<never>[] = [
+  Percentile
+];
 
 function App() {
-  const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
-  const [open, setOpen] = React.useState(false);
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
   const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
+  const [selectedCells, setSelectedCells] = React.useState<number[][]>([]);
+  const modalRef = React.useRef<InputModalRef>(null);
+  const [results, setResults] = React.useState<Result[]>([]);
 
-  // This is the useEffect hook. It is called whenever the things in the array change. In this case, we want to log the selected operations whenever they change. This will be called after re-rendering, so the state will have changed
-  React.useEffect(() => {
-    console.log("Selected operations: ", selectedOperations.join(", "));
-  }, [selectedOperations]);
+  /** This is a function that will return a list of all available operations that are valid for the selected cells
+   * We use useMemo here to make sure that this function is only called when the selected cells change.
+   * Remember that otherwise this function would be called every time the component renders, which would be very inefficient.
+   */
+  const availableOperations = useMemo(() => {
+    return operations.filter(operation => operation.isValid(selectedCells));
+  }, [selectedCells]);
 
   /**
    * Adds an operation to the list of selected operations
    * @param operation The operation to add to the list of selected operations
    */
-  const onOperationSelected = (operation: Operation) => {
-    setSelectedOperations(previous => [...previous, operation]); // Set on a useState passes in the previous state, so we can just add the new operation to the previous state
-    if (operation === "Binomial Distribution") {
-      setOpen(true);
-    }
+  const onOperationSelected = (operation: Operation<Record<string, number>>) => {
+    modalRef.current.open(operation, (values) => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+  };
+
+  const handleOperationComplete = (results: Result[]) => {
+    setResults((previousResults) => [...previousResults, ...results]);
   };
 
   /**
@@ -63,27 +74,29 @@ function App() {
     });
   };
 
-  const results = [];
-
   const onFileOpen = (data: CsvData) => {
     setData(data);
   };
+
   return (
     <div className="App">
       <NavBar
-        availableOperations={[...operations] /* For some reason, operations is readonly, so we just clone it here*/}
+        availableOperations={availableOperations}
         onOperationSelected={onOperationSelected}
         onExport={() => exportData(data)}
         onFileImport={onFileOpen}
       />
-      <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} />
+      <Spreadsheet
+        data={data}
+        onCellChange={onCellChange}
+        onHeaderChange={onHeaderChange}
+        onCellsSelected={(cells) => setSelectedCells(transpose(cells))}
+      />
       <div className = "popup" id = "popup">
         <ResultExporter results={results}></ResultExporter>
       </div>
-      <BinomialDistributionDialogBox open={open} onClose={()=> setOpen(false)} onSubmit={(results) => {
-        setOpen(false);
-        console.log(results);
-      }}/>
+      <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
+      <InputModal ref={modalRef} />
     </div>
   );
 }

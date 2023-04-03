@@ -1,3 +1,5 @@
+import { AnnotationOptions } from "chartjs-plugin-annotation/types/options";
+
 /**
  * This is a union type. Union types require the type keyword, and allow you to specify one type
  * that can be one of many different types. In this case, we have a graph that can be one of five
@@ -37,5 +39,6 @@ export type Graph = {
     y: number
   }[],
   color?: string,
-  lineLabel?: string
+  lineLabel?: string,
+  annotations?: AnnotationOptions[] | Record<string, AnnotationOptions>
 });

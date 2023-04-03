@@ -2,18 +2,17 @@ import React from "react";
 import { Container, Navbar, NavDropdown, Nav } from "react-bootstrap";
 import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
-import { Operation } from "../../stats/operations";
+import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
 
 export interface NavBarProps {
   /** List of available operations */
-  availableOperations: Operation[];
+  availableOperations: Operation<never>[];
   /** Callback function to be called when an operation is selected */
-  onOperationSelected?: (operation: Operation) => void;
+  onOperationSelected?: (operation: Operation<never>) => void;
   onFileImport?: (data: CsvData) => void;
   /** Called when the export button is pressed by the user */
   onExport?: () => unknown;
-  openDialogBox?: (open: boolean) => void;
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -54,7 +53,7 @@ export const NavBar = (props: NavBarProps) => {
     <Navbar bg="light" expand="sm" sticky="top" >
       <Container id="bar-container">
         <Navbar.Brand>
-          <img className="nav-logo" src="logo.png"/>
+          <img className="nav-logo" src="logo.png" alt="logo" />
           Statistical Analyzer
         </Navbar.Brand>
         <Navbar.Toggle />
@@ -67,7 +66,11 @@ export const NavBar = (props: NavBarProps) => {
             </NavDropdown>
             <NavDropdown title="Statistics" id="basic-nav-dropdown">
               {props.availableOperations.map((operation) => ( // Loop over all the available operations
-                <NavDropdown.Item key={operation} onClick={() => props.onOperationSelected?.(operation) /* Call the onOperationSelected function if it's not null */}>{operation}</NavDropdown.Item>
+                <NavDropdown.Item
+                  key={operation.name} // This is necessary whenever you use a loop in React
+                  onClick={() => props.onOperationSelected?.(operation) /* Call the onOperationSelected function if it's not null */}>
+                  {operation.name}
+                </NavDropdown.Item>
               ))}
             </NavDropdown>
           </Nav>
