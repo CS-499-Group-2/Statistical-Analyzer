@@ -42,6 +42,15 @@ export interface Operation<T> {
  * @param cells The 2D array of numbers to transpose.
  */
 export const transpose = (cells: number[][]): number[][] => {
+  if (cells.length === 0) {
+    return [];
+  }
+  if (cells[0] === undefined) {
+    return [];
+  }
+  if (cells[0].length === 0) {
+    return cells;
+  }
   return cells[0].map((_, colIndex) => cells.map(row => row[colIndex]));
 };
 
