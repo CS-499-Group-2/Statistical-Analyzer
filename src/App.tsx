@@ -2,14 +2,13 @@ import "./App.css";
 import React, { useMemo } from "react";
 import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
-import { Operation, Result } from "./stats/operation";
+import { Column, Operation, Result } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
-import {Percentile} from "./stats";
+import { Percentile } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
-import { transpose } from "matrix-transpose";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -19,7 +18,7 @@ const operations: Operation<unknown>[] = [
 function App() {
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
   const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
-  const [selectedCells, setSelectedCells] = React.useState<number[][]>([]);
+  const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
 
@@ -91,7 +90,7 @@ function App() {
         data={data}
         onCellChange={onCellChange}
         onHeaderChange={onHeaderChange}
-        onCellsSelected={(cells) => setSelectedCells(transpose(cells))}
+        onCellsSelected={setSelectedCells}
       />
       <div className = "popup" id = "popup">
         <ResultExporter results={results}></ResultExporter>

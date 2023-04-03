@@ -6,6 +6,8 @@ import "handsontable/dist/handsontable.full.min.css";
 import "./spreadsheet.css";
 import { CsvData } from "../../file-handling/import";
 import { HyperFormula } from "hyperformula";
+import { Column } from "../../stats/operation";
+import { transpose } from "matrix-transpose";
 
 registerAllModules();
 
@@ -17,7 +19,7 @@ export interface SpreadsheetProps {
   data: CsvData,
   onCellChange?: (row: number, column: number, value: number) => void
   onHeaderChange?: (column: number, value: string) => void
-  onCellsSelected?: (cells: number[][]) => void
+  onCellsSelected?: (columns: Column[]) => void
 }
 
 export const Spreadsheet = (props: SpreadsheetProps) => {
@@ -94,7 +96,12 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
           for (let row = rowStart; row <= rowEnd; row++) { // Loop through the rows
             cells[row] = data[row].slice(columnStart, columnEnd + 1); // Add the cells to the array
           }
-          props.onCellsSelected?.(cells); // Call the onCellsSelected callback
+          const transposed = transpose(cells);
+          const columns: Column[] = transposed.map((column) => ({
+            values: column,
+            name: props.data.headers[columnStart]
+          }));
+          props.onCellsSelected?.(columns); // Call the onCellsSelected callback
         }}
         outsideClickDeselects={false}
       />
