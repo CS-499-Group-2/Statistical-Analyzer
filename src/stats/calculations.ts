@@ -6,6 +6,12 @@ import * as ss from "simple-statistics";
  * @returns an array of the mean of each column
  */
 export function calculateMean(data: number[]): number {
+  // if the data has null values, remove them
+  for (let i = 0; i < data.length; i++) {
+    if (data[i] === null) {
+      data.splice(i, 1);
+    }
+  }
   const mean = ss.mean(data);
   return mean;
 } 
@@ -14,45 +20,36 @@ export function calculateMean(data: number[]): number {
  * @param data This is the data will come from the spreadsheet
  * @returns an array of the mean of each column
  */
-function calculateMedian(data: number[][]): number[] {
-  const medianArray: number[] = [];
-
-  for (let i = 0; i < data[0].length; i++) {
-    const column = data.map(row => row[i]);
-    if (column.includes(null)) {
-      const filteredColumn = column.filter(value => value !== null);
-      const median = ss.median(filteredColumn);
-      medianArray.push(median);
-    } else {
-      const median = ss.median(column);
-      medianArray.push(median);
-    } 
+export function calculateMedian(data: number[]): number {
+  for (let i = 0; i < data.length; i++) {
+    if (data[i] === null) {
+      data.splice(i, 1);
+    }
   }
-  return medianArray;
+  const median = ss.median(data);
+  return median;
 }
 /**
  *  This function calculates the mean of each column that the user selects. 
  * @param data This is the data will come from the spreadsheet
  * @returns an array of the mean of each column
  */
-function calculateMode(data: number[][]): number[] {
-  const modeArray: number[] = [];
-
-  for (let i = 0; i < data[0].length; i++) {
-    const column = data.map(row => row[i]);
-    if (column.includes(null)) {
-      const filteredColumn = column.filter(value => value !== null);
-      const mode = ss.mode(filteredColumn);
-      modeArray.push(mode);
-    } else {
-      const mode = ss.mode(column);
-      modeArray.push(mode);
-    } 
+export function calculateMode(data: number[]): number {
+  for (let i = 0; i < data.length; i++) {
+    if (data[i] === null) {
+      data.splice(i, 1);
+    }
   }
-  return modeArray;
+  const mode = ss.mode(data);
+  return mode;
 }
 
 export function calculateBinomialDistribution( numberofTrials: number, probability: number): number [] {
   const binomialDistribution = ss.binomialDistribution(numberofTrials, probability);
   return binomialDistribution;
+}
+
+export function calculateStandardDeviation(data: number[]): number {
+  const standardDeviation = ss.standardDeviation(data);
+  return standardDeviation;
 }

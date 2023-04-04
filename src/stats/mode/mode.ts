@@ -1,13 +1,13 @@
 import { Operation , Result} from "../operation";
-import { calculateMean } from "../calculations";
+import { calculateMode } from "../calculations";
+
 
 //Defining the inputs
 interface Inputs {
     "Color of the mean line": undefined;
-} 
+}
 
-
-export const Mean: Operation<Inputs> = {
+export const Mode: Operation<Inputs> = {
   name: "Mean",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const meanColor = inputs["Color of the mean line"] as string;
@@ -19,30 +19,30 @@ export const Mean: Operation<Inputs> = {
         return [];
       }
     }
-        
+
     //For each column, calculate the mean and return a result
     return selectedCellsByColumn.map((column) => {
-      const meanValue = calculateMean(column.values);
+      const modeValue = calculateMode(column.values);
       const title = `${column.name} | Mean`;
       return {
         name : title,
-        values: [meanValue],
+        values: [modeValue],
         graphs: [{
           chartType: "Horizontal Bar",
           data: [{
-            value : meanValue,
+            value : modeValue,
             color : meanColor,
             label : "Mean",
 
           }],
-        }], 
+        }],
       };
     });
   },
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;
-  }, 
-  keys : { 
-    "Color of the mean line" : "Color", 
+  },
+  keys : {
+    "Color of the mean line" : "Color",
   },
 };

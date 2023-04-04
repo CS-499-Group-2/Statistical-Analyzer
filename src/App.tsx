@@ -6,7 +6,7 @@ import { Column, Operation, Result } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
-import { Percentile , Mean  } from "./stats";
+import { Percentile , Mean, Median, Mode, BinomialDistribution , StandardDeviation} from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
 
@@ -14,6 +14,10 @@ import { GraphDisplay } from "./components/graph-display/graph-display";
 const operations: Operation<unknown>[] = [
   Percentile, 
   Mean , 
+  Median, 
+  Mode,
+  BinomialDistribution, 
+  StandardDeviation,
 ];
 
 function App() {
