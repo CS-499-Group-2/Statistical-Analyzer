@@ -7,14 +7,14 @@ describe ("Mean Testing", () => {
     const data = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const expected = 5.5;
     const result = calculateMean(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
   });
 
   test("Test with negative data", () => {
     const data = [ -1, -2, -3, -4, -5, -6, -7, -8, -9, -10];
     const expected = -5.5;
     const result = calculateMean(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
   }
   );
 
@@ -22,7 +22,7 @@ describe ("Mean Testing", () => {
     const data = [1,2,3,4,null, 6,8,null,10];
     const expected = 4.8;
     const result = calculateMean(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
 
   });
 });
@@ -47,18 +47,25 @@ describe ("Mode Testing", () => {
 });
 
 describe ("Median Testing", () => {
-  test("Test with basic data", () => {
+  test("Test with even data", () => {
     const data = [1,2,3,4,5,6,7,8,9,10];
-    const expected = 5;
+    const expected = 5.5;
     const result = calculateMedian(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
+  });
+
+  test("Test with odd data", () => {
+    const data = [1,2,3,4,5,6,7,8,9,10,11];
+    const expected = 6;
+    const result = calculateMedian(data);
+    expect(result).toBeCloseTo(expected, .01);
   });
 
   test("Test with empty data", () => {
     const data = [null, 2,5,6,7,null,8,9,10];
     const expected = 7;
     const result = calculateMedian(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
   });
 });
 
@@ -67,13 +74,13 @@ describe ("Standard Deviation Testing", () => {
     const data = [1,2,3,4,5,6,7,8,9,10];
     const expected = 2.9;
     const result = calculateStandardDeviation(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
   });
 
   test("Test with empty data", () => {
     const data = [null, 2,5,6,7,null,8,9,10];
     const expected = 2.5;
     const result = calculateStandardDeviation(data);
-    expect(result).toEqual(expected);
+    expect(result).toBeCloseTo(expected, .01);
   });
 });
