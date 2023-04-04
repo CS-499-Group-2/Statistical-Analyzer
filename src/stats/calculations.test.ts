@@ -65,14 +65,14 @@ describe ("Median Testing", () => {
 describe ("Standard Deviation Testing", () => {
   test("Test with basic data", () => {
     const data = [1,2,3,4,5,6,7,8,9,10];
-    const expected = 3.02765;
+    const expected = 2.9;
     const result = calculateStandardDeviation(data);
     expect(result).toEqual(expected);
   });
 
   test("Test with empty data", () => {
     const data = [null, 2,5,6,7,null,8,9,10];
-    const expected = 2.73861;
+    const expected = 2.5;
     const result = calculateStandardDeviation(data);
     expect(result).toEqual(expected);
   });

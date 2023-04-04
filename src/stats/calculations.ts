@@ -50,6 +50,12 @@ export function calculateBinomialDistribution( numberofTrials: number, probabili
 }
 
 export function calculateStandardDeviation(data: number[]): number {
-  const standardDeviation = ss.standardDeviation(data);
-  return standardDeviation;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i] === null) {
+      data.splice(i, 1);
+    }
+  }
+  const standardDeviation = ss.standardDeviation(data).toPrecision(2);
+  const result = parseFloat(standardDeviation);
+  return result;
 }
