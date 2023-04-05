@@ -3,31 +3,47 @@ import { calculateStandardDeviation } from "../calculations";
 
 //Defining the inputs
 interface Inputs {
-    "Color": "color";
+    "Point Color": "Color"
+    "Line Color": "Color"
+    "Fill Color": "Color"
 } 
 
 export const StandardDeviation: Operation<Inputs> = {
   name: "Standard Deviation",
+  isValid: (selectedCellsByColumn) => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-    const color = inputs["Color"] as string;
+    const pointColor = inputs["Point Color"] as string;
+    const lineColor = inputs["Line Color"] as string;
+    const fillColor = inputs["Fill Color"] as string;
     const standardDeviation = calculateStandardDeviation(selectedCellsByColumn[0].values);
+    const xValues = selectedCellsByColumn[0].values.sort((a, b) => a - b);
+    const yValues = xValues.map(() => standardDeviation);
+
     return [{
       name: "Standard Deviation",
       values: [standardDeviation],
       graphs: [{
-        chartType: "Horizontal Bar",
-        data: [{
-          value: standardDeviation,
-          label: standardDeviation.toString(),
-          color: color,
-        }],
-      }],
+        chartType: "Standard Deviation",
+        data: { xValues, yValues} , 
+        curved: true,
+        color: lineColor,
+        fillColor: fillColor,
+        pointColor: pointColor,
+        filled: true,
+
+      }]
     }];
+
+
   },
-  isValid: (selectedCellsByColumn): boolean => {
-    return selectedCellsByColumn.length !== 0;
-  },
+
+
   keys: {
-    "Color": "Color",
+    "Point Color" : "Color",
+    "Line Color" : "Color",
+    "Fill Color": "Color",
   }
+
+
+
 };
