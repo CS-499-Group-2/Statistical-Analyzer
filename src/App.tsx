@@ -9,6 +9,7 @@ import { exportData } from "./file-handling/data-export";
 import { Percentile, ProbabilityDistribution } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
+import { saveToStorage } from "./file-handling/cloud";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -86,6 +87,10 @@ function App() {
         onOperationSelected={onOperationSelected}
         onExport={() => exportData(data)}
         onFileImport={onFileOpen}
+        onCloudExport={() => saveToStorage(data, results).catch((e) => {
+          console.error(e);
+          alert("Failed to save to cloud");
+        })}
       />
       <Spreadsheet
         data={data}

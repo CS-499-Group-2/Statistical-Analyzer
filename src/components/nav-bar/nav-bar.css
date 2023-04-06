@@ -5,6 +5,7 @@
   height: 30px;
   margin-right: 3%;
 }
-#bar-container{
+.bar-container{
   margin-left: 2.5%;
+  margin-right: 2.5%;
 }
