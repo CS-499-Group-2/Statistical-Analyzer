@@ -9,6 +9,23 @@ import { exportData } from "./file-handling/data-export";
 import { Percentile, ProbabilityDistribution } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
+import ReactSwitch from "react-switch";
+import {createGlobalStyle} from "styled-components";
+const GlobalStyle = createGlobalStyle`
+  body{
+    background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+    transition: background-color 0.25s, color 0.25s;
+  }
+  h1,h2,h3,h4 {
+    color: ${({ theme }) => theme.headers};
+  }
+  a {
+    color: ${({ theme }) => theme.links};
+  }
+`;
+
+
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -23,6 +40,11 @@ function App() {
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
 
+
+  
+  
+
+  
   /** This is a function that will return a list of all available operations that are valid for the selected cells
    * We use useMemo here to make sure that this function is only called when the selected cells change.
    * Remember that otherwise this function would be called every time the component renders, which would be very inefficient.
@@ -98,8 +120,21 @@ function App() {
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
-    </div>
+    
+      
+          
+       
+
+    </div> 
+
+
+
+      
+
+
+    
   );
+  
 }
 
 export default App;
