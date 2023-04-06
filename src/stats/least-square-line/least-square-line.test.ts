@@ -16,8 +16,8 @@ describe("Least Square Line Tests", () => {
     const actual = LeastSquareLine.onSelected(columns, {headers: [""], data: []}, { "Which Column Should Be Used For X Values?": "X",
       "Value Line Color": "", "Reference Line Color": "" });
     const graph = actual[0].graphs[0];
-    expect(graph.chartType).toBe("Normal Distribution");
-    if (graph.chartType !== "Normal Distribution") return; // This is to make TypeScript happy
+    expect(graph.chartType).toBe("XY Scatter");
+    if (graph.chartType !== "XY Scatter") return; // This is to make TypeScript happy
     expect(graph.annotations[0].yMax).toBeCloseTo(expectedYMax, 0.01);
     expect(graph.annotations[0].yMin).toBeCloseTo(expectedYMin, 0.01);
   });
