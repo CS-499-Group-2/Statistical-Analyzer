@@ -56,7 +56,7 @@ export const LeastSquareLine: Operation<Inputs> = {
       yLabel: columns[yColumn].name
     };
     return [{
-      name: "Least Square Line",
+      name: `Least Square Line for ${columns[yColumn].name} vs ${xColumnHeader}`,
       values: [slope, yIntercept],
       graphs: [graph]
     }];
