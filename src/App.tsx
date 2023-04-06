@@ -9,7 +9,8 @@ import { exportData } from "./file-handling/data-export";
 import {
   Percentile,
   ProbabilityDistribution,
-  LeastSquareLine
+  LeastSquareLine,
+  ChiSquare
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -18,7 +19,8 @@ import { GraphDisplay } from "./components/graph-display/graph-display";
 const operations: Operation<unknown>[] = [
   Percentile,
   ProbabilityDistribution,
-  LeastSquareLine
+  LeastSquareLine,
+  ChiSquare
 ];
 
 function App() {
