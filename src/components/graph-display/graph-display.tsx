@@ -91,6 +91,8 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
     };
     return <Scatter data={data}  options={options} />;
   }
+
+  
 };
 
 /** The properties for graph display */

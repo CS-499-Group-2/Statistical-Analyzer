@@ -1,5 +1,5 @@
 import { Operation, Result } from "../operation";
-import { calculateStandardDeviation } from "../calculations";
+import { calculateStandardDeviation, calculateMean } from "../calculations";
 
 //Defining the inputs
 interface Inputs {
@@ -16,22 +16,34 @@ export const StandardDeviation: Operation<Inputs> = {
     const lineColor = inputs["Line Color"] as string;
     const fillColor = inputs["Fill Color"] as string;
     const standardDeviation = calculateStandardDeviation(selectedCellsByColumn[0].values);
+    const mean = calculateMean(selectedCellsByColumn[0].values);
     const xValues = selectedCellsByColumn[0].values.sort((a, b) => a - b);
-    const yValues = xValues.map(() => standardDeviation);
-
     return [{
       name: "Standard Deviation",
       values: [standardDeviation],
       graphs: [{
-        chartType: "Standard Deviation",
-        data: { xValues, yValues} , 
+        chartType: "Normal Distribution",
+        title: "Standard Deviation",
+        data: xValues.map((value, index) => ({x: value, y: 1/(standardDeviation * Math.sqrt(2 * Math.PI)) * Math.exp(-Math.pow(value - mean, 2) / (2 * Math.pow(standardDeviation, 2)))})),
+        color: pointColor,
+        lineColor: lineColor,
+        filled : true,
         curved: true,
-        color: lineColor,
-        fillColor: fillColor,
-        pointColor: pointColor,
-        filled: true,
+        annotations: {
+         type : "line",
+         data { 
+          labels : ["Standard Deviation"],
+          datasets : [{
+            label : "Standard Deviation",
+            data : xValues,
+            borderColor : lineColor,
+            backgroundColor : fillColor,
+            fill : true,
+          }]
 
-      }]
+
+
+         }
     }];
 
 
