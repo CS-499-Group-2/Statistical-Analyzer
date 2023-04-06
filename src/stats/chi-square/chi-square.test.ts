@@ -34,7 +34,7 @@ describe("Chi Squared Tests", () => {
       name: "Expected",
       values: new Array<number>(12).fill(21.333, 0, 12)
     }];
-    const actual = ChiSquare.onSelected(columns, undefined, {"Observed Column Header": "Observed"});
+    const actual = ChiSquare.onSelected(columns, undefined, {"Observed Column Header": "Observed", "Line Color": "#ffffff"});
     expect(actual[0].values[0]).toBeCloseTo(expected, 0.001);
   });
 });
