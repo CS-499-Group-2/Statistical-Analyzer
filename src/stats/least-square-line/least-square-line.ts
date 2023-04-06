@@ -39,7 +39,7 @@ export const LeastSquareLine: Operation<Inputs> = {
     const graph: Graph = {
       chartType: "Normal Distribution",
       title: "Least Square Line",
-      data: pointInfo.map(point => ({ x: point.x, y: point.y })),
+      data: pointInfo.sort((a, b) => a.x - b.x).map(point => ({ x: point.x, y: point.y })),
       lineLabel: "Values",
       lineColor: inputs["Value Line Color"] as string,
       annotations: [{
