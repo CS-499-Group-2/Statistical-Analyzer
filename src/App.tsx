@@ -94,7 +94,10 @@ function App() {
         onCellsSelected={setSelectedCells}
       />
       <div className = "popup" id = "popup">
-        <ResultExporter results={results}></ResultExporter>
+        <ResultExporter
+          results={results}
+          onDelete={(idx) => setResults(results.filter(n => n !== results[idx]))}
+        />
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
