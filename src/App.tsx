@@ -7,9 +7,10 @@ import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
 import {
-  ChiSquare,
   Percentile,
-  ProbabilityDistribution
+  ProbabilityDistribution,
+  LeastSquareLine,
+  ChiSquare
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -18,6 +19,7 @@ import { GraphDisplay } from "./components/graph-display/graph-display";
 const operations: Operation<unknown>[] = [
   Percentile,
   ProbabilityDistribution,
+  LeastSquareLine,
   ChiSquare
 ];
 
@@ -99,7 +101,10 @@ function App() {
         onCellsSelected={setSelectedCells}
       />
       <div className = "popup" id = "popup">
-        <ResultExporter results={results}></ResultExporter>
+        <ResultExporter
+          results={results}
+          onDelete={(idx) => setResults(results.filter(n => n !== results[idx]))}
+        />
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
