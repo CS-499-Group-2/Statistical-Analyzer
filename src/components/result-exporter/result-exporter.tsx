@@ -9,9 +9,7 @@ import { Result } from "../../stats/operation";
 export interface ResultExporterProps {
     /** Represents an array of all results */
     results?: Result[];
-
-    onDelete?(index: number);
-    
+    onDelete?: (index: number) => void;
 }
 
 export const formatResults = (results: Result[]) => {
@@ -22,14 +20,6 @@ export const formatResults = (results: Result[]) => {
     .join("\n");
   return resultsString;
 };
-
-/*const onDelete = (results: Result[], idx: number) => {
-  //props.results.filter(n => n !== props.results[idx]);
-  console.log(results);
-  console.log(results[idx]);
-  delete results[idx];
-  console.log(results); 
-};*/
 
 /**
  * Function that handles all actions regarding downloading results of the stats calculations
@@ -75,7 +65,7 @@ export const ResultExporter = (props: ResultExporterProps) => {
       const newResults = [];
       for (let i = 0; i < props.results.length; i++) {
         newResults.push(
-          <div><p><CloseButton onClick={() => props.onDelete(i)}></CloseButton>  
+          <div><p><CloseButton onClick={() => props.onDelete?.(i)}></CloseButton>
             {"\t" + props.results[i].name + ": " + props.results[i].values.join(", ")}
           </p></div>);
       }
