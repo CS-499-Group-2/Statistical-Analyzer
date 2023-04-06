@@ -1,14 +1,17 @@
 import React from "react";
 import { CloseButton } from "react-bootstrap";
 import "./result-exporter.css";
-import {Result} from "../../stats/operation";
+import { Result } from "../../stats/operation";
 
 /**
  * Component with Result[] attribute to allow for multiple stats
  */
 export interface ResultExporterProps {
     /** Represents an array of all results */
-    results?: Result[]; 
+    results?: Result[];
+
+    onDelete?(index: number);
+    
 }
 
 export const formatResults = (results: Result[]) => {
@@ -19,6 +22,14 @@ export const formatResults = (results: Result[]) => {
     .join("\n");
   return resultsString;
 };
+
+/*const onDelete = (results: Result[], idx: number) => {
+  //props.results.filter(n => n !== props.results[idx]);
+  console.log(results);
+  console.log(results[idx]);
+  delete results[idx];
+  console.log(results); 
+};*/
 
 /**
  * Function that handles all actions regarding downloading results of the stats calculations
@@ -56,9 +67,24 @@ export const ResultExporter = (props: ResultExporterProps) => {
     popup.classList.remove("open-popup");
   };
 
+  const printableResults = () => {
+    if (!props.results || props.results.length == 0) {
+      return [];
+    }
+    else {
+      const newResults = [];
+      for (let i = 0; i < props.results.length; i++) {
+        newResults.push(
+          <div><p><CloseButton onClick={() => props.onDelete(i)}></CloseButton>  
+            {"\t" + props.results[i].name + ": " + props.results[i].values.join(", ")}
+          </p></div>);
+      }
+      return newResults;
+    }
+  };
+
   // Returns a button with text "Export" that calls handleOnClick
-  if (!props.results || props.results.length === 0)
-  {
+  if (!props.results || props.results.length === 0) {
     return (
       <div className = "resultRet">
         <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
@@ -67,12 +93,14 @@ export const ResultExporter = (props: ResultExporterProps) => {
       </div>
     );
   }
-  return (
-    <div className = "resultRet">
-      <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
-      <br/>
-      <button className = "expBut" onClick={handleOnClick}>Export</button>
-      <p className = "results">{formatResults(props.results)}</p>
-    </div>
-  );
+  else {
+    return (
+      <div className = "resultRet">
+        <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
+        <br/>
+        <button className = "expBut" onClick={handleOnClick}>Export</button>
+        <p className = "results">{printableResults()}</p>
+      </div>
+    );
+  }
 };
