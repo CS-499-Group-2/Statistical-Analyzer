@@ -99,6 +99,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             const columns = selectedCells.flatMap((group) => {
               const cells: number[][] = []; // Create an array to store the cells
               for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
+                if (!data[row]) continue; // Skip if the row is empty
                 cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
               }
               for (let row = 0; row < cells.length; row++) { // Loop through the rows
