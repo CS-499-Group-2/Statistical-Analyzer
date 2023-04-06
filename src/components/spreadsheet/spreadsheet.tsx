@@ -93,21 +93,25 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
           });
         }}
         afterSelectionEnd={() => {
-          const data = props.data.data; // Get the data
-          const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
-          const columns = selectedCells.flatMap((group) => {
-            const cells: number[][] = []; // Create an array to store the cells
-            for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
-              cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
-            }
-            const transposed = transpose(cells);
-            return transposed.map((column, index) => ({
-              values: column,
-              name: props.data.headers[group.from.col + index]
-            }));
-          });
-          console.log("Columns", columns);
-          props.onCellsSelected?.(columns); // Call the onCellsSelected callback
+          try {
+            const data = props.data.data; // Get the data
+            const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
+            const columns = selectedCells.flatMap((group) => {
+              const cells: number[][] = []; // Create an array to store the cells
+              for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
+                cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
+              }
+              const transposed = transpose(cells);
+              return transposed.map((column, index) => ({
+                values: column,
+                name: props.data.headers[group.from.col + index]
+              }));
+            });
+            console.log("Columns", columns);
+            props.onCellsSelected?.(columns); // Call the onCellsSelected callback
+          } catch (e) {
+            console.error(e);
+          }
         }}
         outsideClickDeselects={false}
       />
