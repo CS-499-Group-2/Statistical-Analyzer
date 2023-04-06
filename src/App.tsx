@@ -11,19 +11,7 @@ import InputModal, { InputModalRef } from "./components/input-modal/input-modal"
 import { GraphDisplay } from "./components/graph-display/graph-display";
 import ReactSwitch from "react-switch";
 import {createGlobalStyle} from "styled-components";
-const GlobalStyle = createGlobalStyle`
-  body{
-    background-color: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.text};
-    transition: background-color 0.25s, color 0.25s;
-  }
-  h1,h2,h3,h4 {
-    color: ${({ theme }) => theme.headers};
-  }
-  a {
-    color: ${({ theme }) => theme.links};
-  }
-`;
+import {useThemeStore} from "./components/theme-store/theme-store";
 
 
 
@@ -33,13 +21,14 @@ const operations: Operation<unknown>[] = [
   ProbabilityDistribution
 ];
 
+
 function App() {
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
   const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
   const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
-
+  const theme = useThemeStore(state => state.isDark);
 
   
   
@@ -102,7 +91,9 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App" style= {{ 
+      backgroundColor: theme ? "#1A1B1E" : "",
+    }}>
       <NavBar
         availableOperations={availableOperations}
         onOperationSelected={onOperationSelected}

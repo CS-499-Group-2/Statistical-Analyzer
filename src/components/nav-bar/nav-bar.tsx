@@ -4,6 +4,7 @@ import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
+import {useThemeStore} from "../theme-store/theme-store";
 
 export interface NavBarProps {
   /** List of available operations */
@@ -16,8 +17,8 @@ export interface NavBarProps {
 }
 
 export const NavBar = (props: NavBarProps) => {
-
-  // Function to open a file
+  const theme = useThemeStore(state => state.isDark);
+  console.log("theme", theme);
   const openFile = () => {
     // Create a file input element, with the accept attribute set to .csv
     const input = document.createElement("input");
@@ -48,9 +49,10 @@ export const NavBar = (props: NavBarProps) => {
     const popup = document.getElementById("popup");
     popup.classList.add("open-popup");
   };
-
   return (
-    <Navbar bg="light" expand="sm" sticky="top" >
+    <Navbar expand="sm" sticky="top" style= {{
+      backgroundColor: theme  ? "#1A1B1E" : "",
+    }} >
       <Container id="bar-container">
         <Navbar.Brand>
           <img className="nav-logo" src="logo.png" alt="logo" />
