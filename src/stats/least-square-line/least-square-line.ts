@@ -12,6 +12,7 @@ export const LeastSquareLine: Operation<Inputs> = {
   isValid: (columns) => columns.length === 2, // The user selects one column, and then we get the X column from the inputs
   onSelected: (columns, spreadsheet, inputs): Result[] => {
     // FORMULA FROM: https://www.mathsisfun.com/data/least-squares-regression.html
+    console.log("Least Square Line", columns, spreadsheet, inputs);
     const xColumnHeader = inputs["Which Column Should Be Used For X Values?"] as string;
     const xColumn = columns.findIndex(column => column.name === xColumnHeader);
     const yColumn = xColumn === 0 ? 1 : 0;
@@ -37,7 +38,7 @@ export const LeastSquareLine: Operation<Inputs> = {
     const slope = (n * sums.xTimesY - sums.x * sums.y) / (n * sums.xSquared - sums.x * sums.x);
     const yIntercept = (sums.y - slope * sums.x) / n;
     const graph: Graph = {
-      chartType: "Normal Distribution",
+      chartType: "XY Scatter",
       title: "Least Square Line",
       data: pointInfo.sort((a, b) => a.x - b.x).map(point => ({ x: point.x, y: point.y })),
       lineLabel: "Values",

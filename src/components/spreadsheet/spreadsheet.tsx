@@ -101,6 +101,13 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
               for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
                 cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
               }
+              for (let row = 0; row < cells.length; row++) { // Loop through the rows
+                // Remove any empty rows
+                if (!cells[row]) {
+                  cells.splice(row, 1);
+                  row--;
+                }
+              }
               const transposed = transpose(cells);
               return transposed.map((column, index) => ({
                 values: column,
