@@ -2,7 +2,8 @@ import { Operation } from "../operation";
 import * as ss from "simple-statistics";
 
 interface Inputs {
-  "Observed Column Header"
+  "Observed Column Header",
+  "Line Color"
 }
 
 export const ChiSquare: Operation<Inputs> = {
@@ -42,11 +43,14 @@ export const ChiSquare: Operation<Inputs> = {
         chartType: "Normal Distribution",
         title: `Chi Squared Distribution for ${valuesInfo.length - 1} degrees of freedom}`,
         data: xValues.map((x) => ({x, y: cdf(x, valuesInfo.length - 1)})),
+        lineLabel: "CDF",
+        lineColor: inputs["Line Color"] as string
       }]
     }];
   },
   keys: {
-    "Observed Column Header": "Text"
+    "Observed Column Header": "Text",
+    "Line Color": "Color"
   }
 };
 
