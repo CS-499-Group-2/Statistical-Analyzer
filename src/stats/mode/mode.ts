@@ -8,9 +8,9 @@ interface Inputs {
 }
 
 export const Mode: Operation<Inputs> = {
-  name: "Mean",
+  name: "Mode",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-    const meanColor = inputs["Color of the mean line"] as string;
+    const meanColor = inputs["Color of Bar"] as string;
 
     //Validation
     for (const column of selectedCellsByColumn) {
@@ -21,23 +21,28 @@ export const Mode: Operation<Inputs> = {
     }
 
     //For each column, calculate the mean and return a result
-    return selectedCellsByColumn.map((column) => {
+    const results = selectedCellsByColumn.map<Result>((column) => {
       const modeValue = calculateMode(column.values);
-      const title = `${column.name} | Mean`;
+      const title = `${column.name} | Mode`;
       return {
         name : title,
         values: [modeValue],
-        graphs: [{
-          chartType: "Horizontal Bar",
-          data: [{
-            value : modeValue,
-            color : meanColor,
-            label : "Mean",
-
-          }],
-        }],
+        graphs : [ ]
       };
     });
+    results.push({
+      values: [],
+      name: "",
+      graphs: [{
+        chartType: "Vertical Bar",
+        data: results.map((currentCol) => ({
+          value: currentCol.values[0],
+          color: meanColor,
+          label: currentCol.name,
+        }))
+      }]
+    });
+    return results;
   },
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;
