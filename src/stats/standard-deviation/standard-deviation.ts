@@ -29,21 +29,8 @@ export const StandardDeviation: Operation<Inputs> = {
         lineColor: lineColor,
         filled : true,
         curved: true,
-        annotations: {
-         type : "line",
-         data { 
-          labels : ["Standard Deviation"],
-          datasets : [{
-            label : "Standard Deviation",
-            data : xValues,
-            borderColor : lineColor,
-            backgroundColor : fillColor,
-            fill : true,
-          }]
 
-
-
-         }
+      }]
     }];
 
 

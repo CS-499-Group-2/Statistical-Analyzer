@@ -20,23 +20,28 @@ export const Median: Operation<Inputs> = {
     }
 
     //For each column, calculate the median and return a result
-    return selectedCellsByColumn.map((column) => {
+    const results = selectedCellsByColumn.map<Result>((column) => {
       const medianValue = calculateMedian(column.values);
       const title = `${column.name} | Median`;
       return {
-        name: title,
+        name : title,
         values: [medianValue],
-        graphs: [{
-          chartType: "Horizontal Bar",
-          data: [{
-            value: medianValue,
-            color: medianColor,
-            label: "Median",
-
-          }],
-        }],
+        graphs : [ ]
       };
     });
+    results.push({
+      values: [],
+      name: "",
+      graphs: [{
+        chartType: "Vertical Bar",
+        data: results.map((currentCol) => ({
+          value: currentCol.values[0],
+          color: medianColor,
+          label: currentCol.name,
+        }))
+      }]
+    });
+    return results;
   },
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;

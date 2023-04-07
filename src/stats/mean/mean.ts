@@ -10,7 +10,7 @@ interface Inputs {
 export const Mean: Operation<Inputs> = {
   name: "Mean",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-    const meanColor = inputs["Color of the mean line"] as string;
+    const meanColor = inputs["Color of graph"] as string;
 
     //Validation
     for (const column of selectedCellsByColumn) {
@@ -21,23 +21,28 @@ export const Mean: Operation<Inputs> = {
     }
         
     //For each column, calculate the mean and return a result
-    return selectedCellsByColumn.map((column) => {
+    const results =  selectedCellsByColumn.map<Result>((column) => {
       const meanValue = calculateMean(column.values);
       const title = `${column.name} | Mean`;
       return {
         name : title,
         values: [meanValue],
-        graphs: [{
-          chartType: "Horizontal Bar",
-          data: [{
-            value : meanValue,
-            color : meanColor,
-            label : "Mean",
-
-          }],
-        }], 
+        graphs : [ ], 
       };
     });
+    results.push({
+      values: [],
+      name: "",
+      graphs: [{
+        chartType: "Vertical Bar",
+        data: results.map((currentCol) => ({
+          value: currentCol.values[0],
+          color: meanColor,
+          label: currentCol.name,
+        }))
+      }]
+    });
+    return results;
   },
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;

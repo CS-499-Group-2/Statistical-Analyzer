@@ -10,7 +10,7 @@ interface Inputs {
 export const Mode: Operation<Inputs> = {
   name: "Mode",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-    const meanColor = inputs["Color of Bar"] as string;
+    const modeColor = inputs["Color of Bar"] as string;
 
     //Validation
     for (const column of selectedCellsByColumn) {
@@ -37,7 +37,7 @@ export const Mode: Operation<Inputs> = {
         chartType: "Vertical Bar",
         data: results.map((currentCol) => ({
           value: currentCol.values[0],
-          color: meanColor,
+          color: modeColor,
           label: currentCol.name,
         }))
       }]
