@@ -1,3 +1,66 @@
 .sheet {
   height: 100%;
 }
+
+.dark-table th,
+.dark-table tr {
+  background-color: #2C2E33;
+  color: white;
+}
+
+.dark-table td {
+  background-color: #5C5F66;
+  color: white;
+}
+
+.dark-active {
+  background-color: #2C2E33;
+  color: white;
+}
+
+.dark-header {
+  background-color: #2C2E33;
+  color: white;
+}
+
+.dark-row {
+  background-color: #2C2E33;
+  color: white;
+}
+
+.dark-col {
+  background-color: #2C2E33;
+  color: white;
+}
+
+.light-table th,
+.light-table tr {
+  background-color: #C1C2C5;
+  color: black;
+}
+
+.light-table td {
+  background-color: white;
+  color: black;
+}
+
+.light-active {
+  background-color: #C1C2C5;
+  color: black;
+}
+
+.light-header {
+  background: #C1C2C5;
+  color: black;
+}
+
+.light-row {
+  background-color: #C1C2C5;
+  color: black;
+}
+
+.light-col {
+  background-color: #C1C2C5;
+  color: black;
+}
+

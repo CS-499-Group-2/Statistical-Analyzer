@@ -8,6 +8,7 @@ import { CsvData } from "../../file-handling/import";
 import { HyperFormula } from "hyperformula";
 import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
+import { theme } from "../toggle-button/toggle-button";
 
 registerAllModules();
 
@@ -27,6 +28,11 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
   return (
     <div className="sheet">
       <HotTable
+        tableClassName={theme ? "dark-table" : "light-table"}
+        activeHeaderClassName={theme ? "dark-active" : "light-active"}
+        currentHeaderClassName={theme ? "dark-header" : "light-header"}
+        currentRowClassName={theme ? "dark-row" : "light-row"}
+        currentColClassName={theme ? "dark-col" : "light-col"}
         data={props.data.data}
         rowHeaders={true}
         colHeaders={props.data.headers}
@@ -93,15 +99,21 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         afterSelectionEnd={(rowStart, columnStart, rowEnd, columnEnd) => {
           const data = props.data.data; // Get the data
           const cells: number[][] = []; // Create an array to store the cells
-          for (let row = rowStart; row <= rowEnd; row++) { // Loop through the rows
-            cells[row] = data[row].slice(columnStart, columnEnd + 1); // Add the cells to the array
+          try {
+            for (let row = rowStart; row <= rowEnd; row++) { // Loop through the rows
+              cells[row] = data[row].slice(columnStart, columnEnd + 1); // Add the cells to the array
+            }
+            const transposed = transpose(cells);
+            const columns: Column[] = transposed.map((column) => ({
+              values: column,
+              name: props.data.headers[columnStart]
+            }));
+          
+            props.onCellsSelected?.(columns); // Call the onCellsSelected callback
           }
-          const transposed = transpose(cells);
-          const columns: Column[] = transposed.map((column) => ({
-            values: column,
-            name: props.data.headers[columnStart]
-          }));
-          props.onCellsSelected?.(columns); // Call the onCellsSelected callback
+          catch (e) {
+            console.error(e);
+          }
         }}
         outsideClickDeselects={false}
       />

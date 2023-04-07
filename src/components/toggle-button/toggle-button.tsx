@@ -3,8 +3,11 @@ import { useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@ma
 import { IconSun, IconMoon } from "@tabler/icons-react";
 import { useThemeStore } from "../theme-store/theme-store";
 
+
+export let theme; 
+
 export function SegmentedToggle() {
-  const theme = useThemeStore(state => state.isDark);
+  theme = useThemeStore(state => state.isDark);
 
   return (
     <Group position="center" my="xl">
