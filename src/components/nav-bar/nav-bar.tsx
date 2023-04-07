@@ -5,6 +5,7 @@ import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
 import {useThemeStore} from "../theme-store/theme-store";
+import { SegmentedToggle } from "../toggle-button/toggle-button";
 
 export interface NavBarProps {
   /** List of available operations */
@@ -51,7 +52,7 @@ export const NavBar = (props: NavBarProps) => {
   };
   return (
     <Navbar expand="sm" sticky="top" style= {{
-      backgroundColor: theme  ? "#1A1B1E" : "",
+      backgroundColor: theme  ? "#909296" : "",
     }} >
       <Container id="bar-container">
         <Navbar.Brand>
@@ -76,6 +77,7 @@ export const NavBar = (props: NavBarProps) => {
               ))}
             </NavDropdown>
           </Nav>
+          <SegmentedToggle />
         </Navbar.Collapse>
       </Container>
     </Navbar>
