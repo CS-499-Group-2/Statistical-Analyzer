@@ -4,7 +4,7 @@ import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
-import { Button, Loader, ThemeIcon } from "@mantine/core";
+import { Button, Center, Loader, ThemeIcon } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import useCloudStore from "../../stores/cloud-store";
@@ -21,6 +21,8 @@ export interface NavBarProps {
   onCloudExport?: () => unknown;
   /** The current state of the save button */
   savingState?: "saving" | "saved" | "error";
+  /** Called when the user tries to view their files */
+  onFilesModalOpen?: () => void;
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -77,16 +79,19 @@ export const NavBar = (props: NavBarProps) => {
           <img className="nav-logo" src="logo.png" alt="logo" />
           Statistical Analyzer
         </Navbar.Brand>
-        <Nav.Item className={"me-auto ms-3 align-self-center"}>
-          {props.savingState === "saving" && <Loader color="green" />}
-          {props.savingState === "saved" && <ThemeIcon color="green"><IconCheck /></ThemeIcon>}
-          {props.savingState === "error" && <ThemeIcon color="red"><IconX /></ThemeIcon>}
+        <Nav.Item className={"me-auto align-self-center"}>
+          <Center>
+            {props.savingState === "saving" && <Loader color="green" />}
+            {props.savingState === "saved" && <ThemeIcon color="green"><IconCheck /></ThemeIcon>}
+            {props.savingState === "error" && <ThemeIcon color="red"><IconX /></ThemeIcon>}
+          </Center>
         </Nav.Item>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="File" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
+              {userState && <NavDropdown.Item onClick={props.onFilesModalOpen}>Open Online</NavDropdown.Item>}
               <NavDropdown.Item onClick={props.onExport}>Export as CSV</NavDropdown.Item>
               {userState && <NavDropdown.Item onClick={props.onCloudExport}>Save Online</NavDropdown.Item>}
               <NavDropdown.Item onClick={() => showResults()}>View Statistics</NavDropdown.Item>

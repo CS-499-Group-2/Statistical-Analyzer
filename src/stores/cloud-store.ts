@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { User } from "firebase/auth";
 
 interface CloudStore {
-  user?: User,
+  user: User | undefined,
   setUser: (user: User) => void,
-  activeFile?: string,
+  activeFile: string | undefined,
   setActiveFile: (file: string) => void,
 }
 
