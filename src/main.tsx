@@ -6,7 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import useUserStore from "./stores/user-store";
+import useCloudStore from "./stores/cloud-store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 initializeApp({
   apiKey: "AIzaSyA7Aqh6w9nqXSY6AnCs5Wvw4_ZyVZ0T93U",
@@ -19,15 +20,18 @@ initializeApp({
 });
 // If the user is logged in, set the user state to the user
 getAuth().onAuthStateChanged((user) => {
-  if (user) useUserStore.setState({ user });
+  if (user) useCloudStore.setState({ user });
   else {
-    useUserStore.setState({ user: undefined });
+    useCloudStore.setState({ user: undefined });
   }
 });
 getStorage();
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>,
 );

@@ -9,7 +9,9 @@ import { exportData } from "./file-handling/data-export";
 import { Percentile, ProbabilityDistribution } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
-import { saveToStorage } from "./file-handling/cloud";
+import { autoSave, saveToStorage } from "./file-handling/cloud";
+import useCloudStore from "./stores/cloud-store";
+import { useMutation } from "@tanstack/react-query";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -23,6 +25,26 @@ function App() {
   const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
+  const activeFile = useCloudStore(state => state.activeFile);
+  const { isError, isLoading } = useMutation({
+    mutationFn: () => autoSave(data, results),
+  });
+
+  /**
+   * This function will return the current state of what the save button should display.
+   */
+  const figureOutSaveState = () => {
+    if (!activeFile) {
+      return undefined;
+    }
+    if (isLoading) {
+      return "saving";
+    }
+    if (isError) {
+      return "error";
+    }
+    return "saved";
+  };
 
   /** This is a function that will return a list of all available operations that are valid for the selected cells
    * We use useMemo here to make sure that this function is only called when the selected cells change.
@@ -91,6 +113,7 @@ function App() {
           console.error(e);
           alert("Failed to save to cloud");
         })}
+        savingState={figureOutSaveState()}
       />
       <Spreadsheet
         data={data}

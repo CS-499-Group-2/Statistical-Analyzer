@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions";
 import setup from "./setup";
+import * as cors from "cors";
 import addFileEndpoint from "./add-file-endpoint";
 
 setup();
@@ -11,5 +12,8 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Bernard!");
 });
 
-export const addFile = functions.https.onRequest(addFileEndpoint);
-
+export const addFile = functions.https.onRequest((request, response) => {
+  return cors()(request, response, () => {
+    return addFileEndpoint(request, response);
+  });
+});

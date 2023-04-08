@@ -1,12 +1,17 @@
 import { getStorage, ref, uploadString, deleteObject } from "firebase/storage";
-import useUserStore from "../stores/user-store";
+import useCloudStore from "../stores/cloud-store";
 import { CsvData } from "./import";
 import { Result } from "../stats/operation";
 import { csvToString } from "./data-export";
 import ky, { HTTPError } from "ky";
 
+/**
+ * Saves the spreadsheet to the user's cloud storage and adds the file to the database
+ * @param spreadsheet The spreadsheet to save
+ * @param results The results of the spreadsheet
+ */
 export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => {
-  const currentUser = useUserStore.getState().user;
+  const currentUser = useCloudStore.getState().user;
   const storage = getStorage();
   const filename = prompt("Enter a name for your file (only letters, numbers and underscores)");
   if (!filename) {
@@ -20,7 +25,7 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
   const csvString = csvToString(spreadsheet);
   await uploadString(storageRef, csvString);
   try {
-    await ky.post("http://127.0.0.1:5001/statistical-analyzer-cs499/us-central1/addFile", { // URL of the cloud function
+    await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/addFile", { // URL of the cloud function
       json: {
         filename,
         userId: currentUser.uid,
@@ -29,12 +34,13 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
       headers: {
         "Content-Type": "application/json"
       },
-      mode: "no-cors"
     });
+    useCloudStore.getState().setActiveFile(filename);
     alert("File Saved! Autosave is now enabled.");
   } catch (e: unknown) {
     if (e instanceof HTTPError) {
-      console.error(await e.response.text());
+      console.error(e.response.status);
+      console.error(e);
       return;
     }
     console.error(e);
@@ -42,4 +48,31 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
     alert("Failed to save file");
     return;
   }
+};
+
+/**
+ * Autosaves whatever the user is currently working on
+ * @param spreadsheet The spreadsheet to save
+ * @param results The results of the spreadsheet
+ */
+export const autoSave = async (spreadsheet: CsvData, results: Result[]) => {
+  const currentUser = useCloudStore.getState().user;
+  const activeFile = useCloudStore.getState().activeFile;
+  if (!activeFile || !currentUser) {
+    return;
+  }
+  const storage = getStorage();
+  const storageRef = ref(storage, `users/${currentUser.uid}/${activeFile}`);
+  const csvString = csvToString(spreadsheet);
+  await uploadString(storageRef, csvString);
+  await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/addFile", { // URL of the cloud function
+    json: {
+      activeFile,
+      userId: currentUser.uid,
+      results
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
 };

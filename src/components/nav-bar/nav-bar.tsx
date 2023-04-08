@@ -4,9 +4,10 @@ import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
-import { Button } from "@mantine/core";
+import { Button, Loader, ThemeIcon } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import useUserStore from "../../stores/user-store";
+import useCloudStore from "../../stores/cloud-store";
 
 export interface NavBarProps {
   /** List of available operations */
@@ -18,10 +19,12 @@ export interface NavBarProps {
   onExport?: () => unknown;
   /** Called when the cloud export button is pressed by the user */
   onCloudExport?: () => unknown;
+  /** The current state of the save button */
+  savingState?: "saving" | "saved" | "error";
 }
 
 export const NavBar = (props: NavBarProps) => {
-  const userState = useUserStore((state) => state.user);
+  const userState = useCloudStore((state) => state.user);
 
   // Function to open a file
   const openFile = () => {
@@ -74,6 +77,11 @@ export const NavBar = (props: NavBarProps) => {
           <img className="nav-logo" src="logo.png" alt="logo" />
           Statistical Analyzer
         </Navbar.Brand>
+        <Nav.Item className={"me-auto ms-3 align-self-center"}>
+          {props.savingState === "saving" && <Loader color="green" />}
+          {props.savingState === "saved" && <ThemeIcon color="green"><IconCheck /></ThemeIcon>}
+          {props.savingState === "error" && <ThemeIcon color="red"><IconX /></ThemeIcon>}
+        </Nav.Item>
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

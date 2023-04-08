@@ -20,7 +20,9 @@ const db = getFirestore();
  * of files.
  */
 const addFileEndpoint = async (request: Request, response: Response) => {
-  const { filename, userId, results } = JSON.parse(request.body) as RequestBody;
+  const bodyString = JSON.stringify(request.body);
+  const bodyObject = JSON.parse(bodyString);
+  const { filename, userId, results } = bodyObject as RequestBody;
   if (!filename || !userId || !results) {
     response.status(400).send("Invalid request. Body: " + JSON.stringify(request.body));
     return;
