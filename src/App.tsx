@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
 import { Column, Operation, Result } from "./stats/operation";
@@ -26,9 +26,14 @@ function App() {
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
   const activeFile = useCloudStore(state => state.activeFile);
-  const { isError, isLoading } = useMutation({
+  const { mutate: mutateActiveFile, isError, isLoading } = useMutation({
     mutationFn: () => autoSave(data, results),
   });
+
+  // Autosave whenever the data or results change
+  useEffect(() => {
+    mutateActiveFile();
+  }, [data, results]);
 
   /**
    * This function will return the current state of what the save button should display.

@@ -67,7 +67,7 @@ export const autoSave = async (spreadsheet: CsvData, results: Result[]) => {
   await uploadString(storageRef, csvString);
   await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/addFile", { // URL of the cloud function
     json: {
-      activeFile,
+      filename: activeFile,
       userId: currentUser.uid,
       results
     },
