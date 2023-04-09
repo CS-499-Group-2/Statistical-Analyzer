@@ -4,6 +4,9 @@ import { calculateMean } from "../calculations";
 //Defining the inputs
 interface Inputs {
     "Color of the mean line": undefined;
+    "Horizontal Bar" : false | undefined;
+    "Vertical Bar" : false | undefined;
+    "Pie" : false | undefined;
 } 
 
 
@@ -11,6 +14,11 @@ export const Mean: Operation<Inputs> = {
   name: "Mean",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const meanColor = inputs["Color of graph"] as string;
+    const isHorizontalBar = inputs["Horizontal Bar"] as boolean;
+    const isVerticalBar = inputs["Vertical Bar"] as boolean;
+    const isPie = inputs["Pie"] as boolean;
+    const chartType = isPie ? "Pie" : isHorizontalBar ? "Horizontal Bar" : isVerticalBar ? "Vertical Bar" : undefined;
+    
 
     //Validation
     for (const column of selectedCellsByColumn) {
@@ -34,7 +42,7 @@ export const Mean: Operation<Inputs> = {
       values: [],
       name: "",
       graphs: [{
-        chartType: "Vertical Bar",
+        chartType: chartType,
         data: results.map((currentCol) => ({
           value: currentCol.values[0],
           color: meanColor,
@@ -49,5 +57,8 @@ export const Mean: Operation<Inputs> = {
   }, 
   keys : { 
     "Color of the mean line" : "Color", 
+    "Horizontal Bar" : "Checkbox",
+    "Vertical Bar" : "Checkbox",
+    "Pie" : "Checkbox",
   },
 };
