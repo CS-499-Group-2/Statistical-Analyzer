@@ -6,7 +6,12 @@ import { Column, Operation, Result } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
-import { Percentile, ProbabilityDistribution } from "./stats";
+import {
+  Percentile,
+  ProbabilityDistribution,
+  LeastSquareLine,
+  ChiSquare
+} from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
 import { autoSave, deleteFile, getFile, saveToStorage } from "./file-handling/cloud";
@@ -17,7 +22,9 @@ import { FileList } from "./components/file-list/file-list";
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
   Percentile,
-  ProbabilityDistribution
+  ProbabilityDistribution,
+  LeastSquareLine,
+  ChiSquare
 ];
 
 function App() {
@@ -165,7 +172,10 @@ function App() {
         onCellsSelected={setSelectedCells}
       />
       <div className = "popup" id = "popup">
-        <ResultExporter results={results}></ResultExporter>
+        <ResultExporter
+          results={results}
+          onDelete={(idx) => setResults(results.filter(n => n !== results[idx]))}
+        />
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />

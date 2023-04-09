@@ -38,6 +38,8 @@ export type Graph = {
     x: number,
     y: number
   }[],
+  xLabel?: string,
+  yLabel?: string,
   color?: string,
   lineLabel?: string,
   lineColor?: string,
