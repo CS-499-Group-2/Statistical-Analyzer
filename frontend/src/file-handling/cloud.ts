@@ -10,7 +10,17 @@ const apiInstance = ky.create({
   prefixUrl: baseUrl,
   headers: {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${useCloudStore.getState().user?.getIdToken()}`
+  },
+  hooks: {
+    beforeRequest: [
+      async (request) => {
+        const currentUser = useCloudStore.getState().user;
+        if (currentUser) {
+          const token = await currentUser.getIdToken();
+          request.headers.set("Authorization", `Bearer ${token}`);
+        }
+      }
+    ]
   }
 });
 

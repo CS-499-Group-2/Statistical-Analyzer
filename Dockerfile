@@ -1,4 +1,4 @@
-FROM node as build
+FROM node:19-alpine as build
 WORKDIR /app
 COPY ./backend/package*.json ./
 RUN npm ci

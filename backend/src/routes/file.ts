@@ -1,8 +1,8 @@
 import express from "express";
+import asyncHandler from "express-async-handler";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import { auth, firestore } from "firebase-admin";
-import Timestamp = firestore.Timestamp;
 
 const router = express.Router();
 const db = getFirestore();
@@ -18,7 +18,7 @@ interface FileDocument {
   results: string;
 }
 
-router.use("/users/:userId", async (req, res, next) => {
+router.use("/users/:userId", asyncHandler(async (req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     next();
     return;
@@ -29,13 +29,18 @@ router.use("/users/:userId", async (req, res, next) => {
     res.status(401).send("Unauthorized");
     return;
   }
-  const user = await auth().verifyIdToken(authorization);
-  if (user.uid !== userId) {
-    res.status(403).send("Forbidden");
-    return;
+  try {
+    const user = await auth().verifyIdToken(authorization);
+    if (user.uid !== userId) {
+      res.status(403).send("Forbidden");
+      return;
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(401).send("Unauthorized");
   }
   next();
-});
+}));
 
 router.put("/users/:userId/files/:filename", async (req, res) => {
   console.log("Reached");
@@ -94,7 +99,7 @@ router.get("/users/:userId/files", async (req, res) => {
     let data = doc.data() as FileDocument;
     data = {
       ...data,
-      lastModified: (data.lastModified as unknown as Timestamp).toDate() // We actually get the last modified date as a Timestamp
+      lastModified: (data.lastModified as unknown as firestore.Timestamp).toDate() // We actually get the last modified date as a Timestamp
     };
     return ({ filename: doc.id, data });
   });
