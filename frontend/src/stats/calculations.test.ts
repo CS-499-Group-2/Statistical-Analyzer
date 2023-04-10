@@ -1,42 +1,86 @@
 import { test, expect, describe } from "vitest";
-import { calculateMean } from "./calculations";
+import { calculateMean, calculateMode, calculateMedian,calculateStandardDeviation} from "./calculations";
 
 
 describe ("Mean Testing", () => {
   test("Test with basic data", () => {
-    const data = [[1,2,3], [4,5,6], [7,8,9]];
-    const expected = [4,5,6];
+    const data = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const expected = 5.5;
     const result = calculateMean(data);
+    expect(result).toBeCloseTo(expected, .01);
+  });
+
+  test("Test with negative data", () => {
+    const data = [ -1, -2, -3, -4, -5, -6, -7, -8, -9, -10];
+    const expected = -5.5;
+    const result = calculateMean(data);
+    expect(result).toBeCloseTo(expected, .01);
+  }
+  );
+
+  test ("Test with empty data", () => {
+    const data = [1,2,3,4,null, 6,8,null,10];
+    const expected = 4.8;
+    const result = calculateMean(data);
+    expect(result).toBeCloseTo(expected, .01);
+
+  });
+});
+
+
+describe ("Mode Testing", () => {
+
+  test("Test with basic data", () => {
+    const data = [1,2,3,4,2,6,7,7,8,8,8,9,10,11,1,2,3,4,1,8,7];
+    const expected = 8;
+    const result = calculateMode(data);
     expect(result).toEqual(expected);
   });
 
-  test("Test with one row of data", () =>{ 
-    const data = [[1,2,3]];
-    const expected = [1,2,3];
-    const result = calculateMean(data);
+  test("Test with empty data", () => {
+    const data = [1,2,3,4,2,6,null,7,8,8,null,9,10,11,1,2,3,4,null,1,null];
+    const expected = 1;
+    const result = calculateMode(data);
     expect(result).toEqual(expected);
+
+  });
+});
+
+describe ("Median Testing", () => {
+  test("Test with even data", () => {
+    const data = [1,2,3,4,5,6,7,8,9,10];
+    const expected = 5.5;
+    const result = calculateMedian(data);
+    expect(result).toBeCloseTo(expected, .01);
   });
 
-  test("Test with one column of data", () => {
-    const data = [[1], [2], [3]];
-    const expected = [2];
-    const result = calculateMean(data);
-    expect(result).toEqual(expected);
+  test("Test with odd data", () => {
+    const data = [1,2,3,4,5,6,7,8,9,10,11];
+    const expected = 6;
+    const result = calculateMedian(data);
+    expect(result).toBeCloseTo(expected, .01);
   });
 
-  test( "Test with null data within some cells of the array", () => {
-    const data = [[1,2,3], [4,5,null], [null,8,9]];
-    const expected = [2.5,5,6];
-    const result = calculateMean(data);
-    expect(result).toEqual(expected);
+  test("Test with empty data", () => {
+    const data = [null, 2,5,6,7,null,8,9,10];
+    const expected = 7;
+    const result = calculateMedian(data);
+    expect(result).toBeCloseTo(expected, .01);
   });
- 
+});
 
-    
+describe ("Standard Deviation Testing", () => {
+  test("Test with basic data", () => {
+    const data = [1,2,3,4,5,6,7,8,9,10];
+    const expected = 2.9;
+    const result = calculateStandardDeviation(data);
+    expect(result).toBeCloseTo(expected, .01);
+  });
 
- 
-
-
-
-
+  test("Test with empty data", () => {
+    const data = [null, 2,5,6,7,null,8,9,10];
+    const expected = 2.5;
+    const result = calculateStandardDeviation(data);
+    expect(result).toBeCloseTo(expected, .01);
+  });
 });
