@@ -15,16 +15,10 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci && npm run build
+      - run: cd frontend && npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_STATISTICAL_ANALYZER_CS499 }}'
           channelId: live
           projectId: statistical-analyzer-cs499
-      - name: Deploy Functions
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only functions
-        env:
-          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_STATISTICAL_ANALYZER_CS499 }}
