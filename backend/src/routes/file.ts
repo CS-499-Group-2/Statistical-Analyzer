@@ -1,5 +1,4 @@
 import express from "express";
-import { Result } from "statistical-analyzer/src/stats/operation";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import { auth, firestore } from "firebase-admin";
@@ -10,7 +9,7 @@ const db = getFirestore();
 const storage = getStorage();
 
 interface AddFileBody {
-  results: Result[];
+  results: string;
   fileContent: string;
 }
 
@@ -57,7 +56,7 @@ router.put("/users/:userId/files/:filename", async (req, res) => {
   await storage.bucket().file(`users/${userId}/${filename}`).save(fileContent);
   const fileData = {
     lastModified: new Date(),
-    results: JSON.stringify(results)
+    results
   };
   await fileRef.set(fileData);
   res.status(201).send("File added");
@@ -88,6 +87,7 @@ router.delete("/users/:userId/files/:filename", async (req, res) => {
 });
 
 router.get("/users/:userId/files", async (req, res) => {
+  console.log("Reached");
   const { userId } = req.params;
   const userFilesCollection = db.collection(`users/${userId}/files`).orderBy("lastModified", "desc");
   const files = (await userFilesCollection.get()).docs.map(doc => {
