@@ -1,9 +1,18 @@
-import { deleteObject, getStorage, ref, uploadString, getBlob } from "firebase/storage";
+import { getBlob, getStorage, ref } from "firebase/storage";
 import useCloudStore from "../stores/cloud-store";
 import { CsvData, csvToArray } from "./import";
 import { Result } from "../stats/operation";
 import { csvToString } from "./data-export";
 import ky, { HTTPError } from "ky";
+
+const baseUrl = "http://localhost:8080";
+const apiInstance = ky.create({
+  prefixUrl: baseUrl,
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${useCloudStore.getState().user?.getIdToken()}`
+  }
+});
 
 /**
  * Saves the spreadsheet to the user's cloud storage and adds the file to the database
@@ -12,7 +21,6 @@ import ky, { HTTPError } from "ky";
  */
 export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => {
   const currentUser = useCloudStore.getState().user;
-  const storage = getStorage();
   const filename = prompt("Enter a name for your file (only letters, numbers and underscores)");
   if (!filename) {
     return;
@@ -21,19 +29,12 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
     alert("Invalid filename");
     return;
   }
-  const storageRef = ref(storage, `users/${currentUser.uid}/${filename}`);
   const csvString = csvToString(spreadsheet);
-  await uploadString(storageRef, csvString);
   try {
-    await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/addFile", { // URL of the cloud function
+    await apiInstance.put(`users/${currentUser.uid}/files/${filename}`, { // Path for the api
       json: {
-        filename,
-        userId: currentUser.uid,
-        results
-      },
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + await currentUser.getIdToken()
+        results,
+        fileContent: csvString
       },
     });
     useCloudStore.getState().setActiveFile(filename);
@@ -42,10 +43,10 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
     if (e instanceof HTTPError) {
       console.error(e.response.status);
       console.error(e);
+      alert("Failed to save file");
       return;
     }
     console.error(e);
-    await deleteObject(storageRef);
     alert("Failed to save file");
     return;
   }
@@ -62,41 +63,32 @@ export const autoSave = async (spreadsheet: CsvData, results: Result[]) => {
   if (!activeFile || !currentUser) {
     return;
   }
-  const storage = getStorage();
-  const storageRef = ref(storage, `users/${currentUser.uid}/${activeFile}`);
   const csvString = csvToString(spreadsheet);
-  await uploadString(storageRef, csvString);
-  await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/addFile", { // URL of the cloud function
+  await apiInstance.put(`users/${currentUser.uid}/files/${activeFile}`, {
     json: {
-      filename: activeFile,
-      userId: currentUser.uid,
-      results
-    },
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + await currentUser.getIdToken()
+      results,
+      fileContent: csvString
     }
   });
 };
 
+export interface GetFileResponse {
+  filename: string;
+  data: {
+    lastModified: string;
+    results: string;
+  }
+}
+
 /**
  * Gets the files from the user's cloud storage
  */
-export const getFiles = async (): Promise<string[]> => {
+export const getFiles = async (): Promise<GetFileResponse[]> => {
   const currentUser = useCloudStore.getState().user;
   if (!currentUser) {
     return [];
   }
-  const response = await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/getFiles", {
-    json: {
-      userId: currentUser.uid
-    },
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + await currentUser.getIdToken()
-    }
-  }).json<{files: string[]}>();
-  return response.files;
+  return await apiInstance.get(`users/${currentUser.uid}/files`).json<GetFileResponse[]>();
 };
 
 export const getFile = async (filename: string): Promise<{data: CsvData, results: Result[]}> => {
@@ -104,21 +96,13 @@ export const getFile = async (filename: string): Promise<{data: CsvData, results
   if (!currentUser) {
     throw new Error("Not logged in");
   }
-  const resultsResponse = await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/getFile", {
-    json: {
-      userId: currentUser.uid,
-      filename
-    },
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + await currentUser.getIdToken()
-    }
-  }).json<{results: Result[]}>();
+  const resultsResponse = await apiInstance.get(`users/${currentUser.uid}/files/${filename}`).json<GetFileResponse>();
   const fileRef = ref(getStorage(), `users/${currentUser.uid}/${filename}`);
   const fileBlob = await getBlob(fileRef);
   const fileText = await fileBlob.text();
   const data = csvToArray(fileText);
-  return { data, results: resultsResponse.results };
+  const results = JSON.parse(resultsResponse.data.results);
+  return { data, results };
 };
 
 export const deleteFile = async (filename: string) => {
@@ -126,16 +110,5 @@ export const deleteFile = async (filename: string) => {
   if (!currentUser) {
     throw new Error("Not logged in");
   }
-  await ky.post("https://us-central1-statistical-analyzer-cs499.cloudfunctions.net/deleteFile", {
-    json: {
-      userId: currentUser.uid,
-      filename
-    },
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + await currentUser.getIdToken()
-    }
-  });
-  const fileRef = ref(getStorage(), `users/${currentUser.uid}/${filename}`);
-  await deleteObject(fileRef);
+  await apiInstance.delete(`users/${currentUser.uid}/files/${filename}`);
 };

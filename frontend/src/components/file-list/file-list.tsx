@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useCloudStore from "../../stores/cloud-store";
-import { getFiles } from "../../file-handling/cloud";
-import { Button, Group, LoadingOverlay, Modal, Paper, Stack, Title } from "@mantine/core";
+import { GetFileResponse, getFiles } from "../../file-handling/cloud";
+import { Button, Group, LoadingOverlay, Modal, Paper, Stack, Text, Title } from "@mantine/core";
 
 export interface FileListProps {
   open: boolean;
@@ -20,14 +20,17 @@ export const FileList = (props: FileListProps) => {
     enabled: props.open,
   });
 
-  const renderFile = (file: string) => {
+  const renderFile = (file: GetFileResponse) => {
     return (
-      <Paper p="md" shadow="sm" key={file}>
+      <Paper p="md" shadow="sm" key={file.filename}>
         <Stack>
-          <Title align={"center"} order={3} mb={5}>{file}</Title>
+          <Group>
+            <Title align={"center"} order={3} mb={5}>{file.filename}</Title>
+            <Text align={"center"}>{new Date(file.data.lastModified).toLocaleString()}</Text>
+          </Group>
           <Group position={"center"}>
-            <Button color={"green"} onClick={() => props.onSelected(file)}>Select</Button>
-            <Button color={"red"} onClick={() => props.onDeleted(file)}>Delete</Button>
+            <Button color={"green"} onClick={() => props.onSelected(file.filename)}>Select</Button>
+            <Button color={"red"} onClick={() => props.onDeleted(file.filename)}>Delete</Button>
           </Group>
         </Stack>
       </Paper>
