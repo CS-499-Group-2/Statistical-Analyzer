@@ -124,6 +124,8 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
     // @ts-expect-error For some reason, the scale types break this
     return <Scatter data={data} options={options} />;
   }
+
+  
 };
 
 /** The properties for graph display */

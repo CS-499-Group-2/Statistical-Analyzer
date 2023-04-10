@@ -10,7 +10,12 @@ import {
   Percentile,
   ProbabilityDistribution,
   LeastSquareLine,
-  ChiSquare
+  ChiSquare,
+  Mean,
+  Median,
+  Mode,
+  BinomialDistribution,
+  StandardDeviation
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -18,6 +23,11 @@ import { GraphDisplay } from "./components/graph-display/graph-display";
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
   Percentile,
+  Mean,
+  Median,
+  Mode,
+  BinomialDistribution,
+  StandardDeviation,
   ProbabilityDistribution,
   LeastSquareLine,
   ChiSquare
