@@ -2,6 +2,8 @@ import React from "react";
 import { CloseButton } from "react-bootstrap";
 import "./result-exporter.css";
 import {Result} from "../../stats/operation";
+import { theme } from "../toggle-button/toggle-button";
+import { BackgroundImage } from "@mantine/core";
 
 /**
  * Component with Result[] attribute to allow for multiple stats
@@ -60,18 +62,18 @@ export const ResultExporter = (props: ResultExporterProps) => {
   if (!props.results || props.results.length === 0)
   {
     return (
-      <div className = "resultRet">
-        <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
+      <div className = {theme ? "result-ret-dark" : "result-ret-light"}>
+        <CloseButton variant = {theme ? "white" : ""} className = "close-but" onClick={closeResults}></CloseButton>
         <br/>
         <p>No Results to Return</p>
       </div>
     );
   }
   return (
-    <div className = "resultRet">
-      <CloseButton className = "closeBut" onClick={closeResults}></CloseButton>
+    <div className = {theme ? "result-ret-dark" : "result-ret-light"}>
+      <CloseButton variant = {theme ? "white" : ""} className = "close-but" onClick={closeResults}></CloseButton>
       <br/>
-      <button className = "expBut" onClick={handleOnClick}>Export</button>
+      <button className = {theme ? "exp-but-dark" : "exp-but-light"} onClick={handleOnClick}>Export</button>
       <p className = "results">{formatResults(props.results)}</p>
     </div>
   );

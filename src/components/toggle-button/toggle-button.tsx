@@ -13,6 +13,7 @@ export function SegmentedToggle() {
     <Group position="center" my="xl">
       <SegmentedControl
         value={theme ? "dark" : "light"}
+        color={theme ? "gray" : "green"}       
         onChange={(value) => {
           useThemeStore.setState({ isDark: value === "dark" });
         }

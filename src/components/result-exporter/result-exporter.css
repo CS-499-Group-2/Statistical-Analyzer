@@ -1,7 +1,25 @@
-.resultRet {
+
+.result-ret-dark {
   overflow: scroll;
   height: 100%;
   width: 100%;
+  background-color: #1A1B1E;
+  color: white;
+  border: 3px solid;
+  border-color: white;
+  border-radius: 10px;
+}
+
+.result-ret-light {
+  overflow: scroll;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  color: black;
+  border: 3px solid;
+  border-color: black;
+  border-radius: 10px;
+
 }
 
 .popup {
@@ -14,7 +32,6 @@
   background: white;
   position: fixed;
   text-align: unset;
-  border: 3px solid black;
   border-radius: 10px;
   font-size: larger;
   white-space: pre;
@@ -29,18 +46,27 @@
   visibility: visible;
 }
 
-.closeBut {
+.close-but {
   position: fixed;
-  top: 0;
-  right: 3%;
-  margin-left: calc(100vw - 48px);
+  top: 2px;
+  right: 20px;
 }
 
-.expBut {
-  margin-top: 10px;
+.exp-but-dark {
+  margin-top: 5px;
   text-align: center;
   border-radius: 10px;
-  background-color: #7f7f7f;
+  background-color: #909296;
+  border-color: white;
+  border-width: 2px;
+  color: white;
+}
+
+.exp-but-light {
+  margin-top: 5px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #909296;
   border-color: black;
   border-width: 2px;
   color: white;
@@ -49,4 +75,40 @@
 .results {
   text-align: left;
   margin: 15px;
+}
+
+.result-ret-dark::-webkit-scrollbar,
+.result-ret-light::-webkit-scrollbar {
+  border: 5px solid transparent;
+  border-radius: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: #909296;
+  background-clip: padding-box;
+}
+
+.result-ret-dark::-webkit-scrollbar-thumb,
+.result-ret-light::-webkit-scrollbar-thumb {
+  border: 5px solid transparent;
+  border-radius: 10px;
+  height: 20px;
+  width: 20px;
+  opacity: 100%;
+  background-color: #6b6d71;
+  background-clip: padding-box;
+}
+
+.result-ret-dark::-webkit-scrollbar-corner,
+.result-ret-light::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.result-ret-dark::-webkit-scrollbar-track,
+.result-ret-light::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.result-ret-dark::-webkit-scrollbar-track-piece,
+.result-ret-light::-webkit-scrollbar-track-piece {
+  background: transparent;
 }

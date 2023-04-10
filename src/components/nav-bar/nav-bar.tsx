@@ -52,7 +52,7 @@ export const NavBar = (props: NavBarProps) => {
   };
   return (
     <Navbar expand="sm" sticky="top" style= {{
-      backgroundColor: theme  ? "#909296" : "",
+      backgroundColor: theme  ? "#909296" : "white",
     }} >
       <Container id="bar-container">
         <Navbar.Brand>
