@@ -5,7 +5,7 @@ import { Result } from "../stats/operation";
 import { csvToString } from "./data-export";
 import ky, { HTTPError } from "ky";
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = "https://backend-nncxuhwx6a-uc.a.run.app";
 const apiInstance = ky.create({
   prefixUrl: baseUrl,
   headers: {
@@ -86,7 +86,7 @@ export interface GetFileResponse {
   filename: string;
   data: {
     lastModified: string;
-    results: string;
+    results: Result[];
   }
 }
 
@@ -111,8 +111,7 @@ export const getFile = async (filename: string): Promise<{data: CsvData, results
   const fileBlob = await getBlob(fileRef);
   const fileText = await fileBlob.text();
   const data = csvToArray(fileText);
-  const results = JSON.parse(resultsResponse.data.results);
-  return { data, results };
+  return { data, results: resultsResponse.data.results };
 };
 
 export const deleteFile = async (filename: string) => {
