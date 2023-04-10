@@ -38,10 +38,12 @@ export type Graph = {
     x: number,
     y: number
   }[],
+  xLabel?: string,
+  yLabel?: string,
   color?: string,
   lineLabel?: string,
-  lineColor? : string,
-  filled? : boolean,
-  curved? : boolean,
+  lineColor?: string,
+  filled?: boolean,
+  curved?: boolean,
   annotations?: AnnotationOptions[] | Record<string, AnnotationOptions>
 });

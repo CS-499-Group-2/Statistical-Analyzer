@@ -1,5 +1,17 @@
 import React from "react";
-import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from "chart.js";
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip
+} from "chart.js";
 import { Bar, Pie, Scatter } from "react-chartjs-2";
 import { Graph } from "./graphs";
 import { ChartProps } from "react-chartjs-2/dist/types";
@@ -20,7 +32,8 @@ ChartJS.register(
   Legend,
   ArcElement,
   BarElement,
-  annotationPlugin
+  annotationPlugin,
+  Filler
 );
 
 /**
@@ -60,6 +73,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
         backgroundColor: graph.data.map((d) => d.color)
       }],
     };
+    // @ts-expect-error For some reason, the scale types break this
     return <Bar data={data} options={options} />;
   }
 
@@ -72,6 +86,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
         backgroundColor: graph.data.map((d) => d.color)
       }]
     };
+    // @ts-expect-error For some reason, the scale types break this
     return <Pie data={data} options={options} />;
   }
 
@@ -84,12 +99,30 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
           data: graph.data,
           // If the graph is a normal distribution, then we want to show the line.
           showLine: graph.chartType === "Normal Distribution",
+          tension: graph.curved ? 0.4 : 0,
           backgroundColor: graph.color,
+          borderColor: graph.lineColor,
           label: graph.lineLabel,
+          fill: graph.filled,
         }
       ],
     };
-    return <Scatter data={data}  options={options} />;
+    options.scales = {
+      x: {
+        title: {
+          display: true,
+          text: graph.xLabel
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: graph.yLabel
+        }
+      }
+    };
+    // @ts-expect-error For some reason, the scale types break this
+    return <Scatter data={data} options={options} />;
   }
 
   

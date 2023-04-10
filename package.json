@@ -20,6 +20,7 @@
     "chartjs-plugin-annotation": "^2.2.1",
     "handsontable": "^12.3.1",
     "matrix-transpose": "^1.0.2",
+    "normal-distribution": "^1.1.1",
     "re-resizable": "^6.9.9",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.1",
