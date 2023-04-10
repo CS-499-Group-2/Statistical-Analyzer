@@ -3,13 +3,14 @@ import { calculateMedian } from "../calculations";
 
 //Defining the inputs
 interface Inputs {
-    "Color of the median line": undefined;
+    "Color of the median graph": undefined;
 }
 
 export const Median: Operation<Inputs> = {
   name: "Median",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-    const medianColor = inputs["Color of the median line"] as string;
+    const medianColor = inputs["Color of the median graph"] as string;
+    const columnNames = selectedCellsByColumn.map((column) => column.name);
 
     //Validation
     for (const column of selectedCellsByColumn) {
@@ -31,14 +32,15 @@ export const Median: Operation<Inputs> = {
     });
     results.push({
       values: [],
-      name: "",
+      name: `Median Graphs | ${columnNames.join(", ")}`,
       graphs: [{
         chartType: "Vertical Bar",
         data: results.map((currentCol) => ({
           value: currentCol.values[0],
           color: medianColor,
           label: currentCol.name,
-        }))
+        })),
+        title: `Median Graphs | ${columnNames.join(", ")}`,
       }]
     });
     return results;
@@ -47,6 +49,6 @@ export const Median: Operation<Inputs> = {
     return selectedCellsByColumn.length !== 0;
   },
   keys: {
-    "Color of the median line": "Color",
+    "Color of the median graph": "Color",
   },
 };

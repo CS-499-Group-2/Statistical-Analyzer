@@ -4,13 +4,14 @@ import { calculateMode } from "../calculations";
 
 //Defining the inputs
 interface Inputs {
-    "Color of the mean line": undefined;
+    "Color of Bar": undefined;
 }
 
 export const Mode: Operation<Inputs> = {
   name: "Mode",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const modeColor = inputs["Color of Bar"] as string;
+    const columnNames = selectedCellsByColumn.map((column) => column.name);
 
     //Validation
     for (const column of selectedCellsByColumn) {
@@ -32,14 +33,15 @@ export const Mode: Operation<Inputs> = {
     });
     results.push({
       values: [],
-      name: "",
+      name: `Mode Graph | ${columnNames.join(", ")}`,
       graphs: [{
         chartType: "Vertical Bar",
         data: results.map((currentCol) => ({
           value: currentCol.values[0],
           color: modeColor,
           label: currentCol.name,
-        }))
+        })),
+        title: `Mode Graph | ${columnNames.join(", ")}`,
       }]
     });
     return results;
@@ -48,6 +50,6 @@ export const Mode: Operation<Inputs> = {
     return selectedCellsByColumn.length !== 0;
   },
   keys : {
-    "Color of the mean line" : "Color",
+    "Color of Bar" : "Color",
   },
 };
