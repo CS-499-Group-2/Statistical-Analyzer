@@ -73,6 +73,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
         backgroundColor: graph.data.map((d) => d.color)
       }],
     };
+    // @ts-expect-error For some reason, the scale types break this
     return <Bar data={data} options={options} />;
   }
 
@@ -85,6 +86,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
         backgroundColor: graph.data.map((d) => d.color)
       }]
     };
+    // @ts-expect-error For some reason, the scale types break this
     return <Pie data={data} options={options} />;
   }
 
@@ -105,8 +107,25 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
         }
       ],
     };
+    options.scales = {
+      x: {
+        title: {
+          display: true,
+          text: graph.xLabel
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: graph.yLabel
+        }
+      }
+    };
+    // @ts-expect-error For some reason, the scale types break this
     return <Scatter data={data} options={options} />;
   }
+
+  
 };
 
 /** The properties for graph display */
