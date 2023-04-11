@@ -57,6 +57,7 @@ export const Percentile: Operation<Inputs> = {
       };
     });
   },
+  type: "Typed",
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;
   },

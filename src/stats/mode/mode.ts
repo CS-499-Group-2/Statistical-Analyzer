@@ -46,6 +46,7 @@ export const Mode: Operation<Inputs> = {
     });
     return results;
   },
+  type: "Typed",
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;
   },

@@ -10,6 +10,7 @@ interface Inputs {
 
 export const StandardDeviation: Operation<Inputs> = {
   name: "Standard Deviation",
+  type: "Typed",
   isValid: (selectedCellsByColumn) => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const pointColor = inputs["Point Color"] as string;

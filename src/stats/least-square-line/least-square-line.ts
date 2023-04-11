@@ -9,6 +9,7 @@ interface Inputs {
 
 export const LeastSquareLine: Operation<Inputs> = {
   name: "Least Square Line",
+  type: "Typed",
   isValid: (columns) => columns.length === 2, // The user selects one column, and then we get the X column from the inputs
   onSelected: (columns, spreadsheet, inputs): Result[] => {
     // FORMULA FROM: https://www.mathsisfun.com/data/least-squares-regression.html

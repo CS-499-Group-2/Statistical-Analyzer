@@ -13,6 +13,7 @@ interface Inputs {
  */
 export const ProbabilityDistribution: Operation<Inputs> = {
   name: "Probability Distribution",
+  type: "Typed",
   isValid: (selectedCellsByColumn) => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const lineColor = inputs["Line Color"] as string;
