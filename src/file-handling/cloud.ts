@@ -51,6 +51,11 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
     alert("File Saved! Autosave is now enabled.");
   } catch (e: unknown) {
     if (e instanceof HTTPError) {
+      if (e.response.status === 409) {
+        console.error(e.response.status);
+        alert("You have reached the maximum number of files (5). Delete a file to save a new one.");
+        return;
+      }
       console.error(e.response.status);
       console.error(e);
       alert("Failed to save file");

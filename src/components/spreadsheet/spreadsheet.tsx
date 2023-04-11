@@ -88,7 +88,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             if (isNaN(Number(newValue))) return true;
           })) return false;
           // We don't need the old value
-          changes?.forEach(([row, column, oldValue, newValue]) => {
+          changes?.forEach(([row, column,, newValue]) => {
             let columnNumber: number;
             // For some reason, the column can be a string or a number. I don't know why, but this is a workaround
             if (typeof column === "string") {
