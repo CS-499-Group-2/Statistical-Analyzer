@@ -10,6 +10,7 @@ interface Inputs {
 
 export const BinomialDistribution: Operation<Inputs> = {
   name: "Binomial Distribution",
+  type: "Typed",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => { 
     const numberOfTrials = inputs["Number of Trials"] as number;
     const probability = inputs["Probability"] as number;
