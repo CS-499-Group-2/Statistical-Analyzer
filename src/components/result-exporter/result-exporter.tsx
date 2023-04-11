@@ -2,8 +2,7 @@ import React from "react";
 import { CloseButton } from "react-bootstrap";
 import "./result-exporter.css";
 import {Result} from "../../stats/operation";
-import { theme } from "../toggle-button/toggle-button";
-import { BackgroundImage } from "@mantine/core";
+import { useThemeStore } from "../../stores/theme-store";
 
 /**
  * Component with Result[] attribute to allow for multiple stats
@@ -28,6 +27,7 @@ export const formatResults = (results: Result[]) => {
  * @returns an export button that will download the results.txt file when clicked
  */
 export const ResultExporter = (props: ResultExporterProps) => {
+  const theme = useThemeStore(state => state.isDark);
   
   /**
    * Function inside ResultExporter that specifically handles downloading the results.txt file
@@ -63,7 +63,7 @@ export const ResultExporter = (props: ResultExporterProps) => {
   {
     return (
       <div className = {theme ? "result-ret-dark" : "result-ret-light"}>
-        <CloseButton variant = {theme ? "white" : ""} className = "close-but" onClick={closeResults}></CloseButton>
+        <CloseButton variant = {theme ? "white" : undefined} className = "close-but" onClick={closeResults}></CloseButton>
         <br/>
         <p>No Results to Return</p>
       </div>
@@ -71,7 +71,7 @@ export const ResultExporter = (props: ResultExporterProps) => {
   }
   return (
     <div className = {theme ? "result-ret-dark" : "result-ret-light"}>
-      <CloseButton variant = {theme ? "white" : ""} className = "close-but" onClick={closeResults}></CloseButton>
+      <CloseButton variant = {theme ? "white" : undefined} className = "close-but" onClick={closeResults}></CloseButton>
       <br/>
       <button className = {theme ? "exp-but-dark" : "exp-but-light"} onClick={handleOnClick}>Export</button>
       <p className = "results">{formatResults(props.results)}</p>

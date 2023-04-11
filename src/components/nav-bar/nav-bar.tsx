@@ -4,7 +4,7 @@ import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
-import {useThemeStore} from "../theme-store/theme-store";
+import {useThemeStore} from "../../stores/theme-store";
 import { SegmentedToggle } from "../toggle-button/toggle-button";
 
 export interface NavBarProps {
@@ -50,11 +50,10 @@ export const NavBar = (props: NavBarProps) => {
     const popup = document.getElementById("popup");
     popup.classList.add("open-popup");
   };
+
   return (
-    <Navbar expand="sm" sticky="top" style= {{
-      backgroundColor: theme  ? "#909296" : "white",
-    }} >
-      <Container id="bar-container">
+    <Navbar expand="sm" sticky="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
+      <Container fluid className="me-4 ms-3">
         <Navbar.Brand>
           <img className="nav-logo" src="logo.png" alt="logo" />
           Statistical Analyzer
@@ -77,7 +76,11 @@ export const NavBar = (props: NavBarProps) => {
               ))}
             </NavDropdown>
           </Nav>
-          <SegmentedToggle />
+          <Nav className="ml-auto">
+            <Nav.Item>
+              <SegmentedToggle />
+            </Nav.Item>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

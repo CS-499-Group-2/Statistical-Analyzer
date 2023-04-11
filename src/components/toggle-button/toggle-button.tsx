@@ -1,23 +1,20 @@
 import React from "react";
-import { useMantineColorScheme, SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { SegmentedControl, Group, Center, Box } from "@mantine/core";
 import { IconSun, IconMoon } from "@tabler/icons-react";
-import { useThemeStore } from "../theme-store/theme-store";
-
-
-export let theme; 
+import { useThemeStore } from "../../stores/theme-store";
 
 export function SegmentedToggle() {
-  theme = useThemeStore(state => state.isDark);
+  const theme = useThemeStore(state => state.isDark);
+  const setTheme = useThemeStore(state => state.setTheme);
 
   return (
-    <Group position="center" my="xl">
+    <Group position="center">
       <SegmentedControl
         value={theme ? "dark" : "light"}
         color={theme ? "gray" : "green"}       
         onChange={(value) => {
-          useThemeStore.setState({ isDark: value === "dark" });
-        }
-        }
+          setTheme(value === "dark");
+        }}
         data={[
           {
             value: "light",

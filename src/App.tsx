@@ -9,11 +9,7 @@ import { exportData } from "./file-handling/data-export";
 import { Percentile, ProbabilityDistribution } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
-import ReactSwitch from "react-switch";
-import {createGlobalStyle} from "styled-components";
-import {useThemeStore} from "./components/theme-store/theme-store";
-
-
+import {useThemeStore} from "./stores/theme-store";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -30,6 +26,12 @@ function App() {
   const [results, setResults] = React.useState<Result[]>([]);
   const theme = useThemeStore(state => state.isDark);
 
+
+  
+  
+
+  
+  
   
   
 
@@ -92,7 +94,7 @@ function App() {
 
   return (
     <div className="App" style= {{ 
-      backgroundColor: theme ? "#1A1B1E" : "",
+      backgroundColor: theme ? "#1A1B1E" : undefined,
     }}>
       <NavBar
         availableOperations={availableOperations}
@@ -111,21 +113,8 @@ function App() {
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
-    
-      
-          
-       
-
     </div> 
-
-
-
-      
-
-
-    
   );
-  
 }
 
 export default App;
