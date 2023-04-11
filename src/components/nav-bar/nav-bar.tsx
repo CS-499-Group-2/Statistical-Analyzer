@@ -61,12 +61,12 @@ export const NavBar = (props: NavBarProps) => {
         <Navbar.Toggle />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <NavDropdown title="File" id="basic-nav-dropdown">
+            <NavDropdown title="File" id="basic-nav-dropdown" menuVariant={theme ? "dark" : "light"}>
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
               <NavDropdown.Item onClick={props.onExport}>Export as CSV</NavDropdown.Item>
               <NavDropdown.Item onClick={() => showResults()}>View Statistics</NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Statistics" id="basic-nav-dropdown">
+            <NavDropdown title="Statistics" id="basic-nav-dropdown" menuVariant={theme ? "dark" : "light"}>
               {props.availableOperations.map((operation) => ( // Loop over all the available operations
                 <NavDropdown.Item
                   key={operation.name} // This is necessary whenever you use a loop in React

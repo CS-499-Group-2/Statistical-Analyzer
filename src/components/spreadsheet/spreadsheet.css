@@ -33,34 +33,3 @@
   color: white;
 }
 
-.light-table th,
-.light-table tr {
-  background-color: #C1C2C5;
-  color: black;
-}
-
-.light-table td {
-  background-color: white;
-  color: black;
-}
-
-.light-active {
-  background-color: #C1C2C5;
-  color: black;
-}
-
-.light-header {
-  background: #C1C2C5;
-  color: black;
-}
-
-.light-row {
-  background-color: #C1C2C5;
-  color: black;
-}
-
-.light-col {
-  background-color: #C1C2C5;
-  color: black;
-}
-
