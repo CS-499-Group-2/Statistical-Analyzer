@@ -33,7 +33,6 @@ export const CoeficientOfVariance: Operation<Inputs> = {
   isValid: (selectedCellsByColumn): boolean => {
     for (const column of selectedCellsByColumn) {
       if (column.values.length < 2) {
-        alert("Please select at least two cells in each column.");
         return false;
       }
     }

@@ -23,11 +23,13 @@ export interface SpreadsheetProps {
 }
 
 export const Spreadsheet = (props: SpreadsheetProps) => {
+  const spreadsheetRef = React.useRef<HotTable>(null);
 
   return (
     <div className="sheet">
       <HotTable
         data={props.data.data}
+        ref={spreadsheetRef}
         rowHeaders={true}
         colHeaders={props.data.headers}
         formulas={{
@@ -90,18 +92,34 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             props.onCellChange?.(row, columnNumber, newValueAsNumber);
           });
         }}
-        afterSelectionEnd={(rowStart, columnStart, rowEnd, columnEnd) => {
-          const data = props.data.data; // Get the data
-          const cells: number[][] = []; // Create an array to store the cells
-          for (let row = rowStart; row <= rowEnd; row++) { // Loop through the rows
-            cells[row] = data[row].slice(columnStart, columnEnd + 1); // Add the cells to the array
+        afterSelectionEnd={() => {
+          try {
+            const data = props.data.data; // Get the data
+            const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
+            const columns = selectedCells.flatMap((group) => {
+              const cells: number[][] = []; // Create an array to store the cells
+              for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
+                if (!data[row]) continue; // Skip if the row is empty
+                cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
+              }
+              for (let row = 0; row < cells.length; row++) { // Loop through the rows
+                // Remove any empty rows
+                if (!cells[row]) {
+                  cells.splice(row, 1);
+                  row--;
+                }
+              }
+              const transposed = transpose(cells);
+              return transposed.map((column, index) => ({
+                values: column,
+                name: props.data.headers[group.from.col + index]
+              }));
+            });
+            console.log("Columns", columns);
+            props.onCellsSelected?.(columns); // Call the onCellsSelected callback
+          } catch (e) {
+            console.error(e);
           }
-          const transposed = transpose(cells);
-          const columns: Column[] = transposed.map((column) => ({
-            values: column,
-            name: props.data.headers[columnStart]
-          }));
-          props.onCellsSelected?.(columns); // Call the onCellsSelected callback
         }}
         outsideClickDeselects={false}
       />

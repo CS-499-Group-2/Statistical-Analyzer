@@ -6,21 +6,41 @@ import { Column, Operation, Result } from "./stats/operation";
 import { CsvData } from "./file-handling/import";
 import { ResultExporter } from "./components/result-exporter/result-exporter";
 import { exportData } from "./file-handling/data-export";
-import { Percentile, ProbabilityDistribution , Variance, CoeficientOfVariance  } from "./stats";
+import {
+  Percentile,
+  ProbabilityDistribution,
+  LeastSquareLine,
+  ChiSquare,
+  Mean,
+  Median,
+  Mode,
+  BinomialDistribution,
+  StandardDeviation,
+  Variance,
+  CoeficientOfVariance
+} from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
   Percentile,
+  Mean,
+  Median,
+  Mode,
+  BinomialDistribution,
+  StandardDeviation,
   ProbabilityDistribution,
+  LeastSquareLine,
+  ChiSquare,
   Variance,
   CoeficientOfVariance,
 ];
 
 function App() {
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
-  const [data, setData] = React.useState<CsvData>({data: [[10, 15], [1, 2], [5, 10]], headers: ["Column 1", "Column 2"]});
+  const emptyArray = Array.from({ length: 20 }, () => new Array(20 ).fill(0));
+  const [data, setData] = React.useState<CsvData>({data:emptyArray, headers: []});
   const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
@@ -96,7 +116,10 @@ function App() {
         onCellsSelected={setSelectedCells}
       />
       <div className = "popup" id = "popup">
-        <ResultExporter results={results}></ResultExporter>
+        <ResultExporter
+          results={results}
+          onDelete={(idx) => setResults(results.filter(n => n !== results[idx]))}
+        />
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />

@@ -16,7 +16,7 @@ export const ProbabilityDistribution: Operation<Inputs> = {
   isValid: (selectedCellsByColumn) => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const lineColor = inputs["Line Color"] as string;
-    const pointColor = inputs["Point Color"] as string;
+    const fillColor = inputs["Fill Color"] as string;
     return selectedCellsByColumn.map((column) => {
       const title = `${column.name} | Probability Distribution`;
       const meanValue = mean(column.values);
@@ -33,7 +33,7 @@ export const ProbabilityDistribution: Operation<Inputs> = {
           data: graphXValues.map((value) => ({x: value, y: normalDist.pdf(value)})),
           lineLabel: "Normal Distribution Curve",
           curved: true,
-          color: pointColor,
+          color: fillColor,
           lineColor: lineColor,
           filled: true
         }]

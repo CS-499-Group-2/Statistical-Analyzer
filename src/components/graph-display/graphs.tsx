@@ -30,7 +30,7 @@ export type Graph = {
   /**
    * The type of xy graph
    */
-  chartType: "XY Scatter" | "Normal Distribution",
+  chartType: "XY Scatter" | "Normal Distribution" | "Standard Deviation",
   /**
    * The data to be displayed on the graph, in the form of an array of x and y values.
    */
@@ -38,6 +38,8 @@ export type Graph = {
     x: number,
     y: number
   }[],
+  xLabel?: string,
+  yLabel?: string,
   color?: string,
   lineLabel?: string,
   lineColor?: string,
