@@ -4,7 +4,7 @@
 
 .dark-table th,
 .dark-table tr {
-  background-color: #2C2E33;
+  background-color: #2C2E33 !important;
   color: white;
 }
 
