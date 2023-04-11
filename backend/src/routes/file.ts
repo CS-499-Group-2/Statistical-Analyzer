@@ -52,10 +52,14 @@ router.put("/users/:userId/files/:filename", async (req, res) => {
     return;
   }
   const userFilesCollection = db.collection(`users/${userId}/files`);
-  const totalFiles = (await userFilesCollection.count().get()).data().count;
-  if (totalFiles >= 5) {
-    res.status(409).send("You have reached the maximum number of files");
-    return;
+  const doesFileExist = (await userFilesCollection.doc(filename).get()).exists;
+  if (!doesFileExist) {
+    // If the file doesn't exist, we check if the user has reached the maximum number of files
+    const totalFiles = (await userFilesCollection.count().get()).data().count;
+    if (totalFiles >= 5) {
+      res.status(409).send("You have reached the maximum number of files");
+      return;
+    }
   }
   const fileRef = userFilesCollection.doc(filename);
   await storage.bucket().file(`users/${userId}/${filename}`).save(fileContent);
