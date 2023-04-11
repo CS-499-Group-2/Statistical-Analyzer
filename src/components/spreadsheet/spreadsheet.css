@@ -4,8 +4,11 @@
 
 .dark-table th,
 .dark-table tr {
-  background-color: #2C2E33 !important;
-  color: white;
+  background-color: #2C2E33;
+  color: white; 
+  --bga: #216527;
+  --bgh: #494c54;
+  --col: white;
 }
 
 .dark-table td {
@@ -13,23 +16,48 @@
   color: white;
 }
 
-.dark-active {
-  background-color: #2C2E33;
-  color: white;
+.dark-active th {
+  background-color: #216527 !important;
+  color: white !important;
 }
 
-.dark-header {
-  background-color: #2C2E33;
-  color: white;
+.light-table th,
+.light-table tr {
+  --bga: #b3e6bc;
+  --bgh: #dcdcdc;
+  --col: black;
 }
 
-.dark-row {
-  background-color: #2C2E33;
-  color: white;
+.handsontable tbody th.ht__highlight,
+.handsontable thead th.ht__highlight {
+  background-color: var(--bgh);
+  color: var(--col);
 }
 
-.dark-col {
-  background-color: #2C2E33;
-  color: white;
+.handsontable tbody th.ht__active_highlight,
+.handsontable thead th.ht__active_highlight {
+  background-color: var(--bga);
+  color: var(--col);
+}
+
+.wtBorder.current,
+.wtBorder.area {
+  background-color: #40c057 !important;
+}
+
+.handsontable td.area:before,
+.handsontable td.area-1:before,
+.handsontable td.area-2:before,
+.handsontable td.area-3:before,
+.handsontable td.area-4:before,
+.handsontable td.area-5:before,
+.handsontable td.area-6:before,
+.handsontable td.area-7:before {
+  background: #40c057;
+  border: #40c057;
+}
+
+.handsontableInput {
+  box-shadow: 0 0 0 2px #40c057 inset;
 }
 
