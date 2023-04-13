@@ -37,7 +37,7 @@ export interface OperationProps {
 }
 
 /** Represents an operation that can be performed on a stat. */
-interface TypedOperation<T> {
+export interface TypedOperation<T> {
   /** The name of the operation */
   name: string;
   type: "Typed";
@@ -62,7 +62,7 @@ interface TypedOperation<T> {
   keys: {[Property in keyof T]: "Number" | "Text" | "Checkbox" | "Color"};
 }
 
-interface ComponentOperation {
+export interface ComponentOperation {
   /** The name of the operation */
   name: string;
   type: "Component";

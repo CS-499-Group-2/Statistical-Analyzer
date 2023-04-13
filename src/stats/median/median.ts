@@ -1,4 +1,4 @@
-import { Operation, Result } from "../operation";
+import { Result, TypedOperation } from "../operation";
 import { calculateMedian } from "../calculations";
 
 //Defining the inputs
@@ -6,7 +6,7 @@ interface Inputs {
     "Color of the median graph": undefined;
 }
 
-export const Median: Operation<Inputs> = {
+export const Median: TypedOperation<Inputs> = {
   name: "Median",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const medianColor = inputs["Color of the median graph"] as string;

@@ -1,4 +1,4 @@
-import { Operation, Result } from "../operation";
+import { Result, TypedOperation } from "../operation";
 import { Graph } from "../../components/graph-display/graphs";
 
 interface Inputs {
@@ -7,7 +7,7 @@ interface Inputs {
   "Reference Line Color";
 }
 
-export const LeastSquareLine: Operation<Inputs> = {
+export const LeastSquareLine: TypedOperation<Inputs> = {
   name: "Least Square Line",
   type: "Typed",
   isValid: (columns) => columns.length === 2, // The user selects one column, and then we get the X column from the inputs

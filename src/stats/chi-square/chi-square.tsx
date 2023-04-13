@@ -1,4 +1,4 @@
-import { Operation, OperationProps, Result } from "../operation";
+import { ComponentOperation, OperationProps, Result } from "../operation";
 import * as ss from "simple-statistics";
 import React, { useEffect } from "react";
 import { Button, ColorInput, Modal, NativeSelect } from "@mantine/core";
@@ -74,7 +74,7 @@ const ChiSquareComponent = (props: OperationProps) => {
   );
 };
 
-export const ChiSquare: Operation = {
+export const ChiSquare: ComponentOperation = {
   name: "Chi Squared",
   type: "Component",
   isValid: (columns) => columns.length === 2,

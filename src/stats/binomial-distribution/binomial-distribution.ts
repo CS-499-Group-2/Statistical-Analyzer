@@ -1,4 +1,4 @@
-import { Operation, Result } from "../operation";
+import { Result, TypedOperation } from "../operation";
 import { calculateBinomialDistribution } from "../calculations";
 
 
@@ -8,7 +8,7 @@ interface Inputs {
     "Probability": number;
 }
 
-export const BinomialDistribution: Operation<Inputs> = {
+export const BinomialDistribution: TypedOperation<Inputs> = {
   name: "Binomial Distribution",
   type: "Typed",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => { 
