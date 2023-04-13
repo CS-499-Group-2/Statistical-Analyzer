@@ -98,8 +98,9 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             changes.some(([, , , newValue]) => {
               if (isNaN(Number(newValue))) return true;
             })
-          )
+          ) {
             return false;
+          }
           // We don't need the old value
           changes?.forEach(([row, column, , newValue]) => {
             let columnNumber: number;
