@@ -1,4 +1,4 @@
-import { Operation , Result} from "../operation";
+import { Result, TypedOperation } from "../operation";
 import { calculateMean } from "../calculations";
 import { Graph } from "../../components/graph-display/graphs";
 
@@ -11,7 +11,7 @@ interface Inputs {
 } 
 
 
-export const Mean: Operation<Inputs> = {
+export const Mean: TypedOperation<Inputs> = {
   name: "Mean",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const meanColor = inputs["Color of graph"] as string;
@@ -55,6 +55,7 @@ export const Mean: Operation<Inputs> = {
     });
     return results;
   },
+  type: "Typed",
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;
   }, 

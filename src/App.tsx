@@ -44,6 +44,7 @@ function App() {
   const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
+  const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
 
   /** This is a function that will return a list of all available operations that are valid for the selected cells
    * We use useMemo here to make sure that this function is only called when the selected cells change.
@@ -58,7 +59,11 @@ function App() {
    * @param operation The operation to add to the list of selected operations
    */
   const onOperationSelected = (operation: Operation<Record<string, number>>) => {
-    modalRef.current.open(operation, (values) => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+    if (operation.type === "Component") {
+      setSelectedOperations(previousSelectedOperations => [...previousSelectedOperations, operation.name]);
+    } else {
+      modalRef.current.open(operation, (values) => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+    }
   };
 
   const handleOperationComplete = (results: Result[]) => {
@@ -123,6 +128,18 @@ function App() {
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
+      {operations.filter(operation => operation.type === "Component").map(operation => {
+        if (operation.type !== "Component") return null;
+        return (
+          <operation.component 
+            key={operation.name}
+            selected={selectedOperations.includes(operation.name)}
+            deselect={() => setSelectedOperations(selectedOperations.filter(o => o !== operation.name))} 
+            addResult={(result) => handleOperationComplete([result])}
+            selectedCellsByColumn={selectedCells}
+            spreadsheet={data}
+          />);
+      })}
     </div>
   );
 }
