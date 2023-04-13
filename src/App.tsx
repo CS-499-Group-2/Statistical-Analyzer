@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { NavBar } from "./components/nav-bar/nav-bar";
 import { Spreadsheet } from "./components/spreadsheet/spreadsheet";
 import { Column, Operation, Result } from "./stats/operation";
@@ -19,6 +19,10 @@ import {
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
+import useCloudStore from "./stores/cloud-store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { autoSave, deleteFile, getFile, saveToStorage } from "./file-handling/cloud";
+import { FileList } from "./components/file-list/file-list";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -41,6 +45,50 @@ function App() {
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
   const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
+  const activeFile = useCloudStore(state => state.activeFile);
+  const setActiveFile = useCloudStore(state => state.setActiveFile);
+  const queryClient = useQueryClient();
+  const { mutate: mutateActiveFile, isError, isLoading } = useMutation({
+    mutationFn: () => autoSave(data, results),
+  });
+  const { mutate: deleteUserFile } = useMutation({
+    mutationFn: (filename: string) => deleteFile(filename),
+    onSettled: () => queryClient.invalidateQueries({
+      queryKey: ["files"]
+    }),
+    onSuccess: (data, filename) => {
+      if (activeFile === filename) {
+        setActiveFile(undefined);
+      }
+      setFilesModalOpen(false);
+    },
+    onError: (error, filename) => {
+      console.error(error);
+      alert("Failed to delete file " + filename);
+    }
+  });
+  const [filesModalOpen, setFilesModalOpen] = React.useState(false);
+
+  // Autosave whenever the data or results change
+  useEffect(() => {
+    mutateActiveFile();
+  }, [data, results]);
+
+  /**
+   * This function will return the current state of what the save button should display.
+   */
+  const figureOutSaveState = () => {
+    if (!activeFile) {
+      return undefined;
+    }
+    if (isLoading) {
+      return "saving";
+    }
+    if (isError) {
+      return "error";
+    }
+    return "saved";
+  };
 
   /** This is a function that will return a list of all available operations that are valid for the selected cells
    * We use useMemo here to make sure that this function is only called when the selected cells change.
@@ -102,6 +150,23 @@ function App() {
     setData(data);
   };
 
+  const onCloudFileOpen = (filename: string) => {
+    getFile(filename).then((data) => {
+      setData(data.data);
+      setResults(data.results);
+      setActiveFile(filename);
+    }).catch((e) => {
+      console.error(e);
+      alert("Failed to load file from cloud");
+    }).finally(() => {
+      setFilesModalOpen(false);
+    });
+  };
+
+  const onCloudFileDelete = (filename: string) => {
+    deleteUserFile(filename);
+  };
+
   return (
     <div className="App">
       <NavBar
@@ -109,6 +174,12 @@ function App() {
         onOperationSelected={onOperationSelected}
         onExport={() => exportData(data)}
         onFileImport={onFileOpen}
+        onCloudExport={() => saveToStorage(data, results).catch((e) => {
+          console.error(e);
+          alert("Failed to save to cloud");
+        })}
+        savingState={figureOutSaveState()}
+        onFilesModalOpen={() => setFilesModalOpen(true)}
       />
       <Spreadsheet
         data={data}
@@ -136,6 +207,11 @@ function App() {
             spreadsheet={data}
           />);
       })}
+      <FileList
+        open={filesModalOpen}
+        onClose={() => setFilesModalOpen(false)}
+        onSelected={onCloudFileOpen}
+        onDeleted={onCloudFileDelete} />
     </div>
   );
 }
