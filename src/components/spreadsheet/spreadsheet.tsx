@@ -1,5 +1,6 @@
 import * as React from "react";
-import { registerAllModules } from "handsontable/registry";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Handsontable from "handsontable";
 import { HotTable } from "@handsontable/react";
 import "handsontable/dist/handsontable.full.min.css";
 import "./spreadsheet.css";
@@ -7,9 +8,16 @@ import { CsvData } from "../../file-handling/import";
 import { HyperFormula } from "hyperformula";
 import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
+import { registerCellType, NumericCellType } from "handsontable/cellTypes";
+import { registerLanguageDictionary, enUS } from "handsontable/i18n";
+import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize } from "handsontable/plugins";
 import { useThemeStore } from "../../stores/theme-store";
 
-registerAllModules();
+registerPlugin(ContextMenu);
+registerPlugin(AutoColumnSize);
+registerPlugin(ManualColumnResize);
+registerCellType(NumericCellType);
+registerLanguageDictionary(enUS);
 
 /**
  * The properties to pass to the spreadsheet component
@@ -76,12 +84,15 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
       }}
       licenseKey="non-commercial-and-evaluation" // for non-commercial use only
       validator={"numeric"}
+      manualColumnResize
       beforeChange={(changes) => {
         // With the beforeChange callback, we can prevent the change from happening. We do this by returning false. See: https://handsontable.com/docs/react-data-grid/api/hooks/#beforechange
         // We want to prevent the change if any of the new values are not numbers
-        if (changes.some(([row, column, oldValue, newValue]) => isNaN(parseFloat(newValue)))) return false;
+        if (changes.some(([, , , newValue]) => {
+          if (isNaN(Number(newValue))) return true;
+        })) return false;
         // We don't need the old value
-        changes?.forEach(([row, column, oldValue, newValue]) => {
+        changes?.forEach(([row, column,, newValue]) => {
           let columnNumber: number;
           // For some reason, the column can be a string or a number. I don't know why, but this is a workaround
           if (typeof column === "string") {

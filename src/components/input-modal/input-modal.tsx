@@ -1,9 +1,9 @@
 import React, { forwardRef, Ref, useImperativeHandle, useState } from "react";
 import { Button, Checkbox, ColorInput, Modal, NumberInput, TextInput } from "@mantine/core";
-import { Operation } from "../../stats/operation";
+import { TypedOperation } from "../../stats/operation";
 
 export interface InputModalRef {
-  open: (operation: Operation<Record<string, never>>, onSubmit: (values: Record<string, never>) => void) => void;
+  open: (operation: TypedOperation<Record<string, never>>, onSubmit: (values: Record<string, never>) => void) => void;
 }
 
 const InputModal = forwardRef((props, ref: Ref<InputModalRef>) => {

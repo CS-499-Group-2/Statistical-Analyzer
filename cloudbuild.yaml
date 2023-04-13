@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker build -t us-central1-docker.pkg.dev/statistical-analyzer-cs499/docker/backend .']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/statistical-analyzer-cs499/docker/backend']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['beta', 'run', 'deploy', 'backend', '--region=us-central1', '--platform=managed', '--image=us-central1-docker.pkg.dev/statistical-analyzer-cs499/docker/backend']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker rmi us-central1-docker.pkg.dev/statistical-analyzer-cs499/docker/backend']

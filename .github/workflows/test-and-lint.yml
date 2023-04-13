@@ -1,4 +1,4 @@
-name: Test Code
+name: Tests and Lints Code
 
 on:
   push:
@@ -17,3 +17,12 @@ jobs:
       - run: npm ci
       - run: npm run test
       - run: npm run coverage
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run lint
