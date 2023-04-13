@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
-import { Column } from "../operation";
-import { ChiSquare } from "./chi-square";
+import { Column, Result } from "../operation";
+import { ChiSquare, calculateChiSquared } from "./chi-square";
 
 describe("Chi Squared Tests", () => {
   test("should not be valid without two columns", () => {
@@ -26,7 +26,11 @@ describe("Chi Squared Tests", () => {
     expect(ChiSquare.isValid(columns)).toBe(true);
   });
   test("should return chi squared value", () => {
-    const expected = 5.094;
+    const expected: Result = {
+      name: "Chi Squared",
+      values: [5.094],
+      graphs: []
+    };
     const columns: Column[] = [{
       name: "Observed",
       values: [29, 24, 22, 19, 21, 18, 19, 20, 23, 18, 20, 23]
@@ -34,7 +38,8 @@ describe("Chi Squared Tests", () => {
       name: "Expected",
       values: new Array<number>(12).fill(21.333, 0, 12)
     }];
-    const actual = ChiSquare.onSelected(columns, undefined, {"Observed Column Header": "Observed", "Line Color": "#ffffff"});
-    expect(actual[0].values[0]).toBeCloseTo(expected, 0.001);
+    const actual = calculateChiSquared(columns[0].values, columns[1].values, "blue");
+    expect(actual.name).toBe(expected.name);
+    expect(actual.values[0]).toBeCloseTo(expected.values[0], 0.001);
   });
 });

@@ -1,4 +1,4 @@
-import { Operation , Result} from "../operation";
+import { Result, TypedOperation } from "../operation";
 import { calculateMode } from "../calculations";
 
 
@@ -7,7 +7,7 @@ interface Inputs {
     "Color of Bar": undefined;
 }
 
-export const Mode: Operation<Inputs> = {
+export const Mode: TypedOperation<Inputs> = {
   name: "Mode",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const modeColor = inputs["Color of Bar"] as string;
@@ -46,6 +46,7 @@ export const Mode: Operation<Inputs> = {
     });
     return results;
   },
+  type: "Typed",
   isValid: (selectedCellsByColumn): boolean => {
     return selectedCellsByColumn.length !== 0;
   },
