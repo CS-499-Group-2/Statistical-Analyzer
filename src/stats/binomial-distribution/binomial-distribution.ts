@@ -8,7 +8,7 @@ interface Inputs {
     "Probability": number;
 }
 
-export const BinomialDistribution: Operation<Inputs> = {
+export const BinomialDistribution:  Operation<Inputs> = {
   name: "Binomial Distribution",
   type: "Typed",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => { 

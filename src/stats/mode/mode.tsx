@@ -27,8 +27,6 @@ const ModeComponent = (props: OperationProps) => {
     case "Pie":
       graphType = "Pie";
       break;
-      
-
     }
     // The actual modes for each column
     selectedCellsByColumn.forEach(column => {
@@ -54,7 +52,7 @@ const ModeComponent = (props: OperationProps) => {
       })),
     };
     addResult({
-      name: `mode Graphs | ${columnNames.join(", ")}`,
+      name: `Mode Graphs | ${columnNames.join(", ")}`,
       values: [ ],
       graphs: [graph],
     });
@@ -63,14 +61,14 @@ const ModeComponent = (props: OperationProps) => {
 
   return (
     <Modal opened={selected} onClose={deselect} centered>
-      <h1>mode</h1>
+      <h1>Mode</h1>
       {columnNames.map(
         (
           columnName // For each column, create a color input
         ) => (
           <ColorInput
             key={columnName}
-            label={ " Bar Color for : " + columnName}
+            label={ "Bar Color for : " + columnName}
             value={barColors.get(columnName)}
             onChange={newColor => {
               // We need to create a new map because we have to use a different object to force a rerender

@@ -27,8 +27,6 @@ const MedianComponent = (props: OperationProps) => {
     case "Pie":
       graphType = "Pie";
       break;
-      
-
     }
     // The actual Medians for each column
     selectedCellsByColumn.forEach(column => {
