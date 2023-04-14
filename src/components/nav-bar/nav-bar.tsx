@@ -80,7 +80,7 @@ export const NavBar = (props: NavBarProps) => {
   };
 
   return (
-    <Navbar expand="sm" sticky="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
+    <Navbar expand="md" sticky="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
       <Container fluid className="me-4 ms-3">
         <Navbar.Brand>
           <img className="nav-logo" src="logo.png" alt="logo" />
