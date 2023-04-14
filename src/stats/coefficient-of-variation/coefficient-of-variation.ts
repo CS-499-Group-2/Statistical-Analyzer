@@ -30,12 +30,7 @@ export const CoeficientOfVariance: TypedOperation<Inputs> = {
     });
   },
   isValid: (selectedCellsByColumn): boolean => {
-    for (const column of selectedCellsByColumn) {
-      if (column.values.length < 2) {
-        return false;
-      }
-    }
-    return true;
+    return selectedCellsByColumn.length !== 0;
   },
   keys : {
     "Color of the Variance Graph" : "Color",

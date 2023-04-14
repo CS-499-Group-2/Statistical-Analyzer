@@ -28,12 +28,8 @@ export const Variance: TypedOperation<Inputs> = {
     });
   },
   isValid: (selectedCellsByColumn): boolean => {
-    for (const column of selectedCellsByColumn) {
-      if (column.values.length < 2) {
-        return false;
-      }
-    }
-    return true;
+    console.log( selectedCellsByColumn.length !== 0);
+    return selectedCellsByColumn.length !== 0;
   },
   keys: {
     "Color of the Variance Graph" : "Color", 
