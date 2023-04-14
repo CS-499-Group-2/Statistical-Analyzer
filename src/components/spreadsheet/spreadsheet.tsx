@@ -1,6 +1,6 @@
 import * as React from "react";
-import { registerAllModules } from "handsontable/registry";
-import "handsontable/dist/handsontable.full.css";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Handsontable from "handsontable";
 import { HotTable } from "@handsontable/react";
 import "handsontable/dist/handsontable.full.min.css";
 import "./spreadsheet.css";
@@ -8,8 +8,15 @@ import { CsvData } from "../../file-handling/import";
 import { HyperFormula } from "hyperformula";
 import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
+import { registerCellType, NumericCellType } from "handsontable/cellTypes";
+import { registerLanguageDictionary, enUS } from "handsontable/i18n";
+import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize } from "handsontable/plugins";
 
-registerAllModules();
+registerPlugin(ContextMenu);
+registerPlugin(AutoColumnSize);
+registerPlugin(ManualColumnResize);
+registerCellType(NumericCellType);
+registerLanguageDictionary(enUS);
 
 /**
  * The properties to pass to the spreadsheet component
@@ -23,11 +30,13 @@ export interface SpreadsheetProps {
 }
 
 export const Spreadsheet = (props: SpreadsheetProps) => {
+  const spreadsheetRef = React.useRef<HotTable>(null);
 
   return (
     <div className="sheet">
       <HotTable
         data={props.data.data}
+        ref={spreadsheetRef}
         rowHeaders={true}
         colHeaders={props.data.headers}
         formulas={{
@@ -71,12 +80,15 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         }}
         licenseKey="non-commercial-and-evaluation" // for non-commercial use only
         validator={"numeric"}
+        manualColumnResize
         beforeChange={(changes) => {
           // With the beforeChange callback, we can prevent the change from happening. We do this by returning false. See: https://handsontable.com/docs/react-data-grid/api/hooks/#beforechange
           // We want to prevent the change if any of the new values are not numbers
-          if (changes.some(([row, column, oldValue, newValue]) => isNaN(parseFloat(newValue)))) return false;
+          if (changes.some(([, , , newValue]) => {
+            if (isNaN(Number(newValue))) return true;
+          })) return false;
           // We don't need the old value
-          changes?.forEach(([row, column, oldValue, newValue]) => {
+          changes?.forEach(([row, column,, newValue]) => {
             let columnNumber: number;
             // For some reason, the column can be a string or a number. I don't know why, but this is a workaround
             if (typeof column === "string") {
@@ -90,18 +102,34 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             props.onCellChange?.(row, columnNumber, newValueAsNumber);
           });
         }}
-        afterSelectionEnd={(rowStart, columnStart, rowEnd, columnEnd) => {
-          const data = props.data.data; // Get the data
-          const cells: number[][] = []; // Create an array to store the cells
-          for (let row = rowStart; row <= rowEnd; row++) { // Loop through the rows
-            cells[row] = data[row].slice(columnStart, columnEnd + 1); // Add the cells to the array
+        afterSelectionEnd={() => {
+          try {
+            const data = props.data.data; // Get the data
+            const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
+            const columns = selectedCells.flatMap((group) => {
+              const cells: number[][] = []; // Create an array to store the cells
+              for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
+                if (!data[row]) continue; // Skip if the row is empty
+                cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
+              }
+              for (let row = 0; row < cells.length; row++) { // Loop through the rows
+                // Remove any empty rows
+                if (!cells[row]) {
+                  cells.splice(row, 1);
+                  row--;
+                }
+              }
+              const transposed = transpose(cells);
+              return transposed.map((column, index) => ({
+                values: column,
+                name: props.data.headers[group.from.col + index]
+              }));
+            });
+            console.log("Columns", columns);
+            props.onCellsSelected?.(columns); // Call the onCellsSelected callback
+          } catch (e) {
+            console.error(e);
           }
-          const transposed = transpose(cells);
-          const columns: Column[] = transposed.map((column) => ({
-            values: column,
-            name: props.data.headers[columnStart]
-          }));
-          props.onCellsSelected?.(columns); // Call the onCellsSelected callback
         }}
         outsideClickDeselects={false}
       />
