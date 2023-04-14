@@ -171,6 +171,7 @@ function App() {
     deleteUserFile(filename);
   };
 
+  document.body.style.backgroundColor = theme ? "#1A1B1E" : "white";
   return (
     <div className="App" style= {{ 
       backgroundColor: theme ? "#1A1B1E" : undefined,

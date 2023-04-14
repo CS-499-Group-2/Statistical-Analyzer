@@ -42,7 +42,6 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
       currentRowClassName={theme ? "dark-row" : "light-row"}
       currentColClassName={theme ? "dark-col" : "light-col"}
       data={props.data.data}
-      preventOverflow={"horizontal"}
       ref={spreadsheetRef}
       rowHeaders={true}
       colHeaders={props.data.headers}
