@@ -4,7 +4,7 @@ import "./nav-bar.css";
 import { csvToArray } from "../../file-handling/import";
 import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
-import {useThemeStore} from "../../stores/theme-store";
+import { useThemeStore } from "../../stores/theme-store";
 import { SegmentedToggle } from "../toggle-button/toggle-button";
 import { Button, Center, Loader, ThemeIcon } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
@@ -80,7 +80,7 @@ export const NavBar = (props: NavBarProps) => {
   };
 
   return (
-    <Navbar expand="sm" sticky="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
+    <Navbar expand="md" sticky="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
       <Container fluid className="me-4 ms-3">
         <Navbar.Brand>
           <img className="nav-logo" src="logo.png" alt="logo" />

@@ -24,10 +24,10 @@ registerLanguageDictionary(enUS);
  */
 export interface SpreadsheetProps {
   /** The data to be shown  */
-  data: CsvData,
-  onCellChange?: (row: number, column: number, value: number) => void
-  onHeaderChange?: (column: number, value: string) => void
-  onCellsSelected?: (columns: Column[]) => void
+  data: CsvData;
+  onCellChange?: (row: number, column: number, value: number) => void;
+  onHeaderChange?: (column: number, value: string) => void;
+  onCellsSelected?: (columns: Column[]) => void;
 }
 
 export const Spreadsheet = (props: SpreadsheetProps) => {
@@ -42,6 +42,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
       currentRowClassName={theme ? "dark-row" : "light-row"}
       currentColClassName={theme ? "dark-col" : "light-col"}
       data={props.data.data}
+      preventOverflow={"horizontal"}
       ref={spreadsheetRef}
       rowHeaders={true}
       colHeaders={props.data.headers}
@@ -75,24 +76,28 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
               const headerIndex = cell.start.col; // Get the column index of the header
               const headerValue = props.data.headers[headerIndex]; // Get the header value
               const newHeaderValue = prompt("Enter the new header value", headerValue); // Prompt the user for the new header value
-              if (newHeaderValue) { // If the user entered a value
+              if (newHeaderValue) {
+                // If the user entered a value
                 props.onHeaderChange?.(headerIndex, newHeaderValue); // Call the onHeaderChange callback
               }
-            }
-          }
-        ]
+            },
+          },
+        ],
       }}
       licenseKey="non-commercial-and-evaluation" // for non-commercial use only
       validator={"numeric"}
       manualColumnResize
-      beforeChange={(changes) => {
+      beforeChange={changes => {
         // With the beforeChange callback, we can prevent the change from happening. We do this by returning false. See: https://handsontable.com/docs/react-data-grid/api/hooks/#beforechange
         // We want to prevent the change if any of the new values are not numbers
-        if (changes.some(([, , , newValue]) => {
-          if (isNaN(Number(newValue))) return true;
-        })) return false;
+        if (
+          changes.some(([, , , newValue]) => {
+            if (isNaN(Number(newValue))) return true;
+          })
+        )
+          return false;
         // We don't need the old value
-        changes?.forEach(([row, column,, newValue]) => {
+        changes?.forEach(([row, column, , newValue]) => {
           let columnNumber: number;
           // For some reason, the column can be a string or a number. I don't know why, but this is a workaround
           if (typeof column === "string") {
@@ -110,13 +115,15 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         try {
           const data = props.data.data; // Get the data
           const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
-          const columns = selectedCells.flatMap((group) => {
+          const columns = selectedCells.flatMap(group => {
             const cells: number[][] = []; // Create an array to store the cells
-            for (let row = group.from.row; row <= group.to.row; row++) { // Loop through the rows
+            for (let row = group.from.row; row <= group.to.row; row++) {
+              // Loop through the rows
               if (!data[row]) continue; // Skip if the row is empty
               cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
             }
-            for (let row = 0; row < cells.length; row++) { // Loop through the rows
+            for (let row = 0; row < cells.length; row++) {
+              // Loop through the rows
               // Remove any empty rows
               if (!cells[row]) {
                 cells.splice(row, 1);
@@ -126,7 +133,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             const transposed = transpose(cells);
             return transposed.map((column, index) => ({
               values: column,
-              name: props.data.headers[group.from.col + index]
+              name: props.data.headers[group.from.col + index],
             }));
           });
           console.log("Columns", columns);
@@ -136,5 +143,6 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         }
       }}
       outsideClickDeselects={false}
-    />);
+    />
+  );
 };
