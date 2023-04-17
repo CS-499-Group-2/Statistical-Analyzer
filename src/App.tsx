@@ -45,9 +45,8 @@ const operations: Operation<unknown>[] = [
 
 function App() {
   const emptyArray = Array.from({ length: 20 }, () => new Array(20).fill(0));
-  const headers = Array.from({ length: 20 }, (_, i) => `Column ${i + 1}`);
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
-  const [data, setData] = React.useState<CsvData>({ data: emptyArray, headers: headers });
+  const [data, setData] = React.useState<CsvData>({ data: emptyArray, headers: [] });
   const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);

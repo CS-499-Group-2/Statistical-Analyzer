@@ -10,14 +10,25 @@ import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
 import { registerCellType, NumericCellType } from "handsontable/cellTypes";
 import { registerLanguageDictionary, enUS } from "handsontable/i18n";
-import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize } from "handsontable/plugins";
+import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize, Autofill, Formulas } from "handsontable/plugins";
 import { useThemeStore } from "../../stores/theme-store";
 
 registerPlugin(ContextMenu);
 registerPlugin(AutoColumnSize);
 registerPlugin(ManualColumnResize);
+registerPlugin(Autofill);
+registerPlugin(Formulas);
 registerCellType(NumericCellType);
 registerLanguageDictionary(enUS);
+
+const getColumnHeader = (column: number) => {
+  let header = "";
+  while (column >= 0) {
+    header = String.fromCharCode((column % 26) + 65) + header;
+    column = Math.floor(column / 26) - 1;
+  }
+  return header;
+};
 
 /**
  * The properties to pass to the spreadsheet component
@@ -90,12 +101,13 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
       beforeChange={changes => {
         // With the beforeChange callback, we can prevent the change from happening. We do this by returning false. See: https://handsontable.com/docs/react-data-grid/api/hooks/#beforechange
         // We want to prevent the change if any of the new values are not numbers
-        if (
-          changes.some(([, , , newValue]) => {
-            if (isNaN(Number(newValue))) return true;
-          })
-        )
-          return false;
+        const notANumber = changes.some(([, , , newValue]) => {
+          if (typeof newValue === "string") {
+            if (newValue.startsWith("=")) return false;
+          }
+          if (isNaN(Number(newValue))) return true;
+        });
+        if (notANumber) return false;
         // We don't need the old value
         changes?.forEach(([row, column, , newValue]) => {
           let columnNumber: number;
@@ -113,7 +125,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
       }}
       afterSelectionEnd={() => {
         try {
-          const data = props.data.data; // Get the data
+          const data = spreadsheetRef.current?.hotInstance.getData(); // Get the data from the spreadsheet
           const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
           const columns = selectedCells.flatMap(group => {
             const cells: number[][] = []; // Create an array to store the cells
@@ -133,7 +145,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             const transposed = transpose(cells);
             return transposed.map((column, index) => ({
               values: column,
-              name: props.data.headers[group.from.col + index],
+              name: props.data.headers[group.from.col + index] ?? getColumnHeader(group.from.col + index),
             }));
           });
           console.log("Columns", columns);
