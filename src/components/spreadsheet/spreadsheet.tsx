@@ -10,12 +10,13 @@ import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
 import { registerCellType, NumericCellType } from "handsontable/cellTypes";
 import { registerLanguageDictionary, enUS } from "handsontable/i18n";
-import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize } from "handsontable/plugins";
+import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize, Autofill } from "handsontable/plugins";
 import { useThemeStore } from "../../stores/theme-store";
 
 registerPlugin(ContextMenu);
 registerPlugin(AutoColumnSize);
 registerPlugin(ManualColumnResize);
+registerPlugin(Autofill);
 registerCellType(NumericCellType);
 registerLanguageDictionary(enUS);
 
