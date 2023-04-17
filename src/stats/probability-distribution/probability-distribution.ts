@@ -1,4 +1,4 @@
-import { Operation, Result } from "../operation";
+import { Result, TypedOperation } from "../operation";
 import NormalDistribution from "normal-distribution";
 import { mean, standardDeviation } from "simple-statistics";
 
@@ -11,7 +11,7 @@ interface Inputs {
  * Although I think we could use the column to find the mean and standard dev, it seems that most implementations of this operation
  * (MiniTab, Excel) ask the user to input the mean and standard deviation
  */
-export const ProbabilityDistribution: Operation<Inputs> = {
+export const ProbabilityDistribution: TypedOperation<Inputs> = {
   name: "Probability Distribution",
   type: "Typed",
   isValid: (selectedCellsByColumn) => selectedCellsByColumn.length !== 0,

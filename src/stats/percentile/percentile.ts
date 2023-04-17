@@ -1,4 +1,4 @@
-import { Operation, Result } from "../operation";
+import { Result, TypedOperation } from "../operation";
 import { quantile } from "simple-statistics";
 
 /** Here I define the inputs that the operation will take */
@@ -9,7 +9,7 @@ interface Inputs {
 }
 
 /** Here I define the operation */
-export const Percentile: Operation<Inputs> = {
+export const Percentile: TypedOperation<Inputs> = {
   name: "Percentile", // The name of the operation
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const percentileAmount = inputs["Percentile Amount"] as number;
@@ -36,7 +36,7 @@ export const Percentile: Operation<Inputs> = {
         values: [quantileValue],
         graphs: [{
           chartType: "Normal Distribution",
-          data: column.values.map((value, index) => ({x: index + 1, y: value})),
+          data: column.values.map((value, index) => ({ x: index + 1, y: value })),
           title: title,
           color: graphColor,
           lineLabel: "Data",
