@@ -15,7 +15,9 @@ import {
   Median,
   Mode,
   BinomialDistribution,
-  StandardDeviation
+  StandardDeviation,
+  Variance,
+  CoeficientOfVariance
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -23,6 +25,7 @@ import useCloudStore from "./stores/cloud-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { autoSave, deleteFile, getFile, saveToStorage } from "./file-handling/cloud";
 import { FileList } from "./components/file-list/file-list";
+import {useThemeStore} from "./stores/theme-store";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -34,16 +37,21 @@ const operations: Operation<unknown>[] = [
   StandardDeviation,
   ProbabilityDistribution,
   LeastSquareLine,
-  ChiSquare
+  ChiSquare,
+  Variance,
+  CoeficientOfVariance,
 ];
 
+
 function App() {
+  const emptyArray = Array.from({ length: 20 }, () => new Array(20).fill(0));
+  const headers = Array.from({ length: 20 }, (_, i) => `Column ${i + 1}`);
   // This is the source of truth for the data. We will try to pass this to all of the operations that need it.
-  const emptyArray = Array.from({ length: 20 }, () => new Array(20 ).fill(0));
-  const [data, setData] = React.useState<CsvData>({data:emptyArray, headers: []});
+  const [data, setData] = React.useState<CsvData>({ data: emptyArray, headers: headers });
   const [selectedCells, setSelectedCells] = React.useState<Column[]>([]);
   const modalRef = React.useRef<InputModalRef>(null);
   const [results, setResults] = React.useState<Result[]>([]);
+  const theme = useThemeStore(state => state.isDark);
   const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
   const activeFile = useCloudStore(state => state.activeFile);
   const setActiveFile = useCloudStore(state => state.setActiveFile);
@@ -167,8 +175,11 @@ function App() {
     deleteUserFile(filename);
   };
 
+  document.body.style.backgroundColor = theme ? "#1A1B1E" : "white";
   return (
-    <div className="App">
+    <div className="App" style= {{ 
+      backgroundColor: theme ? "#1A1B1E" : undefined,
+    }}>
       <NavBar
         availableOperations={availableOperations}
         onOperationSelected={onOperationSelected}
