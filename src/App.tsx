@@ -23,6 +23,7 @@ import useCloudStore from "./stores/cloud-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { autoSave, deleteFile, getFile, saveToStorage } from "./file-handling/cloud";
 import { FileList } from "./components/file-list/file-list";
+import { SignTest } from "./stats/sign-test/sign-test";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -34,7 +35,8 @@ const operations: Operation<unknown>[] = [
   StandardDeviation,
   ProbabilityDistribution,
   LeastSquareLine,
-  ChiSquare
+  ChiSquare,
+  SignTest
 ];
 
 function App() {
