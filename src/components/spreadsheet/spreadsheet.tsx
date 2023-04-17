@@ -144,7 +144,10 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
             }
             const transposed = transpose(cells);
             return transposed.map((column, index) => ({
-              values: column,
+              values: column.map(value => {
+                if (typeof value === "string") return 0;
+                return value;
+              }),
               name: props.data.headers[group.from.col + index] ?? getColumnHeader(group.from.col + index),
             }));
           });

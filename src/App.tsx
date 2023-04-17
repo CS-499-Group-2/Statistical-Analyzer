@@ -17,7 +17,8 @@ import {
   BinomialDistribution,
   StandardDeviation,
   Variance,
-  CoeficientOfVariance
+  CoeficientOfVariance,
+  RankSumOperation,
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -40,6 +41,7 @@ const operations: Operation<unknown>[] = [
   ChiSquare,
   Variance,
   CoeficientOfVariance,
+  RankSumOperation,
 ];
 
 
@@ -55,14 +57,19 @@ function App() {
   const activeFile = useCloudStore(state => state.activeFile);
   const setActiveFile = useCloudStore(state => state.setActiveFile);
   const queryClient = useQueryClient();
-  const { mutate: mutateActiveFile, isError, isLoading } = useMutation({
+  const {
+    mutate: mutateActiveFile,
+    isError,
+    isLoading,
+  } = useMutation({
     mutationFn: () => autoSave(data, results),
   });
   const { mutate: deleteUserFile } = useMutation({
     mutationFn: (filename: string) => deleteFile(filename),
-    onSettled: () => queryClient.invalidateQueries({
-      queryKey: ["files"]
-    }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["files"],
+      }),
     onSuccess: (data, filename) => {
       if (activeFile === filename) {
         setActiveFile(undefined);
@@ -72,7 +79,7 @@ function App() {
     onError: (error, filename) => {
       console.error(error);
       alert("Failed to delete file " + filename);
-    }
+    },
   });
   const [filesModalOpen, setFilesModalOpen] = React.useState(false);
 
@@ -113,12 +120,16 @@ function App() {
     if (operation.type === "Component") {
       setSelectedOperations(previousSelectedOperations => [...previousSelectedOperations, operation.name]);
     } else {
-      modalRef.current.open(operation, (values) => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+      if (Object.keys(operation.keys).length === 0) {
+        handleOperationComplete(operation.onSelected(selectedCells, data, {}));
+      } else {
+        modalRef.current.open(operation, values => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+      }
     }
   };
 
   const handleOperationComplete = (results: Result[]) => {
-    setResults((previousResults) => [...previousResults, ...results]);
+    setResults(previousResults => [...previousResults, ...results]);
   };
 
   /**
@@ -129,8 +140,9 @@ function App() {
    */
   const onCellChange = (row: number, column: number, value: number) => {
     setData(previousData => {
-      const newData = {...previousData}; // We need to clone the data, because we can't mutate the state directly
-      if (newData.data[row] === undefined) { // If row doesn't exist, create a new row
+      const newData = { ...previousData }; // We need to clone the data, because we can't mutate the state directly
+      if (newData.data[row] === undefined) {
+        // If row doesn't exist, create a new row
         newData.data[row] = [];
       }
       newData.data[row][column] = value; // Update the value
@@ -146,7 +158,7 @@ function App() {
    */
   const onHeaderChange = (column: number, value: string) => {
     setData(previousData => {
-      const newData = {...previousData}; // We need to clone the data, because we can't mutate the state directly
+      const newData = { ...previousData }; // We need to clone the data, because we can't mutate the state directly
       newData.headers[column] = value; // Update the value
       console.log("New data: ", newData);
       return newData;
@@ -158,16 +170,19 @@ function App() {
   };
 
   const onCloudFileOpen = (filename: string) => {
-    getFile(filename).then((data) => {
-      setData(data.data);
-      setResults(data.results);
-      setActiveFile(filename);
-    }).catch((e) => {
-      console.error(e);
-      alert("Failed to load file from cloud");
-    }).finally(() => {
-      setFilesModalOpen(false);
-    });
+    getFile(filename)
+      .then(data => {
+        setData(data.data);
+        setResults(data.results);
+        setActiveFile(filename);
+      })
+      .catch(e => {
+        console.error(e);
+        alert("Failed to load file from cloud");
+      })
+      .finally(() => {
+        setFilesModalOpen(false);
+      });
   };
 
   const onCloudFileDelete = (filename: string) => {
@@ -184,44 +199,37 @@ function App() {
         onOperationSelected={onOperationSelected}
         onExport={() => exportData(data)}
         onFileImport={onFileOpen}
-        onCloudExport={() => saveToStorage(data, results).catch((e) => {
-          console.error(e);
-          alert("Failed to save to cloud");
-        })}
+        onCloudExport={() =>
+          saveToStorage(data, results).catch(e => {
+            console.error(e);
+            alert("Failed to save to cloud");
+          })
+        }
         savingState={figureOutSaveState()}
         onFilesModalOpen={() => setFilesModalOpen(true)}
       />
-      <Spreadsheet
-        data={data}
-        onCellChange={onCellChange}
-        onHeaderChange={onHeaderChange}
-        onCellsSelected={setSelectedCells}
-      />
-      <div className = "popup" id = "popup">
-        <ResultExporter
-          results={results}
-          onDelete={(idx) => setResults(results.filter(n => n !== results[idx]))}
-        />
+      <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} onCellsSelected={setSelectedCells} />
+      <div className="popup" id="popup">
+        <ResultExporter results={results} onDelete={idx => setResults(results.filter(n => n !== results[idx]))} />
       </div>
       <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
       <InputModal ref={modalRef} />
-      {operations.filter(operation => operation.type === "Component").map(operation => {
-        if (operation.type !== "Component") return null;
-        return (
-          <operation.component 
-            key={operation.name}
-            selected={selectedOperations.includes(operation.name)}
-            deselect={() => setSelectedOperations(selectedOperations.filter(o => o !== operation.name))} 
-            addResult={(result) => handleOperationComplete([result])}
-            selectedCellsByColumn={selectedCells}
-            spreadsheet={data}
-          />);
-      })}
-      <FileList
-        open={filesModalOpen}
-        onClose={() => setFilesModalOpen(false)}
-        onSelected={onCloudFileOpen}
-        onDeleted={onCloudFileDelete} />
+      {operations
+        .filter(operation => operation.type === "Component")
+        .map(operation => {
+          if (operation.type !== "Component") return null;
+          return (
+            <operation.component
+              key={operation.name}
+              selected={selectedOperations.includes(operation.name)}
+              deselect={() => setSelectedOperations(selectedOperations.filter(o => o !== operation.name))}
+              addResult={result => handleOperationComplete([result])}
+              selectedCellsByColumn={selectedCells}
+              spreadsheet={data}
+            />
+          );
+        })}
+      <FileList open={filesModalOpen} onClose={() => setFilesModalOpen(false)} onSelected={onCloudFileOpen} onDeleted={onCloudFileDelete} />
     </div>
   );
 }
