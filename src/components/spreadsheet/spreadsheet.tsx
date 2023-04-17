@@ -60,7 +60,8 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         engine: HyperFormula,
       }}
       rowHeights={23}
-      preventOverflow={"horizontal"}
+      height={"100%"}
+      width={"100%"}
       type="numeric"
       colWidths={100}
       // @ts-expect-error The types for handson table seem to not match up here, even though this is legal; see: https://handsontable.com/docs/react-data-grid/context-menu/#context-menu-with-a-fully-custom-configuration

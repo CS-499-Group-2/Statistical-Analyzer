@@ -60,6 +60,7 @@
   border-color: white;
   border-width: 2px;
   color: white;
+  align-self: center;
 }
 
 .exp-but-light {

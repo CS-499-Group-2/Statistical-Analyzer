@@ -17,9 +17,9 @@ import { Graph } from "./graphs";
 import { ChartProps } from "react-chartjs-2/dist/types";
 import "./graph-display.css";
 import Draggable from "react-draggable";
-import { Card } from "react-bootstrap";
 import { Resizable } from "re-resizable";
 import annotationPlugin from "chartjs-plugin-annotation";
+import { Card } from "@mantine/core";
 
 // This is required to register the chart types with chart js. See https://react-chartjs-2.js.org/faq/registered-element
 ChartJS.register(
@@ -43,15 +43,15 @@ ChartJS.register(
  */
 export const mapGraphToChart = (graph: Graph): JSX.Element => {
   // Setup the default options for the chart.
-  const options: ChartProps["options"] =  {
+  const options: ChartProps["options"] = {
     plugins: {
       title: {
         display: !!graph.title,
-        text: graph.title
+        text: graph.title,
       },
       annotation: {
-        annotations: []
-      }
+        annotations: [],
+      },
     },
     responsive: true,
     // setting this to false will allow the chart to be resized.
@@ -82,18 +82,20 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
   // If the graph is a pie chart, then let's setup the data and return a pie component from chart js
   if (graph.chartType === "Pie") {
     const data: ChartProps<"pie">["data"] = {
-      labels: graph.data.map((d) => d.label),
-      datasets: [{
-        data: graph.data.map((d) => d.value),
-        backgroundColor: graph.data.map((d) => d.color)
-      }]
+      labels: graph.data.map(d => d.label),
+      datasets: [
+        {
+          data: graph.data.map(d => d.value),
+          backgroundColor: graph.data.map(d => d.color),
+        },
+      ],
     };
     // @ts-expect-error For some reason, the scale types break this
     return <Pie data={data} options={options} />;
   }
 
   // If the graph is a scatter plot, then let's setup the data and return a scatter component from chart js
-  if (graph.chartType === "XY Scatter" || graph.chartType === "Normal Distribution")  {
+  if (graph.chartType === "XY Scatter" || graph.chartType === "Normal Distribution") {
     options.plugins.annotation.annotations = graph.annotations;
     const data: ChartProps<"scatter">["data"] = {
       datasets: [
@@ -106,28 +108,26 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
           borderColor: graph.lineColor,
           label: graph.lineLabel,
           fill: graph.filled,
-        }
+        },
       ],
     };
     options.scales = {
       x: {
         title: {
           display: true,
-          text: graph.xLabel
-        }
+          text: graph.xLabel,
+        },
       },
       y: {
         title: {
           display: true,
-          text: graph.yLabel
-        }
-      }
+          text: graph.yLabel,
+        },
+      },
     };
     // @ts-expect-error For some reason, the scale types break this
     return <Scatter data={data} options={options} />;
   }
-
-  
 };
 
 /** The properties for graph display */
@@ -149,17 +149,27 @@ export const GraphDisplay = (props: GraphDisplayProps) => {
       {props.selectedGraphs.map((graph, index) => {
         return (
           <Draggable key={index} nodeRef={containerRef[index]} handle="canvas">
-            <div ref={containerRef[index]} style={{position: "absolute", top: "10%", left: "25%"}}>
-              <Resizable style={{position: "absolute"}} className=".graph-display-container" enable={{
-                bottom: false,
-                bottomRight: true,
-                bottomLeft: false,
-                left: false,
-                right: false,
-                top: false,
-                topLeft: false,
-                topRight: false
-              }} key={index} as={Card}>
+            <div ref={containerRef[index]} style={{ position: "absolute", top: "10%", left: "25%", backgroundColor: "blue", zIndex: 100 }}>
+              <Resizable
+                style={{ position: "absolute" }}
+                className=".graph-display-container"
+                enable={{
+                  bottom: false,
+                  bottomRight: true,
+                  bottomLeft: false,
+                  left: false,
+                  right: false,
+                  top: false,
+                  topLeft: false,
+                  topRight: false,
+                }}
+                key={index}
+                as={Card}
+                // @ts-expect-error This seems to be how you pass additional props to the as
+                shadow="md"
+                padding="md"
+                radius="md"
+              >
                 {mapGraphToChart(graph)}
               </Resizable>
             </div>
