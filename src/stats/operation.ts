@@ -67,6 +67,7 @@ export interface ComponentOperation {
   name: string;
   type: "Component";
   /** A component for the operation instead. If this is used, then onSelected becomes invalid */
+  description: string;
   component: React.ComponentType<OperationProps>;
   /**
    * The function that is called to determine if the operation is valid.

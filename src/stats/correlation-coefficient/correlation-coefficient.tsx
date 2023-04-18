@@ -75,6 +75,8 @@ const CorrelationComponent = (props: OperationProps) => {
 export const CorrelationCoeffcient: ComponentOperation = {
   name: "Correlation Coeffcient",
   type: "Component",
+  description: 
+    "Calculates the correlation coefficient between two columns, value is between -1 and 1, with -1 being a perfect negative correlation, 0 being no correlation, and 1 being a perfect positive correlation",
   isValid: (columns) => columns.length === 2,
   component: CorrelationComponent
 };
