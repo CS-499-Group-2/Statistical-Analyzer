@@ -59,6 +59,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
 
   return (
     <HotTable
+      id = {theme ? "dark" : "light"}
       tableClassName={theme ? "dark-table" : "light-table"}
       activeHeaderClassName="ht__active_highlight"
       currentHeaderClassName="ht__highlight"

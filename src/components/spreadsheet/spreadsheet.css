@@ -2,13 +2,24 @@
   height: 100%;
 }
 
+#dark {
+  --bg: #5C5F66;
+  --bga: #216527;
+  --bgh: #494c54;
+  --col: white;
+}
+
+#light {
+  --bg: white;
+  --bga: #b3e6bc;
+  --bgh: #dcdcdc;
+  --col: black;
+}
+
 .dark-table th,
 .dark-table tr {
   background-color: #2C2E33;
   color: white; 
-  --bga: #216527;
-  --bgh: #494c54;
-  --col: white;
 }
 
 .dark-table td {
@@ -21,13 +32,6 @@
   color: white !important;
 }
 
-.light-table th,
-.light-table tr {
-  --bga: #b3e6bc;
-  --bgh: #dcdcdc;
-  --col: black;
-}
-
 .handsontable tbody th.ht__highlight,
 .handsontable thead th.ht__highlight {
   background-color: var(--bgh);
@@ -38,6 +42,11 @@
 .handsontable thead th.ht__active_highlight {
   background-color: var(--bga);
   color: var(--col);
+}
+
+.handsontableInput {
+  color: var(--col);
+  background-color: var(--bg);
 }
 
 .wtBorder.current,
