@@ -8,7 +8,7 @@ import { CsvData } from "../../file-handling/import";
 import { HyperFormula } from "hyperformula";
 import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
-import { registerCellType, NumericCellType } from "handsontable/cellTypes";
+import { registerAllCellTypes } from "handsontable/cellTypes";
 import { registerLanguageDictionary, enUS } from "handsontable/i18n";
 import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize, Autofill, Formulas, DragToScroll } from "handsontable/plugins";
 import { useThemeStore } from "../../stores/theme-store";
@@ -19,7 +19,7 @@ registerPlugin(ManualColumnResize);
 registerPlugin(Autofill);
 registerPlugin(Formulas);
 registerPlugin(DragToScroll);
-registerCellType(NumericCellType);
+registerAllCellTypes();
 registerLanguageDictionary(enUS);
 
 const getColumnHeader = (column: number) => {
@@ -62,6 +62,7 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
       }}
       rowHeights={23}
       height={"100%"}
+      stretchH="all"
       width={"100%"}
       type="numeric"
       colWidths={100}
@@ -131,10 +132,14 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
           const selectedCells = spreadsheetRef.current?.hotInstance.getSelectedRange(); // Get the selected cells
           const columns = selectedCells.flatMap(group => {
             const cells: number[][] = []; // Create an array to store the cells
-            for (let row = group.from.row; row <= group.to.row; row++) {
+            const startRow = Math.min(group.from.row, group.to.row); // Get the start row
+            const startCol = Math.min(group.from.col, group.to.col); // Get the start column
+            const endRow = Math.max(group.from.row, group.to.row); // Get the end row
+            const endCol = Math.max(group.from.col, group.to.col);
+            for (let row = startRow; row <= endRow; row++) {
               // Loop through the rows
               if (!data[row]) continue; // Skip if the row is empty
-              cells[row] = data[row].slice(group.from.col, group.to.col + 1); // Add the cells to the array
+              cells[row] = data[row].slice(startCol, endCol + 1); // Add the cells to the array
             }
             for (let row = 0; row < cells.length; row++) {
               // Loop through the rows
@@ -145,12 +150,19 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
               }
             }
             const transposed = transpose(cells);
+            // Loop through every column. Filter out the columns to only their numbers. If there are no numbers, remove the column
+            for (let i = 0; i < transposed.length; i++) {
+              const column = transposed[i];
+              const columnButOnlyNumbers = column.filter(value => typeof value === "number");
+              if (columnButOnlyNumbers.length === 0) {
+                transposed.splice(i, 1);
+                i--;
+              }
+              transposed[i] = columnButOnlyNumbers;
+            }
             return transposed.map((column, index) => ({
-              values: column.map(value => {
-                if (typeof value === "string") return 0;
-                return value;
-              }),
-              name: props.data.headers[group.from.col + index] ?? getColumnHeader(group.from.col + index),
+              values: column,
+              name: props.data.headers[startCol + index] ?? getColumnHeader(startCol + index),
             }));
           });
           console.log("Columns", columns);

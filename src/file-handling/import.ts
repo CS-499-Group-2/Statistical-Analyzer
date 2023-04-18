@@ -1,6 +1,6 @@
 export interface CsvData {
-  headers?: string[],
-  data: number[][]
+  headers?: string[];
+  data: (string | number | null)[][];
 }
 
 /**
@@ -54,35 +54,39 @@ function getHeaders(data:string): string[] {
  * @param data A string that represents the data in a csv file
  * @returns The data of the csv file, without the headers. 
  */
-export function getData(data:string): number[][] {
-  const dataArray: number[][] = [];
+export function getData(data: string): (string | number)[][] {
+  const dataArray: (string | number)[][] = [];
   let stringBuilder = "";
   let i = "";
-  let rowArray: number[] = [];
-  const newCSV = data.substring(data.indexOf("\n")+1);
-  for (  i of newCSV){
-    if(i === "\n"){
-      rowArray.push(Number(stringBuilder));
+  let rowArray: (string | number)[] = [];
+  const newCSV = data.substring(data.indexOf("\n") + 1);
+
+  const getAsStringOrNumber = (string: string) => {
+    const number = Number(string);
+    if (isNaN(number)) {
+      return string;
+    }
+    return number;
+  };
+
+  for (i of newCSV) {
+    if (i === "\n") {
+      rowArray.push(getAsStringOrNumber(stringBuilder));
       stringBuilder = "";
       dataArray.push(rowArray);
       rowArray = [];
-      
     }
-    if (i === ","){
-      rowArray.push(Number(stringBuilder));
+    if (i === ",") {
+      rowArray.push(getAsStringOrNumber(stringBuilder));
       stringBuilder = "";
-    }
-    else{
+    } else {
       stringBuilder += i;
     }
-    
-   
-  
   }
-  if(i === "\n"){
+  if (i === "\n") {
     return dataArray;
   }
-  rowArray.push(Number(stringBuilder));
+  rowArray.push(getAsStringOrNumber(stringBuilder));
   dataArray.push(rowArray);
   return dataArray;
 }
