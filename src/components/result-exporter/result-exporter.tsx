@@ -2,7 +2,7 @@ import React from "react";
 import "./result-exporter.css";
 import { Result } from "../../stats/operation";
 import { useThemeStore } from "../../stores/theme-store";
-import { Center, CloseButton, Group } from "@mantine/core";
+import { Button, Center, CloseButton, Group } from "@mantine/core";
 
 /**
  * Component with Result[] attribute to allow for multiple stats
@@ -12,6 +12,7 @@ export interface ResultExporterProps {
   results?: Result[];
   onDelete?: (index: number) => void;
   onClose?: () => void;
+  deleteAll?: () => void;
 }
 
 export const formatResults = (results: Result[]) => {
@@ -27,7 +28,6 @@ export const formatResults = (results: Result[]) => {
  * @returns an export button that will download the results.txt file when clicked
  */
 export const ResultExporter = (props: ResultExporterProps) => {
-  const theme = useThemeStore(state => state.isDark);
 
   /**
    * Function inside ResultExporter that specifically handles downloading the results.txt file
@@ -71,14 +71,19 @@ export const ResultExporter = (props: ResultExporterProps) => {
 
   // Returns a button with text "Export" that calls handleOnClick
   if (!props.results || props.results.length === 0) {
-    return <p>No Results to Return</p>;
+    return <Center><p>No Results to Return</p></Center>;
   } else {
     return (
       <>
         <Center>
-          <button className={theme ? "exp-but-dark" : "exp-but-light"} onClick={handleOnClick}>
-            Export
-          </button>
+          <Group>
+            <Button color="green" onClick={handleOnClick}>
+              Export
+            </Button>
+            <Button onClick={props.deleteAll}>
+              Delete All
+            </Button>
+          </Group>
         </Center>
         <p className="results">{printableResults()}</p>
       </>
