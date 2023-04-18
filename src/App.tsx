@@ -195,7 +195,6 @@ function App() {
         className="App"
         style={{
           backgroundColor: theme ? "#1A1B1E" : undefined,
-          paddingTop: 50,
         }}
       >
         <NavBar
