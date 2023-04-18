@@ -9,6 +9,7 @@ interface Inputs {
 export const CoeficientOfVariance: TypedOperation<Inputs> = {
   name: "Coefficient of Variation",
   type : "Typed",
+  description: "Calculates the coefficient of variation of a set of numbers. Plots the coefficient of variation as a normal distribution.",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const graphColor = inputs["Color of the Variance Graph"] as string;
     return selectedCellsByColumn.map((column) => {

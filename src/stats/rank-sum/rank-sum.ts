@@ -15,6 +15,7 @@ export const RankSumOperation: TypedOperation<Record<string, never>> = {
     return [result];
   },
   keys: {},
+  description: "Calculates the rank sum statistic for the first column with respect to the second.",
 };
 
 /**

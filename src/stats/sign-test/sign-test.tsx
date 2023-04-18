@@ -141,6 +141,8 @@ const SignTestComponent = (props: OperationProps) => {
 export const SignTest: ComponentOperation = {
   name: "Sign Test",
   type: "Component",
-  isValid: (columns) => columns.length === 1,
-  component: SignTestComponent
+  description:
+    "A one sample sign test is used when data is not normally distributed. Select data from one column,  and then select a test median and a comparison option. The sign test then compares every value in the data set to the test median and assigns it a + or - based on whether it's less than or greater than the test median. A p value is then generated using your selected comparator and the number of pluses vs minuses. The p value can help you determine whether to accept or reject the null hypothesis, which is the assumption that the test median is equal to the actual median. Typically, if a p value is below 0.05, you can reject the null hypothesis and conclude that your assertion is more likely to be correct.",
+  isValid: columns => columns.length === 1,
+  component: SignTestComponent,
 };

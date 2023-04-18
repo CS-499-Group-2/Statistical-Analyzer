@@ -9,6 +9,7 @@ interface Inputs {
 export const Variance: TypedOperation<Inputs> = {
   name: "Variance",
   type: "Typed",
+  description: "Calculates the variance of a set of numbers. Plots the variance as a normal distribution.",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const graphColor = inputs["Color of the Variance Graph"] as string;
     return selectedCellsByColumn.map(column => {

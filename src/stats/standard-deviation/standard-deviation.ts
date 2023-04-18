@@ -11,6 +11,7 @@ interface Inputs {
 export const StandardDeviation: TypedOperation<Inputs> = {
   name: "Standard Deviation",
   type: "Typed",
+  description: "Calculates the standard deviation of a set of numbers. Plots the standard deviation as a normal distribution.",
   isValid: selectedCellsByColumn => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const pointColor = inputs["Point Color"] as string;

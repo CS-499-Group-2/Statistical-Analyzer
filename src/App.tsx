@@ -126,7 +126,16 @@ function App() {
       if (Object.keys(operation.keys).length === 0) {
         handleOperationComplete(operation.onSelected(selectedCells, data, {}));
       } else {
-        modalRef.current.open(operation, values => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+        modalRef.current.open(operation, values => {
+          try {
+            handleOperationComplete(operation.onSelected(selectedCells, data, values));
+          } catch (error) {
+            alert(
+              "There was an error performing the operation. Usually, this is because of bad input. Check the logs for more information"
+            );
+            throw error;
+          }
+        });
       }
     }
   };
@@ -207,6 +216,7 @@ function App() {
       >
         <NavBar
           availableOperations={availableOperations}
+          allOperations={operations}
           onOperationSelected={onOperationSelected}
           onExport={() => exportData(data)}
           onFileImport={onFileOpen}
