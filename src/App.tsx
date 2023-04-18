@@ -17,7 +17,8 @@ import {
   BinomialDistribution,
   StandardDeviation,
   Variance,
-  CoeficientOfVariance
+  CoeficientOfVariance,
+  RankSumOperation,
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -41,6 +42,7 @@ const operations: Operation<unknown>[] = [
   ChiSquare,
   Variance,
   CoeficientOfVariance,
+  RankSumOperation,
 ];
 
 function App() {
@@ -119,7 +121,11 @@ function App() {
     if (operation.type === "Component") {
       setSelectedOperations(previousSelectedOperations => [...previousSelectedOperations, operation.name]);
     } else {
-      modalRef.current.open(operation, values => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+      if (Object.keys(operation.keys).length === 0) {
+        handleOperationComplete(operation.onSelected(selectedCells, data, {}));
+      } else {
+        modalRef.current.open(operation, values => handleOperationComplete(operation.onSelected(selectedCells, data, values)));
+      }
     }
   };
 
