@@ -19,6 +19,7 @@ import {
   Variance,
   CoeficientOfVariance,
   RankSumOperation,
+  SignTest
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -27,6 +28,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { autoSave, deleteFile, getFile, saveToStorage } from "./file-handling/cloud";
 import { FileList } from "./components/file-list/file-list";
 import {useThemeStore} from "./stores/theme-store";
+import { MantineProvider, Modal } from "@mantine/core";
 
 /** List of all available operations */
 const operations: Operation<unknown>[] = [
@@ -42,8 +44,8 @@ const operations: Operation<unknown>[] = [
   Variance,
   CoeficientOfVariance,
   RankSumOperation,
+  SignTest
 ];
-
 
 function App() {
   const emptyArray = Array.from({ length: 20 }, () => new Array(20).fill(0));
@@ -54,6 +56,7 @@ function App() {
   const [results, setResults] = React.useState<Result[]>([]);
   const theme = useThemeStore(state => state.isDark);
   const [selectedOperations, setSelectedOperations] = React.useState<string[]>([]);
+  const [resultModalOpen, setResultModalOpen] = React.useState(false);
   const activeFile = useCloudStore(state => state.activeFile);
   const setActiveFile = useCloudStore(state => state.setActiveFile);
   const queryClient = useQueryClient();
@@ -200,50 +203,66 @@ function App() {
 
   document.body.style.backgroundColor = theme ? "#1A1B1E" : "white";
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: theme ? "#1A1B1E" : undefined,
+    <MantineProvider
+      theme={{
+        colorScheme: theme ? "dark" : "light",
       }}
     >
-      <NavBar
-        availableOperations={availableOperations}
-        allOperations={operations}
-        onOperationSelected={onOperationSelected}
-        onExport={() => exportData(data)}
-        onFileImport={onFileOpen}
-        onCloudExport={() =>
-          saveToStorage(data, results).catch(e => {
-            console.error(e);
-            alert("Failed to save to cloud");
-          })
-        }
-        savingState={figureOutSaveState()}
-        onFilesModalOpen={() => setFilesModalOpen(true)}
-      />
-      <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} onCellsSelected={setSelectedCells} />
-      <div className="popup" id="popup">
-        <ResultExporter results={results} onDelete={idx => setResults(results.filter(n => n !== results[idx]))} />
+      <div
+        className="App"
+        style={{
+          backgroundColor: theme ? "#1A1B1E" : undefined,
+        }}
+      >
+        <NavBar
+          availableOperations={availableOperations}
+          allOperations={operations}
+          onOperationSelected={onOperationSelected}
+          onExport={() => exportData(data)}
+          onFileImport={onFileOpen}
+          onCloudExport={() =>
+            saveToStorage(data, results).catch(e => {
+              console.error(e);
+              alert("Failed to save to cloud");
+            })
+          }
+          savingState={figureOutSaveState()}
+          onFilesModalOpen={() => setFilesModalOpen(true)}
+          onResultsModalOpen={() => setResultModalOpen(true)}
+        />
+        <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} onCellsSelected={setSelectedCells} />
+        <Modal size = "lg" yOffset={100} onClose={() => setResultModalOpen(false)} opened={resultModalOpen}>
+          <ResultExporter results={results}
+          onDelete={idx => setResults(results.filter(n => n !== results[idx]))} 
+          deleteAll={function() {
+            if (confirm("Are you sure you want to delete all results?")) {
+            setResults([]);}}}/>
+        </Modal>
+        <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
+        <InputModal ref={modalRef} />
+        {operations
+          .filter(operation => operation.type === "Component")
+          .map(operation => {
+            if (operation.type !== "Component") return null;
+            return (
+              <operation.component
+                key={operation.name}
+                selected={selectedOperations.includes(operation.name)}
+                deselect={() => setSelectedOperations(selectedOperations.filter(o => o !== operation.name))}
+                addResult={result => handleOperationComplete([result])}
+                selectedCellsByColumn={selectedCells}
+                spreadsheet={data}
+              />
+            );
+          })}
+        <FileList
+          open={filesModalOpen}
+          onClose={() => setFilesModalOpen(false)}
+          onSelected={onCloudFileOpen}
+          onDeleted={onCloudFileDelete}
+        />
       </div>
-      <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
-      <InputModal ref={modalRef} />
-      {operations
-        .filter(operation => operation.type === "Component")
-        .map(operation => {
-          if (operation.type !== "Component") return null;
-          return (
-            <operation.component
-              key={operation.name}
-              selected={selectedOperations.includes(operation.name)}
-              deselect={() => setSelectedOperations(selectedOperations.filter(o => o !== operation.name))}
-              addResult={result => handleOperationComplete([result])}
-              selectedCellsByColumn={selectedCells}
-              spreadsheet={data}
-            />
-          );
-        })}
-      <FileList open={filesModalOpen} onClose={() => setFilesModalOpen(false)} onSelected={onCloudFileOpen} onDeleted={onCloudFileDelete} />
-    </div>
+    </MantineProvider>
   );
 }
 

@@ -27,6 +27,8 @@ export interface NavBarProps {
   savingState?: "saving" | "saved" | "error";
   /** Called when the user tries to view their files */
   onFilesModalOpen?: () => void;
+  /** Called when the results button is clicked */
+  onResultsModalOpen?: () => void;
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -60,9 +62,7 @@ export const NavBar = (props: NavBarProps) => {
   };
 
   const showResults = () => {
-    console.log("showResults");
-    const popup = document.getElementById("popup");
-    popup.classList.add("open-popup");
+    props.onResultsModalOpen?.();
   };
 
   const login = () => {
@@ -83,7 +83,7 @@ export const NavBar = (props: NavBarProps) => {
   };
 
   return (
-    <Navbar expand="md" sticky="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
+    <Navbar style={{ height: 50 }} expand="md" fixed="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
       <Container fluid className="me-4 ms-3">
         <Navbar.Brand>
           <img className="nav-logo" src="logo.png" alt="logo" />
