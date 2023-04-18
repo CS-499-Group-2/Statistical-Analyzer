@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArcElement,
   BarElement,
@@ -10,7 +10,7 @@ import {
   LineElement,
   PointElement,
   Title,
-  Tooltip
+  Tooltip,
 } from "chart.js";
 import { Bar, Pie, Scatter } from "react-chartjs-2";
 import { Graph } from "./graphs";
@@ -20,6 +20,7 @@ import Draggable from "react-draggable";
 import { Resizable } from "re-resizable";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { Card } from "@mantine/core";
+import { useThemeStore } from "../../stores/theme-store";
 
 // This is required to register the chart types with chart js. See https://react-chartjs-2.js.org/faq/registered-element
 ChartJS.register(
@@ -41,8 +42,9 @@ ChartJS.register(
  * @param graph The graph to be converted to a chart.
  * @returns Returns a JSX element that will render the graph.
  */
-export const mapGraphToChart = (graph: Graph): JSX.Element => {
+export const mapGraphToChart = (graph: Graph, isDark: boolean): JSX.Element => {
   // Setup the default options for the chart.
+  console.log("isDark", isDark);
   const options: ChartProps["options"] = {
     plugins: {
       title: {
@@ -56,6 +58,7 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
     responsive: true,
     // setting this to false will allow the chart to be resized.
     maintainAspectRatio: false,
+    color: isDark ? "white" : "black",
   };
 
   // If the graph is a horizontal bar graph, we need to set the index axis to y (so it's sideways).
@@ -143,6 +146,15 @@ export interface GraphDisplayProps {
  */
 export const GraphDisplay = (props: GraphDisplayProps) => {
   const containerRef = React.useRef(props.selectedGraphs.map(() => React.createRef<HTMLDivElement>()));
+  const isDark = useThemeStore(store => store.isDark);
+  const [someState, setSomeState] = useState(false);
+
+  useEffect(() => {
+    ChartJS.defaults.color = isDark ? "white" : "#666";
+    ChartJS.defaults.borderColor = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)";
+    // For some reason, the graph display doesn't rerender when the theme changes. This is a hack to force it to rerender.
+    setSomeState(!someState);
+  }, [isDark]);
 
   return (
     <>
@@ -170,7 +182,7 @@ export const GraphDisplay = (props: GraphDisplayProps) => {
                 padding="md"
                 radius="md"
               >
-                {mapGraphToChart(graph)}
+                {mapGraphToChart(graph, isDark)}
               </Resizable>
             </div>
           </Draggable>
