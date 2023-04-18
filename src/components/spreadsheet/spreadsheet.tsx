@@ -10,7 +10,7 @@ import { Column } from "../../stats/operation";
 import { transpose } from "matrix-transpose";
 import { registerCellType, NumericCellType } from "handsontable/cellTypes";
 import { registerLanguageDictionary, enUS } from "handsontable/i18n";
-import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize, Autofill, Formulas } from "handsontable/plugins";
+import { registerPlugin, ContextMenu, AutoColumnSize, ManualColumnResize, Autofill, Formulas, DragToScroll } from "handsontable/plugins";
 import { useThemeStore } from "../../stores/theme-store";
 
 registerPlugin(ContextMenu);
@@ -18,6 +18,7 @@ registerPlugin(AutoColumnSize);
 registerPlugin(ManualColumnResize);
 registerPlugin(Autofill);
 registerPlugin(Formulas);
+registerPlugin(DragToScroll);
 registerCellType(NumericCellType);
 registerLanguageDictionary(enUS);
 
@@ -60,7 +61,8 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         engine: HyperFormula,
       }}
       rowHeights={23}
-      preventOverflow={"horizontal"}
+      height={"100%"}
+      width={"100%"}
       type="numeric"
       colWidths={100}
       // @ts-expect-error The types for handson table seem to not match up here, even though this is legal; see: https://handsontable.com/docs/react-data-grid/context-menu/#context-menu-with-a-fully-custom-configuration
