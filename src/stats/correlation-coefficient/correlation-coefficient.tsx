@@ -1,48 +1,82 @@
-import React from "react";
-import { ComponentOperation, Operation, OperationProps, Result } from "../operation";
-import { calculateCorrelation } from "calculate-correlation";
-//Defining the inputs that the operation will take
-interface Inputs {
-  "Line color?": undefined;
-}
+import { ComponentOperation, OperationProps, Result } from "../operation";
+import * as ss from "simple-statistics";
+import React, { useEffect } from "react";
+import { Button, ColorInput, Modal, NativeSelect } from "@mantine/core";
 
-const correlationCoefficientComponent = (props: OperationProps) => {
-  return <div>Hello World</div>;
+export const calculateCorrelationCoeffcient = (observed: number[], expected: number[], lineColor: string): Result => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const valuesInfo = observed.map((value, index) => {
+    const observedValue = value;
+    const expectedValue = expected[index];
+
+    return {
+      observed: observedValue,
+      expected: expectedValue,
+    
+    };
+  });
+  const correlationCoeffcient = ss.sampleCorrelation(observed, expected);
+  console.log(correlationCoeffcient);
+  const xValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  return {
+    name: "Correlation Coeffcient",
+    values: [correlationCoeffcient],
+    graphs: [{
+      chartType: "Normal Distribution",
+      title: "Correlation Coefficient",
+      data: xValues.map((x,y) => ({x, y})),
+      lineLabel: "Correlation Coeffcient Line",
+      lineColor
+    }]
+  };
 };
 
-//Defining the operation
-export const CorrelationCoeffcient: ComponentOperation = {
-  name: "Correlation Coefficient",
-  type: "Component",
-  component: correlationCoefficientComponent,
-  // onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
-  //   const lineColor = inputs["Line color?"] as string;
-  //   return selectedCellsByColumn.map((column) => {
-  //     const correlationCoefficient = calculateCorrelation(column.values, column.values);
-  //     const title = `${column.name} | Correlation Coefficient`;
-  //     return {
-  //       name: title,
-  //       values: [correlationCoefficient],
-  //       graphs: [{
-  //         chartType: "Normal Distribution",
-  //         data: column.values.map((value, index) => ({ x: index + 1, y: value })),
-  //         title: title,
-  //         color: lineColor,
-  //         lineLabel: "Data",
-  //       }],
-  //     };
-  //   });
-  // },
-  isValid: (selectedCellsByColumn): boolean => {
-    for (const column of selectedCellsByColumn) {
-      if (column.values.length < 2) {
-        alert("Please select at least two cells in each column.");
-        return false;
-      }
+const CorrelationComponent = (props: OperationProps) => {
+  const { deselect, selected, selectedCellsByColumn: columns, addResult } = props;
+  const columnNames = columns.map(column => column.name);
+  const [observedColumn, setObservedColumn] = React.useState<string | undefined>(undefined);
+  const [lineColor, setLineColor] = React.useState("#000000");
+  
+  const onSubmit = () => {
+    if (observedColumn === null) {
+      alert("Please select a column");
+      return;
     }
-    return true;
-  },
-  // keys : {
-  //   "Line color?" : "Color",
-  // },
+    const observedColumnIndex = columnNames.findIndex(columnName => columnName === observedColumn);
+    const expectedColumn = observedColumnIndex === 0 ? 1 : 0;
+    const observed = columns[observedColumnIndex].values;
+    const expected = columns[expectedColumn].values;
+    const result = calculateCorrelationCoeffcient(observed, expected, lineColor);
+    addResult(result);
+    deselect();
+  };
+
+  useEffect(() => {
+    if (selected) {
+      setObservedColumn(columnNames[0]);
+    }
+  }, [selected]);
+
+  return (
+    <Modal onClose={deselect} opened={selected} title="Correlation Coeffcient" centered>
+      <NativeSelect
+        data={columnNames}
+        label="Select the column for the observed values"
+        withAsterisk
+        value={observedColumn}
+        onChange={(event) => setObservedColumn(event.currentTarget.value)}
+      />
+      <ColorInput value={lineColor} label="Select the color for the CDF line" onChange={(col) => setLineColor(col)} />
+      <Button my={3} color="green" onClick={onSubmit}>Submit</Button>
+    </Modal>
+  );
 };
+
+export const CorrelationCoeffcient: ComponentOperation = {
+  name: "Correlation Coeffcient",
+  type: "Component",
+  isValid: (columns) => columns.length === 2,
+  component: CorrelationComponent
+};
+
+

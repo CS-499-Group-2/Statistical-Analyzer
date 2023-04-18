@@ -15,7 +15,8 @@ import {
   Median,
   Mode,
   BinomialDistribution,
-  StandardDeviation
+  StandardDeviation,
+  CorrelationCoeffcient
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -34,7 +35,8 @@ const operations: Operation<unknown>[] = [
   StandardDeviation,
   ProbabilityDistribution,
   LeastSquareLine,
-  ChiSquare
+  ChiSquare,
+  CorrelationCoeffcient
 ];
 
 function App() {
