@@ -64,7 +64,7 @@ export function getData(data: string): (string | number)[][] {
   const getAsStringOrNumber = (string: string) => {
     const number = Number(string);
     if (isNaN(number)) {
-      return string;
+      return string.replaceAll("\n", "");
     }
     return number;
   };
