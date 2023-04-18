@@ -3,6 +3,10 @@ import { ComponentOperation, OperationProps } from "../operation";
 import { quantile } from "simple-statistics";
 import { Button, ColorInput, Modal, NumberInput, Text } from "@mantine/core";
 
+export const calculatePercentile = (values: number[], percentileAmount: number): number => {
+  return quantile(values, percentileAmount);
+};
+
 const PercentileComponent = (props: OperationProps) => {
   const [percentileAmount, setPercentileAmount] = React.useState<number | "">(0);
   const [referenceLineColor, setReferenceLineColor] = React.useState("#000000");
@@ -15,7 +19,7 @@ const PercentileComponent = (props: OperationProps) => {
       return;
     }
     selectedCellsByColumn.forEach(column => {
-      const quantileValue = quantile(column.values, percentileAmount);
+      const quantileValue = calculatePercentile(column.values, percentileAmount);
       const title = `${column.name} | Percentile | ${percentileAmount * 100}%`;
       addResult({
         name: title,
