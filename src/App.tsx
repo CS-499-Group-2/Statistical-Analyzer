@@ -19,6 +19,7 @@ import {
   Variance,
   CoeficientOfVariance,
   RankSumOperation,
+  SignTest
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -42,6 +43,7 @@ const operations: Operation<unknown>[] = [
   Variance,
   CoeficientOfVariance,
   RankSumOperation,
+  SignTest
 ];
 
 
