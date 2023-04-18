@@ -6,7 +6,7 @@ import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
 import { useThemeStore } from "../../stores/theme-store";
 import { SegmentedToggle } from "../toggle-button/toggle-button";
-import { Button, Center, Loader, ThemeIcon } from "@mantine/core";
+import { Accordion, Button, Center, Loader, Modal, ThemeIcon } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import useCloudStore from "../../stores/cloud-store";
@@ -14,6 +14,8 @@ import useCloudStore from "../../stores/cloud-store";
 export interface NavBarProps {
   /** List of available operations */
   availableOperations: Operation<unknown>[];
+  /** List of all operations */
+  allOperations: Operation<unknown>[];
   /** Callback function to be called when an operation is selected */
   onOperationSelected?: (operation: Operation<unknown>) => void;
   onFileImport?: (data: CsvData) => void;
@@ -30,6 +32,7 @@ export interface NavBarProps {
 export const NavBar = (props: NavBarProps) => {
   const userState = useCloudStore(state => state.user);
   const theme = useThemeStore(state => state.isDark);
+  const [helpModal, setHelpModal] = React.useState(false);
 
   const openFile = () => {
     // Create a file input element, with the accept attribute set to .csv
@@ -125,6 +128,9 @@ export const NavBar = (props: NavBarProps) => {
                 )
               )}
             </NavDropdown>
+            <Nav.Item>
+              <Nav.Link onClick={() => setHelpModal(true)}>Help</Nav.Link>
+            </Nav.Item>
           </Nav>
           <Nav className="ml-auto">
             <Nav.Item>
@@ -134,6 +140,16 @@ export const NavBar = (props: NavBarProps) => {
               {userState ? <Button onClick={logout}>Logout</Button> : <Button onClick={login}>Login/Sign Up</Button>}
             </Nav.Item>
           </Nav>
+          <Modal onClose={() => setHelpModal(false)} opened={helpModal} centered title="User Help" size="lg">
+            <Accordion defaultValue="customization">
+              {props.allOperations.map(operation => (
+                <Accordion.Item key={operation.name} value={operation.name}>
+                  <Accordion.Control>{operation.name}</Accordion.Control>
+                  <Accordion.Panel>{operation.description ?? "Help not found for this operation"}</Accordion.Panel>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+          </Modal>
         </Navbar.Collapse>
       </Container>
     </Navbar>

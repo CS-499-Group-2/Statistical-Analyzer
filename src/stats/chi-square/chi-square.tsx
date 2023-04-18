@@ -77,8 +77,10 @@ const ChiSquareComponent = (props: OperationProps) => {
 export const ChiSquare: ComponentOperation = {
   name: "Chi Squared",
   type: "Component",
-  isValid: (columns) => columns.length === 2,
-  component: ChiSquareComponent
+  description:
+    "Calculates the chi squared value for the observed and expected values in the selected columns. Generates a CDF graph of the chi squared distribution with n-1 degrees of freedom.",
+  isValid: columns => columns.length === 2,
+  component: ChiSquareComponent,
 };
 
 const cdf = (x: number, df: number) => {

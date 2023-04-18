@@ -191,11 +191,15 @@ function App() {
 
   document.body.style.backgroundColor = theme ? "#1A1B1E" : "white";
   return (
-    <div className="App" style= {{ 
-      backgroundColor: theme ? "#1A1B1E" : undefined,
-    }}>
+    <div
+      className="App"
+      style={{
+        backgroundColor: theme ? "#1A1B1E" : undefined,
+      }}
+    >
       <NavBar
         availableOperations={availableOperations}
+        allOperations={operations}
         onOperationSelected={onOperationSelected}
         onExport={() => exportData(data)}
         onFileImport={onFileOpen}
