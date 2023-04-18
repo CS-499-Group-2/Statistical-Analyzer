@@ -57,8 +57,7 @@ export const mapGraphToChart = (graph: Graph, isDark: boolean): JSX.Element => {
     },
     responsive: true,
     // setting this to false will allow the chart to be resized.
-    maintainAspectRatio: false,
-    color: isDark ? "white" : "black",
+    maintainAspectRatio: false
   };
 
   // If the graph is a horizontal bar graph, we need to set the index axis to y (so it's sideways).
@@ -147,14 +146,6 @@ export interface GraphDisplayProps {
 export const GraphDisplay = (props: GraphDisplayProps) => {
   const containerRef = React.useRef(props.selectedGraphs.map(() => React.createRef<HTMLDivElement>()));
   const isDark = useThemeStore(store => store.isDark);
-  const [someState, setSomeState] = useState(false);
-
-  useEffect(() => {
-    ChartJS.defaults.color = isDark ? "white" : "#666";
-    ChartJS.defaults.borderColor = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)";
-    // For some reason, the graph display doesn't rerender when the theme changes. This is a hack to force it to rerender.
-    setSomeState(!someState);
-  }, [isDark]);
 
   return (
     <>
