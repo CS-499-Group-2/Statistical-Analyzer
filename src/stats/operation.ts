@@ -41,8 +41,8 @@ export interface TypedOperation<T> {
   /** The name of the operation */
   name: string;
   type: "Typed";
-  /** Description of the operation and how it returns values */
-  description?: string;
+  /** Description of the operation and how it returns values Can be either a string or a react element (div, p) */
+  description?: string | React.ReactNode;
   /**
    * The function that is called when the operation is selected.
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
@@ -71,8 +71,8 @@ export interface ComponentOperation {
   /** The name of the operation */
   name: string;
   type: "Component";
-  /** Description of the operation and how it returns values */
-  description?: string;
+  /** Description of the operation and how it returns values. Can be either a string or a react element (div, p) */
+  description?: string | React.ReactNode;
   /** A component for the operation instead. If this is used, then onSelected becomes invalid */
   component: React.ComponentType<OperationProps>;
   /**

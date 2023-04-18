@@ -6,7 +6,7 @@ import { Operation } from "../../stats/operation";
 import { CsvData } from "../../file-handling/import";
 import { useThemeStore } from "../../stores/theme-store";
 import { SegmentedToggle } from "../toggle-button/toggle-button";
-import { Accordion, Button, Center, Loader, Modal, ThemeIcon } from "@mantine/core";
+import { Accordion, Button, Center, Loader, Modal, ThemeIcon, Title } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import useCloudStore from "../../stores/cloud-store";
@@ -144,7 +144,7 @@ export const NavBar = (props: NavBarProps) => {
             <Accordion defaultValue="customization">
               {props.allOperations.map(operation => (
                 <Accordion.Item key={operation.name} value={operation.name}>
-                  <Accordion.Control>{operation.name}</Accordion.Control>
+                  <Accordion.Control>{<Title order={5}>{operation.name}</Title>}</Accordion.Control>
                   <Accordion.Panel>{operation.description ?? "Help not found for this operation"}</Accordion.Panel>
                 </Accordion.Item>
               ))}
