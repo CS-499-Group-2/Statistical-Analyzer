@@ -121,11 +121,13 @@ const SignTestComponent = (props: OperationProps) => {
   return (
     <Modal onClose={deselect} opened = {selected} title="Sign Test" centered>
       <NumberInput 
+        my={3}
         withAsterisk label="Test Median" 
         value={testMedian}
         onChange={setTestMedian}>
       </NumberInput>
       <NativeSelect
+        my={8}
         data = {["Not Equal","Less Than","Greater Than"]}
         value = {medOption}
         onChange={(event) => setMedOption(event.currentTarget.value)}

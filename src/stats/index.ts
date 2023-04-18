@@ -10,3 +10,4 @@ export * from "./probability-distribution/probability-distribution";
 export * from "./variance/variance";
 export * from "./coefficient-of-variation/coefficient-of-variation";
 export * from "./rank-sum/rank-sum";
+export * from "./sign-test/sign-test";

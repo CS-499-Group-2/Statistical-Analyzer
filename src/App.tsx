@@ -19,6 +19,7 @@ import {
   Variance,
   CoeficientOfVariance,
   RankSumOperation,
+  SignTest
 } from "./stats";
 import InputModal, { InputModalRef } from "./components/input-modal/input-modal";
 import { GraphDisplay } from "./components/graph-display/graph-display";
@@ -26,7 +27,6 @@ import useCloudStore from "./stores/cloud-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { autoSave, deleteFile, getFile, saveToStorage } from "./file-handling/cloud";
 import { FileList } from "./components/file-list/file-list";
-import { SignTest } from "./stats/sign-test/sign-test";
 import {useThemeStore} from "./stores/theme-store";
 
 /** List of all available operations */
