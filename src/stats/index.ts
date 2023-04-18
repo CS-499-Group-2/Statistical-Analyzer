@@ -7,3 +7,6 @@ export * from "./standard-deviation/standard-deviation";
 export * from "./chi-square/chi-square";
 export * from "./least-square-line/least-square-line";
 export * from "./probability-distribution/probability-distribution";
+export * from "./variance/variance";
+export * from "./coefficient-of-variation/coefficient-of-variation";
+export * from "./rank-sum/rank-sum";

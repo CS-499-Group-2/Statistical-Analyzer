@@ -66,12 +66,14 @@ export const mapGraphToChart = (graph: Graph): JSX.Element => {
   // If the graph is a bar chart, then let's setup the data and return a bar component from chart js
   if (graph.chartType === "Vertical Bar" || graph.chartType === "Horizontal Bar") {
     const data: ChartProps<"bar">["data"] = {
-      labels: graph.data.map((d) => d.label),
-      datasets: [{
-        label: "",
-        data: graph.data.map((d) => d.value),
-        backgroundColor: graph.data.map((d) => d.color)
-      }],
+      labels: graph.data.map(d => d.label),
+      datasets: [
+        {
+          label: "Value",
+          data: graph.data.map(d => d.value),
+          backgroundColor: graph.data.map(d => d.color),
+        },
+      ],
     };
     // @ts-expect-error For some reason, the scale types break this
     return <Bar data={data} options={options} />;
