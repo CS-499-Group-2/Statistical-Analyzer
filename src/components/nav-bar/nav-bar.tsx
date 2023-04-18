@@ -29,10 +29,13 @@ export interface NavBarProps {
   onFilesModalOpen?: () => void;
   /** Called when the results button is clicked */
   onResultsModalOpen?: () => void;
+  /** Called when the user tries to save the file */
+  onReSave?: () => void;
 }
 
 export const NavBar = (props: NavBarProps) => {
   const userState = useCloudStore(state => state.user);
+  const activeFile = useCloudStore(state => state.activeFile);
   const theme = useThemeStore(state => state.isDark);
   const [helpModal, setHelpModal] = React.useState(false);
 
@@ -111,7 +114,8 @@ export const NavBar = (props: NavBarProps) => {
               <NavDropdown.Item onClick={() => openFile()}>Open</NavDropdown.Item>
               {userState && <NavDropdown.Item onClick={props.onFilesModalOpen}>Open Online</NavDropdown.Item>}
               <NavDropdown.Item onClick={props.onExport}>Export as CSV</NavDropdown.Item>
-              {userState && <NavDropdown.Item onClick={props.onCloudExport}>Save Online</NavDropdown.Item>}
+              {userState && <NavDropdown.Item onClick={props.onCloudExport}>Save Online As</NavDropdown.Item>}
+              {activeFile && userState && <NavDropdown.Item onClick={props.onReSave}>Save</NavDropdown.Item>}
               <NavDropdown.Item onClick={() => showResults()}>View Statistics</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Statistics" id="basic-nav-dropdown" menuVariant={theme ? "dark" : "light"}>

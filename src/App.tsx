@@ -229,14 +229,19 @@ function App() {
           savingState={figureOutSaveState()}
           onFilesModalOpen={() => setFilesModalOpen(true)}
           onResultsModalOpen={() => setResultModalOpen(true)}
+          onReSave={() => mutateActiveFile()}
         />
-        <Spreadsheet data={data} onCellChange={onCellChange} onHeaderChange={onHeaderChange} onCellsSelected={setSelectedCells} />
-        <Modal size = "lg" yOffset={100} onClose={() => setResultModalOpen(false)} opened={resultModalOpen}>
-          <ResultExporter results={results}
-          onDelete={idx => setResults(results.filter(n => n !== results[idx]))} 
-          deleteAll={function() {
-            if (confirm("Are you sure you want to delete all results?")) {
-            setResults([]);}}}/>
+        <Spreadsheet data={data} onHeaderChange={onHeaderChange} onCellsSelected={setSelectedCells} />
+        <Modal size="lg" yOffset={100} onClose={() => setResultModalOpen(false)} opened={resultModalOpen}>
+          <ResultExporter
+            results={results}
+            onDelete={idx => setResults(results.filter(n => n !== results[idx]))}
+            deleteAll={function () {
+              if (confirm("Are you sure you want to delete all results?")) {
+                setResults([]);
+              }
+            }}
+          />
         </Modal>
         <GraphDisplay selectedGraphs={results.flatMap(result => result.graphs)} />
         <InputModal ref={modalRef} />
