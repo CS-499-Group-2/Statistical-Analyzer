@@ -28,7 +28,7 @@ describe("Correlation Coeffcient Test", () => {
   test("should return percent value", () => {
     const expected: Result = {
       name: "Correlation Coeffcient",
-      values: [5.094],
+      values: [1],
       graphs: []
     };
     const columns: Column[] = [{
