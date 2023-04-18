@@ -105,6 +105,7 @@ const ModeComponent = (props: OperationProps) => {
 export const Mode: Operation = {
   name: "Mode",
   type: "Component",
+  description: " Calculates the mode of the selected columns and returns a graph with all modes as a  point. ",
   isValid: (columns) => columns.length >= 1 ,
   component: ModeComponent,
 };

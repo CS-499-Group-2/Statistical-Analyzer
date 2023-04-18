@@ -10,6 +10,7 @@ interface Inputs {
 export const BinomialDistribution: TypedOperation<Inputs> = {
   name: "Binomial Distribution",
   type: "Typed",
+  description: "Calculates the binomial distribution of a set of numbers. Returns the probability of a certain number of successes in a given number of trials. Also returns a graph of the binomial distribution.",
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
     const numberOfTrials = inputs["Number of Trials"] as number;
     const probability = inputs["Probability"] as number;
@@ -34,13 +35,11 @@ export const BinomialDistribution: TypedOperation<Inputs> = {
         values: binomialDistribution,
         graphs: [
           {
-            chartType: "Horizontal Bar",
-            data: binomialDistribution.map(value => {
-              return {
-                value: value,
-                label: value.toString(),
-              };
-            }),
+            chartType: "Normal Distribution", 
+            data: binomialDistribution.map((value, index) => ({ x: index, y: value })),
+            title: "Binomial Distribution",
+            color: "blue",
+            lineLabel: "Data",
           },
         ],
       },

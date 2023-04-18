@@ -104,6 +104,7 @@ const MedianComponent = (props: OperationProps) => {
 export const Median: Operation = {
   name: "Median",
   type: "Component",
+  description: "Median is the middle of the values that are selected in the columns. It will return one median for each column. It will also display a graph of the medians.",
   isValid: (columns) => columns.length >= 1,
   component: MedianComponent,
 };

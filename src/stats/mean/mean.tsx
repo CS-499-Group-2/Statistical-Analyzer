@@ -106,6 +106,7 @@ const MeanComponent = (props: OperationProps) => {
 export const Mean: Operation = {
   name: "Mean",
   type: "Component",
+  description: "Calculates the mean, or the average, of the selected columns. Returns a graph with all means as a point.",
   isValid: (columns) => columns.length >= 1,
   component: MeanComponent,
 };
