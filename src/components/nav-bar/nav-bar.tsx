@@ -140,7 +140,7 @@ export const NavBar = (props: NavBarProps) => {
               {userState ? <Button onClick={logout}>Logout</Button> : <Button onClick={login}>Login/Sign Up</Button>}
             </Nav.Item>
           </Nav>
-          <Modal onClose={() => setHelpModal(false)} opened={helpModal} centered title="User Help" size="lg">
+          <Modal onClose={() => setHelpModal(false)} opened={helpModal} yOffset={75} title="User Help" size="80%">
             <Accordion defaultValue="customization">
               {props.allOperations.map(operation => (
                 <Accordion.Item key={operation.name} value={operation.name}>
