@@ -86,7 +86,7 @@ export const NavBar = (props: NavBarProps) => {
   };
 
   return (
-    <Navbar style={{ height: 50 }} expand="md" fixed="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
+    <Navbar expand="md" fixed="top" variant={theme ? "dark" : "light"} bg={theme ? "dark" : "light"}>
       <Container fluid className="me-4 ms-3">
         <Navbar.Brand>
           <img className="nav-logo" src="logo.png" alt="logo" />
@@ -137,11 +137,12 @@ export const NavBar = (props: NavBarProps) => {
             </Nav.Item>
           </Nav>
           <Nav className="ml-auto">
-            <Nav.Item>
+            <Nav.Item className="m-auto">
               <SegmentedToggle />
             </Nav.Item>
-            <Nav.Item className="ms-3 mt-auto">
-              {userState ? <Button onClick={logout}>Logout</Button> : <Button onClick={login}>Login/Sign Up</Button>}
+            <Nav.Item className="m-auto">
+              {userState ? <Button my={4} mx={20} onClick={logout}>Logout</Button>
+              : <Button my={4} mx={20} onClick={login}>Login/Sign Up</Button>}
             </Nav.Item>
           </Nav>
           <Modal onClose={() => setHelpModal(false)} opened={helpModal} yOffset={75} title="User Help" size="80%">
