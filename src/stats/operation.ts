@@ -41,6 +41,8 @@ export interface TypedOperation<T> {
   /** The name of the operation */
   name: string;
   type: "Typed";
+  /** Description of the operation and how it returns values Can be either a string or a react element (div, p) */
+  description?: string | React.ReactNode;
   /**
    * The function that is called when the operation is selected.
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
@@ -49,8 +51,11 @@ export interface TypedOperation<T> {
    * @param inputs The inputs that the user has provided for this operation.
    * @returns Any results from this operation.
    */
-  onSelected: (selectedCellsByColumn: Column[], spreadsheet: CsvData, inputs: {[Property in keyof T]: number | string | boolean})
-    => Result[];
+  onSelected: (
+    selectedCellsByColumn: Column[],
+    spreadsheet: CsvData,
+    inputs: { [Property in keyof T]: number | string | boolean }
+  ) => Result[];
   /**
    * The function that is called to determine if the operation is valid.
    * @param selectedCellsByColumn The cells that are selected in the spreadsheet, grouped by column, so each array in the array
@@ -59,13 +64,15 @@ export interface TypedOperation<T> {
   isValid: (selectedCellsByColumn: Column[]) => boolean;
 
   /** The names of the inputs that this operation takes along with what the input should be */
-  keys: {[Property in keyof T]: "Number" | "Text" | "Checkbox" | "Color"};
+  keys: { [Property in keyof T]: "Number" | "Text" | "Checkbox" | "Color" };
 }
 
 export interface ComponentOperation {
   /** The name of the operation */
   name: string;
   type: "Component";
+  /** Description of the operation and how it returns values. Can be either a string or a react element (div, p) */
+  description?: string | React.ReactNode;
   /** A component for the operation instead. If this is used, then onSelected becomes invalid */
   description: string;
   component: React.ComponentType<OperationProps>;

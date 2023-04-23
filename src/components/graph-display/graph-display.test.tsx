@@ -12,13 +12,13 @@ describe("Graph Display Tests", () => {
         {
           label: "A",
           value: 1,
-        }
+        },
       ],
       title: "Test Graph",
     };
 
     // Act
-    const chart = mapGraphToChart(graph);
+    const chart = mapGraphToChart(graph, false);
 
     // Assert
     expect(chart.type).toBe(Bar);
@@ -32,13 +32,13 @@ describe("Graph Display Tests", () => {
         {
           label: "A",
           value: 1,
-        }
+        },
       ],
       title: "Test Graph",
     };
 
     // Act
-    const chart = mapGraphToChart(graph);
+    const chart = mapGraphToChart(graph, false);
 
     // Assert
     expect(chart.type).toBe(Bar);
@@ -52,13 +52,13 @@ describe("Graph Display Tests", () => {
         {
           label: "A",
           value: 1,
-        }
+        },
       ],
       title: "Test Graph",
     };
 
     // Act
-    const chart = mapGraphToChart(graph);
+    const chart = mapGraphToChart(graph, false);
 
     // Assert
     expect(chart.type).toBe(Pie);
@@ -71,13 +71,13 @@ describe("Graph Display Tests", () => {
         {
           x: 1,
           y: 1,
-        }
+        },
       ],
       title: "Test Graph",
     };
 
     // Act
-    const chart = mapGraphToChart(graph);
+    const chart = mapGraphToChart(graph, false);
 
     // Assert
     expect(chart.type).toBe(Scatter);
@@ -96,7 +96,7 @@ describe("Graph Display Tests", () => {
     };
 
     // Act
-    const chart = mapGraphToChart(graph);
+    const chart = mapGraphToChart(graph, false);
 
     // Assert
     expect(chart.type).toBe(Scatter);

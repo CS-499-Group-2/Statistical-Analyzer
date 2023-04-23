@@ -6,6 +6,7 @@
 
 .App {
   height: 100%;
+  padding-top: 50px;
 }
 
 .logo {
@@ -43,3 +44,6 @@
 .read-the-docs {
   color: #888;
 }
+
+
+

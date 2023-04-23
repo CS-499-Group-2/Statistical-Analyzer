@@ -1,4 +1,5 @@
 import { CsvData } from "./import";
+import useCloudStore from "../stores/cloud-store";
 
 /**
  * Creates a downloadable CSV file from the inputted data
@@ -10,7 +11,8 @@ export const exportData = (csvData: CsvData) => {
   const blob = new Blob([dataString], { type: "text/csv" }); // Creates a "blob" that can hold the file data
   const url = URL.createObjectURL(blob); // Converts the blob into a url
   const anchor = document.createElement("a"); // Creates hyperlink element
-  anchor.download = "data.csv"; // Names the resulting file download
+  const fileName = (useCloudStore.getState().activeFile ?? "data") + ".csv";
+  anchor.download = fileName;
   anchor.href = url; // Specifies the anchor's url
   anchor.click(); // Simulates a mouse click
 };
