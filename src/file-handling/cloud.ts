@@ -48,7 +48,7 @@ export const saveToStorage = async (spreadsheet: CsvData, results: Result[]) => 
       },
     });
     useCloudStore.getState().setActiveFile(filename);
-    alert("File Saved! Autosave is now enabled.");
+    alert("File Saved!");
   } catch (e: unknown) {
     if (e instanceof HTTPError) {
       if (e.response.status === 409) {
