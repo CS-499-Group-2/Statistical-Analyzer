@@ -34,7 +34,7 @@ describe("Sign Test Tests", () => {
         126, 70, 173, 89, 76, 69, 128, 136, 169, 82, 164]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.263],
       graphs: []
     };
@@ -50,7 +50,7 @@ describe("Sign Test Tests", () => {
         126, 70, 173, 89, 76, 69, 128, 136, 169, 82, 164]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.132],
       graphs: []
     };
@@ -66,7 +66,7 @@ describe("Sign Test Tests", () => {
         126, 70, 173, 89, 76, 69, 128, 136, 169, 82, 164]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.942],
       graphs: []
     };
@@ -85,7 +85,7 @@ describe("Sign Test Tests", () => {
         44, 58, 140, 141, 52, 8, 80, 172, 78, 146]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.253],
       graphs: []
     };
@@ -104,7 +104,7 @@ describe("Sign Test Tests", () => {
         44, 58, 140, 141, 52, 8, 80, 172, 78, 146]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.126],
       graphs: []
     };
@@ -123,7 +123,7 @@ describe("Sign Test Tests", () => {
         44, 58, 140, 141, 52, 8, 80, 172, 78, 146]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.924],
       graphs: []
     };
@@ -139,7 +139,7 @@ describe("Sign Test Tests", () => {
         126, 70, 173, 89, 76, 69, 128, 136, 169, 82, 164]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.503],
       graphs: []
     };
@@ -158,7 +158,7 @@ describe("Sign Test Tests", () => {
         44, 58, 140, 141, 52, 8, 80, 172, 78, 146]
     }];
     const expected: Result = {
-      name: "Sign Test " + columns[0].name + " (p value)",
+      name: "Sign Test p value | " + columns[0].name,
       values: [0.888],
       graphs: []
     };

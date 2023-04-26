@@ -7,7 +7,7 @@ describe("Probability Distribution Tests", () => {
     const actual = ProbabilityDistribution.onSelected([{
       name: "Column 1",
       values: [15, 2, 10]
-    }], {headers: [""], data: []}, { "Fill Color": "red", "Line Color": "blue" });
+    }], {headers: [""], data: []}, { "Point Color": "green", "Fill Color": "red", "Line Color": "blue" });
     expect(actual[0].values[0]).closeTo(expected[0], 0.001);
     expect(actual[0].values[1]).closeTo(expected[1], 0.001);
     expect(actual[0].values[2]).closeTo(expected[2], 0.001);
