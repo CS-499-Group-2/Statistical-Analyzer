@@ -3,6 +3,13 @@ import * as ss from "simple-statistics";
 import React, { useEffect } from "react";
 import { Button, ColorInput, Modal, NativeSelect } from "@mantine/core";
 
+/**
+ * 
+ * @param observed represents values from observed column
+ * @param expected represents values from expected column
+ * @param lineColor respresents color of line for graph
+ * @returns correlation coefficient results
+ */
 export const calculateCorrelationCoeffcient = (observed: number[], expected: number[], lineColor: string): Result => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const valuesInfo = observed.map((value, index) => {
@@ -37,6 +44,10 @@ const CorrelationComponent = (props: OperationProps) => {
   const [observedColumn, setObservedColumn] = React.useState<string | undefined>(undefined);
   const [lineColor, setLineColor] = React.useState("#000000");
   
+  /**
+   * if no observed column, send alert and close
+   * else, set necessary values, and call calculateCorrelationCoefficient, addResult, and deselect
+   */
   const onSubmit = () => {
     if (observedColumn === null) {
       alert("Please select a column");
@@ -57,7 +68,7 @@ const CorrelationComponent = (props: OperationProps) => {
     }
   }, [selected]);
 
-  return (
+  return ( // returns correlation coefficient modal with appropriate inputs
     <Modal onClose={deselect} opened={selected} title="Correlation Coeffcient" centered>
       <NativeSelect
         data={columnNames}

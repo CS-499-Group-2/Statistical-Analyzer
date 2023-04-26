@@ -52,6 +52,9 @@ export const ResultExporter = (props: ResultExporterProps) => {
     exportText(resultsString); // Calls exportText function with resultsString argument
   };
 
+  /**
+   * Returns array of results printable to the site, rather than a string
+   */
   const printableResults = () => {
     if (!props.results || props.results.length == 0) {
       return [];
@@ -70,6 +73,7 @@ export const ResultExporter = (props: ResultExporterProps) => {
   };
 
   // Returns a button with text "Export" that calls handleOnClick
+  // and a button with text "Delete All" that allows for the deletion of all results
   if (!props.results || props.results.length === 0) {
     return <Center><p>No Results to Return</p></Center>;
   } else {

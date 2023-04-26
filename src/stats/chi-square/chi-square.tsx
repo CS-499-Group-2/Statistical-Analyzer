@@ -25,7 +25,7 @@ export const calculateChiSquared = (observed: number[], expected: number[], line
     values: [chiSquared],
     graphs: [{
       chartType: "Normal Distribution",
-      title: `Chi Squared Distribution for ${valuesInfo.length - 1} degrees of freedom}`,
+      title: `Chi Squared Distribution for ${valuesInfo.length - 1} degrees of freedom`,
       data: xValues.map((x) => ({x, y: cdf(x, valuesInfo.length - 1)})),
       lineLabel: "CDF",
       lineColor
