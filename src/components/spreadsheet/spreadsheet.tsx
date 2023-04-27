@@ -110,8 +110,10 @@ export const Spreadsheet = (props: SpreadsheetProps) => {
         ],
       }}
       licenseKey="non-commercial-and-evaluation" // for non-commercial use only
-      validator={"numeric"}
       manualColumnResize
+      type="numeric"
+      renderer="numeric"
+      validator={undefined}
       afterSelectionEnd={() => {
         try {
           const data = spreadsheetRef.current?.hotInstance.getData(); // Get the data from the spreadsheet
