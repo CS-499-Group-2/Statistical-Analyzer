@@ -27,17 +27,21 @@ describe("Correlation Coeffcient Test", () => {
   });
   test("should return percent value", () => {
     const expected: Result = {
-      name: "Correlation Coeffcient",
-      values: [1],
-      graphs: []
+      name: "Correlation Coefficient",
+      values: [0.9575],
+      graphs: [],
     };
-    const columns: Column[] = [{
-      name: "Observed",
-      values: [29, 24, 22, 19, 21, 18, 19, 20, 23, 18, 20, 23]
-    }, {
-      name: "Expected",
-      values: new Array<number>(12).fill(21.333, 0, 12)
-    }];
+    // Columns from https://www.mathsisfun.com/data/correlation.html
+    const columns: Column[] = [
+      {
+        name: "X Column",
+        values: [14.2, 16.4, 11.9, 15.2, 18.5, 22.1, 19.4, 25.1, 23.4, 18.1, 22.6, 17.2],
+      },
+      {
+        name: "Y Column",
+        values: [215, 325, 185, 332, 406, 522, 412, 614, 544, 421, 445, 408],
+      },
+    ];
     const actual = calculateCorrelationCoeffcient(columns[0].values, columns[1].values, "blue");
     expect(actual.name).toBe(expected.name);
     expect(actual.values[0]).toBeCloseTo(expected.values[0], 0.001);
