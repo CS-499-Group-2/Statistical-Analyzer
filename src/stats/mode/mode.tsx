@@ -50,6 +50,7 @@ const ModeComponent = (props: OperationProps) => {
     // The graph to display
     const graph: Graph = {
       chartType: graphType,
+      title: "Mode",
       // Create a data point for each column
       data: selectedCellsByColumn.map(column => ({
         label: column.name,
@@ -97,7 +98,7 @@ const ModeComponent = (props: OperationProps) => {
         value={selectedGraph}
         onChange={setSelectedGraph}
       />
-      <Button onClick={onSubmit}>Submit</Button>
+      <Button color = "green" mt = {"md"} onClick={onSubmit}>Submit</Button>
     </Modal>
   );
 };

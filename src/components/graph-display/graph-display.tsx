@@ -106,7 +106,8 @@ export const mapGraphToChart = (graph: Graph, isDark: boolean): JSX.Element => {
           // If the graph is a normal distribution, then we want to show the line.
           showLine: graph.chartType === "Normal Distribution",
           tension: graph.curved ? 0.4 : 0,
-          backgroundColor: graph.color,
+          pointBackgroundColor: graph.color,
+          backgroundColor: graph.fillColor,
           borderColor: graph.lineColor,
           label: graph.lineLabel,
           fill: graph.filled,

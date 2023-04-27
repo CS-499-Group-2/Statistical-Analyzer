@@ -44,11 +44,22 @@ export function calculateMode(data: number[]): number {
   return mode;
 }
 
+/**
+ * calculates binomial distribution using simple statistics
+ * @param numberofTrials
+ * @param probability 
+ * @returns binomial distribution calculation
+ */
 export function calculateBinomialDistribution( numberofTrials: number, probability: number): number [] {
   const binomialDistribution = ss.binomialDistribution(numberofTrials, probability);
   return binomialDistribution;
 }
 
+/**
+ * Calulates standard deviaton using simple statistics
+ * @param data is inputted data from column
+ * @returns 
+ */
 export function calculateStandardDeviation(data: number[]): number {
   for (let i = 0; i < data.length; i++) {
     if (data[i] === null) {

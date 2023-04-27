@@ -43,6 +43,7 @@ export type Graph = {
   color?: string,
   lineLabel?: string,
   lineColor?: string,
+  fillColor?: string,
   filled?: boolean,
   curved?: boolean,
   annotations?: AnnotationOptions[] | Record<string, AnnotationOptions>

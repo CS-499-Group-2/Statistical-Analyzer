@@ -5,6 +5,7 @@ import { mean, standardDeviation } from "simple-statistics";
 import { Text } from "@mantine/core";
 
 interface Inputs {
+  "Point Color";
   "Line Color";
   "Fill Color";
 }
@@ -17,6 +18,8 @@ export const ProbabilityDistribution: TypedOperation<Inputs> = {
       Calculates the normal distribution of each value in each column with respect to the mean and standard deviation of that column
       <br />
       <br />
+      <b>Point Color</b> = The color of the points that represent the data
+      <br/>
       <b>Line Color</b> - The color of the line that represents the normal distribution curve
       <br />
       <b>Fill Color</b> - The color of the area under the normal distribution curve
@@ -24,6 +27,7 @@ export const ProbabilityDistribution: TypedOperation<Inputs> = {
   ),
   isValid: selectedCellsByColumn => selectedCellsByColumn.length !== 0,
   onSelected: (selectedCellsByColumn, spreadsheet, inputs): Result[] => {
+    const pointColor = inputs["Point Color"] as string;
     const lineColor = inputs["Line Color"] as string;
     const fillColor = inputs["Fill Color"] as string;
     const results: Result[] = selectedCellsByColumn
@@ -48,8 +52,9 @@ export const ProbabilityDistribution: TypedOperation<Inputs> = {
               data: graphXValues.map(value => ({ x: value, y: normalDist.pdf(value) })),
               lineLabel: "Normal Distribution Curve",
               curved: true,
-              color: fillColor,
+              color: pointColor,
               lineColor: lineColor,
+              fillColor: fillColor,
               filled: true,
             },
           ],
@@ -60,6 +65,7 @@ export const ProbabilityDistribution: TypedOperation<Inputs> = {
     return results;
   },
   keys: {
+    "Point Color": "Color",
     "Line Color": "Color",
     "Fill Color": "Color",
   },

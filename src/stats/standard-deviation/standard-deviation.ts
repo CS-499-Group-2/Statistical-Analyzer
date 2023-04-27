@@ -8,6 +8,9 @@ interface Inputs {
   "Fill Color": "Color";
 }
 
+/**
+ * Exports standard deviation type for use in input-modal
+ */
 export const StandardDeviation: TypedOperation<Inputs> = {
   name: "Standard Deviation",
   type: "Typed",
@@ -17,7 +20,7 @@ export const StandardDeviation: TypedOperation<Inputs> = {
     const pointColor = inputs["Point Color"] as string;
     const lineColor = inputs["Line Color"] as string;
     const fillColor = inputs["Fill Color"] as string;
-    const standardDeviation = calculateStandardDeviation(selectedCellsByColumn[0].values);
+    const standardDeviation = calculateStandardDeviation(selectedCellsByColumn[0].values); // calls SD calculation from calculations.ts
     const mean = calculateMean(selectedCellsByColumn[0].values);
     const xValues = selectedCellsByColumn[0].values.sort((a, b) => a - b);
     return [
@@ -34,8 +37,10 @@ export const StandardDeviation: TypedOperation<Inputs> = {
                 (1 / (standardDeviation * Math.sqrt(2 * Math.PI))) *
                 Math.exp(-Math.pow(value - mean, 2) / (2 * Math.pow(standardDeviation, 2))),
             })),
+            lineLabel: selectedCellsByColumn.map(column => column.name).join(", "),
             color: pointColor,
             lineColor: lineColor,
+            fillColor: fillColor,
             filled: true,
             curved: true,
           },
