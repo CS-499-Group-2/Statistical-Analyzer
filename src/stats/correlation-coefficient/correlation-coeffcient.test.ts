@@ -1,6 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { Column, Result } from "../operation";
-import { CorrelationCoeffcient, calculateCorrelationCoeffcient } from "./correlation-coefficient";
+import { CorrelationCoefficient, calculateCorrelationCoefficient } from "./correlation-coefficient";
 
 describe("Correlation Coeffcient Test", () => {
   test("should not be valid without two columns", () => {
@@ -10,7 +10,7 @@ describe("Correlation Coeffcient Test", () => {
         values: [1, 2, 3, 4, 5]
       }
     ];
-    expect(CorrelationCoeffcient.isValid(columns)).toBe(false);
+    expect(CorrelationCoefficient.isValid(columns)).toBe(false);
   });
   test("should be valid with two columns", () => {
     const columns: Column[] = [
@@ -23,7 +23,7 @@ describe("Correlation Coeffcient Test", () => {
         values: [1, 2, 3, 4, 5]
       }
     ];
-    expect(CorrelationCoeffcient.isValid(columns)).toBe(true);
+    expect(CorrelationCoefficient.isValid(columns)).toBe(true);
   });
   test("should return percent value", () => {
     const expected: Result = {
@@ -42,7 +42,7 @@ describe("Correlation Coeffcient Test", () => {
         values: [215, 325, 185, 332, 406, 522, 412, 614, 544, 421, 445, 408],
       },
     ];
-    const actual = calculateCorrelationCoeffcient(columns[0].values, columns[1].values, "blue");
+    const actual = calculateCorrelationCoefficient(columns[0].values, columns[1].values, "blue");
     expect(actual.name).toBe(expected.name);
     expect(actual.values[0]).toBeCloseTo(expected.values[0], 0.001);
   });
